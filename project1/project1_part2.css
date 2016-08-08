@@ -12,6 +12,14 @@
     background-color: #99ff99;
 }
 
+/* All cells share the same size */
+.cell {
+    width: 100px;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #ffffff;
+}
+
 /************************************************/
 /* use floats for the first table */
 /************************************************/
@@ -28,32 +36,28 @@
     clear: both;
 }
 
-/* All cells share the same size */
 .cell-group1 {
     float: left;
-    width: 100px;
-    border-style: solid;
-    border-width: 1px;
-    background-color: #ffffff;
 }
 
 /************************************************/
 /* use inline-block for the second table */
 /************************************************/
 
+/* TODO: How to get rid of extra spacing in between each cell?; */
+
 #table-group2 {
-}
-/* Note: By default, divs are treated as blocks. Set them to inline-block
-so they flow like text, but their size can still be specified */
-/* #div3 {
-    display: inline-block;
-    margin: 20px 100px 20px 80px;
+    padding: 0 40px 50px 40px;
 }
 
-#div4 {
+.row-group2 {
+}
+
+.cell-group2 {
     display: inline-block;
 }
- */
+
+
 /************************************************/
 /* use absolute positioning for the third table */
 /************************************************/
