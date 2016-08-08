@@ -1,0 +1,87 @@
+/* To prevent elements below from jumping up into floated layouts */
+.cleared {
+    clear: both;
+}
+
+.group-divider {
+    padding: 30px 0 0 0;
+}
+
+/* Background colors for various elements */
+.group {
+    background-color: #99ff99;
+}
+
+/************************************************/
+/* use floats for the first table */
+/************************************************/
+
+#table-group1 {
+    padding: 0 40px 50px 40px;
+    /* This makes the outer div actually have a height, because it would be zero with two floated block elements */
+    /* See http://stackoverflow.com/questions/5369954/why-is-my-divs-height-zero */
+    /* Also http://stackoverflow.com/questions/1844207/how-to-make-a-div-to-wrap-two-float-divs-inside */
+    overflow: hidden;
+}
+
+.row-group1 {
+    clear: both;
+}
+
+/* All cells share the same size */
+.cell-group1 {
+    float: left;
+    width: 100px;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #ffffff;
+}
+
+/************************************************/
+/* use inline-block for the second table */
+/************************************************/
+
+#table-group2 {
+}
+/* Note: By default, divs are treated as blocks. Set them to inline-block
+so they flow like text, but their size can still be specified */
+/* #div3 {
+    display: inline-block;
+    margin: 20px 100px 20px 80px;
+}
+
+#div4 {
+    display: inline-block;
+}
+ */
+/************************************************/
+/* use absolute positioning for the third table */
+/************************************************/
+
+
+#table-group3 {
+    /* A parent element with absolute children will treat them like they aren't there */
+    /* Because of this, I will need to manually set the height of the group3 div */
+    /* See https://css-tricks.com/almanac/properties/p/position/ */
+/*     height: 160px;
+ */    /* Note: absolutely positioned elements inside of a relative parent element makes
+    the children relative to the parent instead of the document itself! */
+    /* See https://css-tricks.com/absolute-positioning-inside-relative-positioning/ */
+/*     position: relative;
+ */}
+/*
+#div5 {
+    position: absolute;
+    top: 20px;
+    left: 80px;
+}
+
+#div6 {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+}
+ */
+
+
+
