@@ -3,6 +3,10 @@
     clear: both;
 }
 
+.group-divider {
+    padding: 30px 0 0 0;
+}
+
 /* Background colors for various elements */
 .green-background {
     background-color: #99ff99;
@@ -22,6 +26,16 @@
     border-color: #8b0000;
 }
 
+/* All boxes share the same size */
+.box-size {
+    width: 200px;
+    height: 120px;
+}
+
+/************************************************/
+/* use floats for the boxes */
+/************************************************/
+
 #group1 {
     /* This makes the outer div actually have a height, because it would be zero with two floated block elements */
     /* See http://stackoverflow.com/questions/5369954/why-is-my-divs-height-zero */
@@ -31,14 +45,45 @@
 #div1 {
     float: right;
     margin: 20px 80px 20px 0;
-    width: 200px;
-    height: 120px;
 }
 
 #div2 {
     float: left;
     margin: 20px 0 20px 80px;
-    width: 200px;
-    height: 120px;
 }
+
+/************************************************/
+/* use inline-block for the boxes */
+/************************************************/
+
+#group2 {
+}
+
+#div3 {
+    display: inline-block;
+    margin: 20px 100px 20px 80px;
+}
+
+#div4 {
+    display: inline-block;
+}
+
+/************************************************/
+/* use absolute positioning for the boxes */
+/************************************************/
+
+#group3 {
+}
+
+#div5 {
+    /* position: absolute; */
+
+}
+
+#div6 {
+    /* position: absolute; */
+}
+
+
+
 
