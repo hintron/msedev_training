@@ -39,6 +39,7 @@
 #group1 {
     /* This makes the outer div actually have a height, because it would be zero with two floated block elements */
     /* See http://stackoverflow.com/questions/5369954/why-is-my-divs-height-zero */
+    /* Also http://stackoverflow.com/questions/1844207/how-to-make-a-div-to-wrap-two-float-divs-inside */
     overflow: hidden;
 }
 
@@ -58,7 +59,8 @@
 
 #group2 {
 }
-
+/* Note: By default, divs are treated as blocks. Set them to inline-block
+so they flow like text, but their size can still be specified */
 #div3 {
     display: inline-block;
     margin: 20px 100px 20px 80px;
@@ -72,16 +74,28 @@
 /* use absolute positioning for the boxes */
 /************************************************/
 
+
 #group3 {
+    /* A parent element with absolute children will treat them like they aren't there */
+    /* Because of this, I will need to manually set the height of the group3 div */
+    /* See https://css-tricks.com/almanac/properties/p/position/ */
+    height: 160px;
+    /* Note: absolutely positioned elements inside of a relative parent element makes
+    the children relative to the parent instead of the document itself! */
+    /* See https://css-tricks.com/absolute-positioning-inside-relative-positioning/ */
+    position: relative;
 }
 
 #div5 {
-    /* position: absolute; */
-
+    position: absolute;
+    top: 20px;
+    left: 80px;
 }
 
 #div6 {
-    /* position: absolute; */
+    position: absolute;
+    top: 20px;
+    right: 80px;
 }
 
 
