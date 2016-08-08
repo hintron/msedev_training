@@ -1,0 +1,44 @@
+/* To prevent elements below from jumping up into floated layouts */
+.cleared {
+    clear: both;
+}
+
+/* Background colors for various elements */
+.green-background {
+    background-color: #99ff99;
+}
+
+.blue-background {
+    background-color: #66ccff;
+}
+
+.white-background {
+    background-color: #ffffff;
+}
+
+.red-border {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #8b0000;
+}
+
+#group1 {
+    /* This makes the outer div actually have a height, because it would be zero with two floated block elements */
+    /* See http://stackoverflow.com/questions/5369954/why-is-my-divs-height-zero */
+    overflow: hidden;
+}
+
+#div1 {
+    float: right;
+    margin: 20px 80px 20px 0;
+    width: 200px;
+    height: 120px;
+}
+
+#div2 {
+    float: left;
+    margin: 20px 0 20px 80px;
+    width: 200px;
+    height: 120px;
+}
+
