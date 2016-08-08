@@ -1,3 +1,10 @@
+# Mac
 .localized
 *.DS_Store
 ._*
+
+# Sublime Text Files
+*.sublime-workspace
+#*.sublime-project
+
+
