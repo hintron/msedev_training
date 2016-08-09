@@ -25,8 +25,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.getElementById("new-problem-btn").addEventListener("click", newProblem);
     document.getElementById("reset-btn").addEventListener("click", reset);
 
-
-
     // Problem Requirements:
     // Use HTML, CSS and JavaScript only.
     // Use loops to create a site that will randomly generate a number sequence.
@@ -55,8 +53,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         displayPercentage();
         clearInput();
     }
-
-
 
     function displayQuestionNumber(number) {
         document.querySelector('#question_number').textContent = number;
@@ -103,9 +99,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     // Helper function to clear the user input
     function clearInput() {
-        document.querySelector('#answer_input').value = "";
+        var answer_input = document.querySelector('#answer_input')
+        answer_input.value = "";
+        answer_input.focus();
     }
 
+    function focusInput() {
+        var answer_input = document.querySelector('#answer_input')
+        answer_input.focus();
+    }
 
     // Taken from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
     // Returns a random integer between min (included) and max (excluded)
@@ -115,13 +117,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
 
-
     function newProblem() {
-
-
-        answer_input.focus();
-
-
         clearCorrectnessContainer();
         clearInput();
 
@@ -129,14 +125,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
         answer_checked = false;
         displayQuestionNumber(question_number);
 
-        // Generate a string of numbers using a random pattern
         // Generate a string of 5 numbers
-        // Space each by a random number
-        // Use a variation of + - / * to mix things up
 
         var starting_number = getRandomInt(1,100);
         var number = starting_number;
 
+        // Use a variation of + - / * to mix things up
         // For now, only do + and -
         var operator = getRandomInt(0,2);
         var starting_operating_number = getRandomInt(1,100);
@@ -158,7 +152,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         // Choose the digit to blank out
         var omitted_number_index = getRandomInt(1,SEQUENCE_LENGTH);
-
 
         for (var i = 0; i < SEQUENCE_LENGTH; i++) {
             if(i == omitted_number_index){
@@ -189,7 +182,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
                     break;
             }
 
-
             if(using_multiplier){
                 operating_number *= multiplier;
             }
@@ -206,6 +198,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     // Check to see if the number is correct and keep track of the number of correct and incorrect
     function checkAnswer() {
+        focusInput();
         var user_answer = document.querySelector('#answer_input').value;
         if(answer == null || user_answer == ""){
             return;
@@ -220,7 +213,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if(answer == user_answer){
             displayCorrect();
             questions_right++;
-
         }
         else {
             displayIncorrect();
@@ -231,8 +223,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         displayWrong();
         displayPercentage();
     }
-
-
-
+// End DOMContentLoaded
 });
 
