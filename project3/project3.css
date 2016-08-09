@@ -35,7 +35,7 @@ p {
 }
 #percentage {
     display: inline-block;
-    width:  100px;
+    width:  200px;
 }
 
 /************************************/
@@ -64,3 +64,23 @@ p {
     padding: 10px 0;
     text-align: center;
 }
+
+
+/************************************/
+/* Correctness container */
+/************************************/
+
+
+#correctness_container {
+    font-size: 25px;
+    text-align: center;
+}
+
+#correct {
+    font-style: green;
+}
+
+#incorrect {
+    font-style: red;
+}
+
