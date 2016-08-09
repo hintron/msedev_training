@@ -23,6 +23,7 @@ p {
 #question_number {
     display: inline-block;
     width:  100px;
+    /* font-size: 20px; */
 }
 #right {
     display: inline-block;
@@ -51,6 +52,7 @@ p {
 }
 
 #sequence {
+    font-size: 60px;
 }
 
 
