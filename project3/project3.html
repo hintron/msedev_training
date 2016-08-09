@@ -8,6 +8,41 @@
     <script src="project3.js"></script>
 </head>
 <body>
-    Hi
+    <!--
+    div#header>span{Question #: }+span#question_number+span{Right: }+span#right+span{Wrong: }+span#wrong+span{Percentage Right: }+span#percentage
+    -->
+    <div id="header_container">
+        <span>Question #: </span>
+        <span id="question_number"></span>
+        <span>Right: </span>
+        <span id="right"></span>
+        <span>Wrong: </span>
+        <span id="wrong"></span>
+        <span>Percentage Right: </span>
+        <span id="percentage"></span>
+    </div>
+
+
+
+
+    <div id="output_container">
+        <p id="sequence">
+            Hello! Welcome to the Number Sequences Pattern Recognition game! Click on New Problem to start.
+        </p>
+    </div>
+
+
+    <div id="input_container">
+        <label for="username">Please input the answer: </label>
+        <input type="text" id="username">
+        <!-- <input type="button" value="adfasdfsad" onclick="check_answer()"> -->
+        <button onclick="check_answer()" >Check Answer</button>
+        <button onclick="new_problem()" >New Problem</button>
+    </div>
+
+
+
+
+
 </body>
 </html>

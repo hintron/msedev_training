@@ -1,0 +1,64 @@
+/* Get rid of default browser spacing */
+body {
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+
+/************************************/
+/* header container */
+/************************************/
+
+#header_container {
+    /* position: fixed; */
+    background-color: #00ddcc;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+}
+
+#question_number {
+    display: inline-block;
+    width:  100px;
+}
+#right {
+    display: inline-block;
+    width:  100px;
+}
+#wrong {
+    display: inline-block;
+    width:  100px;
+}
+#percentage {
+    display: inline-block;
+    width:  100px;
+}
+
+/************************************/
+/* Output container */
+/************************************/
+
+#output_container {
+    background-color: #bbbbbb;
+}
+
+#output_container p{
+    padding: 15px 50px;
+    text-align: center;
+}
+
+#sequence {
+}
+
+
+/************************************/
+/* Input container */
+/************************************/
+
+#input_container {
+    padding: 10px 0;
+    text-align: center;
+}
