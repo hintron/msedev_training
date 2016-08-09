@@ -20,7 +20,7 @@
         <span id="wrong"></span>
         <span>Percentage Right: </span>
         <span id="percentage"></span>
-        <button onclick="reset()" >RESET</button>
+        <button id="reset-btn" >RESET</button>
     </div>
 
 
@@ -28,7 +28,7 @@
 
     <div id="output_container">
         <p id="welcome">
-            Hello! Welcome to the Number Sequences Pattern Recognition game! Click on New Problem to start.
+            Hello! Welcome to the Number Sequences Pattern Recognition game! Click on New Problem to start. Pro-tip: After typing your answer, hit enter to check your answer and then enter again to load a new problem!
         </p>
         <p id="sequence"></p>
     </div>
@@ -37,9 +37,8 @@
     <div id="input_container">
         <label for="answer_input">Please input the answer: </label>
         <input type="text" id="answer_input">
-        <!-- <input type="button" value="adfasdfsad" onclick="check_answer()"> -->
-        <button onclick="check_answer()" >Check Answer</button>
-        <button onclick="new_problem()" >New Problem</button>
+        <button id="check-answer-btn" >Check Answer</button>
+        <button id="new-problem-btn" >New Problem</button>
     </div>
 
 

@@ -35,7 +35,7 @@ p {
 }
 #percentage {
     display: inline-block;
-    width:  200px;
+    width:  100px;
 }
 
 /************************************/
@@ -77,10 +77,10 @@ p {
 }
 
 #correct {
-    font-style: green;
+    background-color: #77cc44;
 }
 
 #incorrect {
-    font-style: red;
+    background-color: #ff3322;
 }
 
