@@ -13,12 +13,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const TILE_WIDTH = 30;
     const TILE_HEIGHT = TILE_WIDTH;
 
-
     // If not null, then it means it is grabbed and should move around
     var grabbed_piece = null;
+    var grabbed_x = null;
+    var grabbed_y = null;
+
 
     //
-    // Attach event handlers
+    //// Attach event handlers
     //
     // See this for setting event handlers: http://stackoverflow.com/a/6348597
 
@@ -54,62 +56,48 @@ document.addEventListener("DOMContentLoaded", function(event) {
     for (var i = tiles.length - 1; i >= 0; i--) {
         var tile = tiles[i];
         tile.addEventListener("mousedown", function(mouse_event) {
-
-            // TODO: Set a global var saying that the piece can move around now. Save off a global reference to the piece?
-            // TODO: Create a function that moves the grabbed piece around until the global is turned off by mouseup
+            var rect = tile.getBoundingClientRect();
             grabbed_piece = tile;
+
+            var piece_x = rect.left;
+            var piece_y = rect.top;
+
+            var mouse_x = mouse_event.clientX;
+            var mouse_y = mouse_event.clientY;
+
+            // The grabbed location relative to the piece will be mouse_x - piece_x
+
+            // Save the location of mouse within the piece
+            grabbed_x = mouse_x - piece_x;
+            grabbed_y = mouse_y - piece_y;
         });
     }
 
 
     window.addEventListener("mousemove", function(mouse_event) {
         if(grabbed_piece){
-            console.log("Moving piece...");
-            // TODO: Don't move the piece if it goes out of the screen
+            // Don't move the piece if it goes out of the screen
             var x = mouse_event.clientX;
             var y = mouse_event.clientY;
-
-            if(x < 0 || y < 0 || y > MAX_HEIGHT-TILE_HEIGHT){
+            if(x < 0 || y < 0 || y > MAX_HEIGHT-(TILE_HEIGHT-grabbed_y) || y < TILE_HEIGHT-grabbed_y){
                 return;
             }
-            console.log("x: " + mouse_event.clientX);
-            console.log("y: " + mouse_event.clientY);
+            // console.log("x: " + mouse_event.clientX);
+            // console.log("y: " + mouse_event.clientY);
 
             // .tile needs to be set to absolute for this to work
-            grabbed_piece.style.left = x + "px";
-            grabbed_piece.style.top = y + "px";
+            grabbed_piece.style.left = (x - grabbed_x) + "px";
+            grabbed_piece.style.top = (y - grabbed_y) + "px";
         }
-
-
-        // console.log();
-        // console.log();
-        // console.log();
-
     });
+
     window.addEventListener("mouseup", function(mouse_event) {
         console.log("Drop peice");
         grabbed_piece = null;
+        grabbed_x = null;
+        grabbed_y = null;
         // TODO: Snap to grid - Have it snap to the closest grid location
     });
-
-
-    // // see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent
-    // window.addEventListener("mousedown", function(mouse_event) {
-    //     console.log("x: " + mouse_event.clientX);
-    //     console.log("y: " + mouse_event.clientY);
-    //     // console.log();
-    //     // console.log();
-    //     // console.log();
-
-    // });
-
-
-
-
-
-
-
-
 
 
     // Rotate the currently selected piece
@@ -117,14 +105,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         console.log("Rotate piece");
     }
 
-
-
     // How to clone HTML objects:
     // http://stackoverflow.com/a/921316
     // Also https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
-
-
-
 
 
 });
