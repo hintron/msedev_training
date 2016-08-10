@@ -1,0 +1,55 @@
+/* Get rid of default browser spacing */
+body {
+    margin: 0;
+}
+
+
+/************************************/
+/* Toolbars */
+/************************************/
+
+.toolbar {
+    height: 600px;
+    width: 100px;
+}
+
+#player1_toolbar {
+    float: left;
+    background-color: yellow;
+}
+
+#player2_toolbar {
+    float: left;
+    background-color: blue;
+}
+
+#player3_toolbar {
+    float: right;
+    background-color: green;
+}
+
+#player4_toolbar {
+    float: right;
+    background-color: red;
+}
+
+
+/************************************/
+/* header container */
+/************************************/
+
+#gameboard_container {
+    /* float: left; */
+
+    min-width: 300px;
+}
+
+
+#header_container {
+    /* position: fixed; */
+    background-color: #00ddcc;
+    text-align: center;
+    /* padding: 10px 0; */
+}
+
+
