@@ -1,6 +1,13 @@
 /* Get rid of default browser spacing */
 body {
     margin: 0;
+    /* Disable text selection, so it doesn't activate during drag and drop */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 
@@ -40,7 +47,7 @@ body {
 
 #gameboard_container {
     /* float: left; */
-
+    text-align: center;
     min-width: 300px;
 }
 
@@ -51,5 +58,37 @@ body {
     text-align: center;
     /* padding: 10px 0; */
 }
+
+/************************************/
+/* Gameboard */
+/************************************/
+
+#gameboard {
+    display: inline-block;
+}
+
+/************************************/
+/* Tiles */
+/************************************/
+
+/* The CSS for a single tile unit */
+.tile {
+    /* display: block; */
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 5px solid gray;
+    background-color: white;
+}
+
+.tile_row {
+
+}
+
+.piece {
+
+}
+
+
 
 
