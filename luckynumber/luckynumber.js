@@ -3,7 +3,7 @@
 //
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    document.querySelector("#check-answer-btn").addEventListener("click", output_lucky_number);
+    document.querySelector("#generate-btn").addEventListener("click", output_lucky_number);
     console.log("Gerenating LUT...");
     generate_masks();
     generate_lut();
