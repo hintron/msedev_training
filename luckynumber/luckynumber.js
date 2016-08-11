@@ -1,11 +1,13 @@
-// "use strict";
+//
+//// Display Code
+//
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
     document.querySelector("#check-answer-btn").addEventListener("click", output_lucky_number);
 
     console.log("Gerenating LUT...");
-    generate_flags();
+    generate_masks();
     generate_lut();
 });
 
@@ -29,24 +31,20 @@ function output_lucky_number() {
         return;
     }
 
+    // Bitwise operators only can work on 32 bit numbers
+    // So make sure input can fit into a 32 bit 2's compliment number
+    // -(2^n-1) to (2^n-1)-1 (-2147483648 to +2147483647)
+    // Note: (1<<31)-1 doesn't produce the result I want...
+    // console.log("Max input value: " + 2147483647);
+    // The next number after 777,777,777 is 4,444,444,444, which isn't representable as a 32-bit number
+    if(user_input > 777777777) {
+        document.querySelector('#lucky_number').textContent = "Input was too big. Must be a 32-bit 2's compliment number";
+        return;
+    }
 
     console.log("Checking lucky number: " + user_input);
 
-    var searching_lucky_number = true;
-    var lucky_number = null;
-
-
-    // TODO: Make a more efficient way of searching through all the lucky numbers
-    // Binary search? Count the digits of the input, and start at 2^digit#?
-    var i = 0;
-    while(searching_lucky_number){
-        // console.log("Is " + user_input + " > " + lut[i] + "?");
-        if(user_input <= lut[i]){
-            lucky_number = lut[i];
-            searching_lucky_number = false;
-        }
-        i++;
-    }
+    lucky_number = getLuckyNumber(user_input);
 
     if(lucky_number){
         document.querySelector('#lucky_number').textContent = lucky_number;
@@ -57,50 +55,40 @@ function output_lucky_number() {
 }
 
 
-// Notes:
-// All numbers in javascript are 64-bit floats by default.
-// However, when using bitwise operators, the number is converted to 32-bit 2's complement
-// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Flags_and_bitmasks
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
-// http://stackoverflow.com/questions/596467/how-do-i-convert-a-float-number-to-a-whole-number-in-javascript
+//
+//// Lucky Number code
+//
 
-// Javascript strings are immutable. There is no character replacement. The best you can
-// do is to create a new string. See http://stackoverflow.com/a/1431113
-
-const MAX_DIGITS = 7;
+// Max representable number is 777777777, which is 9 digits
+const MAX_DIGITS = 9;
 var lut = [];
-// Generate one-hot encoding masks
 var masks = [];
-function generate_flags() {
+
+function generate_masks() {
     var i;
     var num;
-    console.log("MAX_DIGITS: " + MAX_DIGITS);
-    // Create one-hot encoding for each digit
+    // Create one-hot encoding masks for each digit
     for (i = 0; i < MAX_DIGITS; i++) {
         num = 1 << i;
         masks.push(num);
         // console.log("i: " + i);
-        console.log("num: " + num);
+        // console.log("num: " + num);
     }
 }
 
 function generate_lut() {
-    // TODO: Loop through MAX_DIGITS digits!
     var digit_number;
-
-    var digits;
-    // The amount of numbers to generate for each digit
-    var generate_count;
+    var generate_count; // The amount of numbers to generate for each digit
     var i, j, k;
     var str;
     var strArray;
 
     for (digit_number = 1; digit_number <= MAX_DIGITS; digit_number++) {
-        console.log("Digit " + (digit_number));
+        // console.log("Digit " + (digit_number));
         generate_count = 1 << (digit_number);
 
         for (i = 0; i < generate_count; i++) {
-            console.log("i: " + i);
+            // console.log("i: " + i);
             strArray = [];
             // For each bit in i, if it is a 0, create a 4 digit,
             // and if it is 1, give it a 7 digit.
@@ -115,13 +103,13 @@ function generate_lut() {
                 strArray[j] = ((masks[j] & i)) ? "7" : "4";
             }
 
-            // Contatenate all the digits into a single string to store
+            // Concatenate all the digits into a single string to store
             str = "";
             for (k = strArray.length-1; k >= 0; k--) {
                 str += strArray[k];
             }
 
-            console.log("output: " + str);
+            // console.log("output: " + str);
             // Convert the string to number
             // See http://stackoverflow.com/questions/12862624/whats-the-fastest-way-to-convert-string-to-number-in-javascript
             lut.push(~~str);
@@ -130,9 +118,28 @@ function generate_lut() {
         }
     }
 
-
-
-
     console.log("lut: ");
     console.log(lut);
 }
+
+// TODO: Make a more efficient way of searching through all the lucky numbers
+// Binary search? Count the digits of the input, and start at 2^digit#?
+function getLuckyNumber(input){
+    var i = 0;
+    for (var i = 0; i < lut.length; i++) {
+        if(input <= lut[i]){
+            return lut[i];
+        }
+    }
+}
+
+
+// Notes:
+// All numbers in javascript are 64-bit floats by default.
+// However, when using bitwise operators, the number is converted to 32-bit 2's complement
+// See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Flags_and_bitmasks
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type
+// http://stackoverflow.com/questions/596467/how-do-i-convert-a-float-number-to-a-whole-number-in-javascript
+
+// Javascript strings are immutable. There is no character replacement. The best you can
+// do is to create a new string. See http://stackoverflow.com/a/1431113
