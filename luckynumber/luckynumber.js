@@ -3,9 +3,7 @@
 //
 
 document.addEventListener("DOMContentLoaded", function(event) {
-
     document.querySelector("#check-answer-btn").addEventListener("click", output_lucky_number);
-
     console.log("Gerenating LUT...");
     generate_masks();
     generate_lut();
@@ -18,6 +16,8 @@ function output_lucky_number() {
 
     console.log("user_input: ");
     console.log(user_input);
+
+    // Make sure input isn't null
     if(user_input == ""){
         document.querySelector('#lucky_number').textContent = "Input was null...";
         return;
@@ -37,15 +37,19 @@ function output_lucky_number() {
     // Note: (1<<31)-1 doesn't produce the result I want...
     // console.log("Max input value: " + 2147483647);
     // The next number after 777,777,777 is 4,444,444,444, which isn't representable as a 32-bit number
+
+    // Bounds checking
     if(user_input > 777777777) {
         document.querySelector('#lucky_number').textContent = "Input was too big. Must be a 32-bit 2's compliment number";
         return;
     }
 
-    console.log("Checking lucky number: " + user_input);
 
-    lucky_number = getLuckyNumber(user_input);
+    // Calculate the lucky number
+    console.log("Calculating lucky number: " + user_input);
+    lucky_number = get_lucky_number(user_input);
 
+    // Output the lucky number
     if(lucky_number){
         document.querySelector('#lucky_number').textContent = lucky_number;
     }
@@ -124,7 +128,7 @@ function generate_lut() {
 
 // TODO: Make a more efficient way of searching through all the lucky numbers
 // Binary search? Count the digits of the input, and start at 2^digit#?
-function getLuckyNumber(input){
+function get_lucky_number(input){
     var i;
     for (i = 0; i < lut.length; i++) {
         if(input <= lut[i]){
