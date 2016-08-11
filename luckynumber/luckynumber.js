@@ -125,8 +125,8 @@ function generate_lut() {
 // TODO: Make a more efficient way of searching through all the lucky numbers
 // Binary search? Count the digits of the input, and start at 2^digit#?
 function getLuckyNumber(input){
-    var i = 0;
-    for (var i = 0; i < lut.length; i++) {
+    var i;
+    for (i = 0; i < lut.length; i++) {
         if(input <= lut[i]){
             return lut[i];
         }
