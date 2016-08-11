@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
-    document.getElementById("check-answer-btn").addEventListener("click", generate_lucky_number);
+    document.querySelector("#check-answer-btn").addEventListener("click", output_lucky_number);
 
     console.log("Gerenating LUT...");
     generate_flags();
@@ -10,19 +10,50 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 
-function generate_lucky_number() {
+function output_lucky_number() {
     console.log("Generating Lucky Number...");
+    var user_input = document.querySelector('#user_input').value;
 
-
-    var user_answer = document.querySelector('#user_input').value;
-
-    if(user_answer == null){
+    console.log("user_input: ");
+    console.log(user_input);
+    if(user_input == ""){
+        document.querySelector('#lucky_number').textContent = "Input was null...";
         return;
     }
 
-    console.log("Checking answer " + user_answer);
+    // convert input into a number
+    user_input = +user_input;
+
+    if(!Number.isInteger(user_input)){
+        document.querySelector('#lucky_number').textContent = "Input was not an integer...";
+        return;
+    }
 
 
+    console.log("Checking lucky number: " + user_input);
+
+    var searching_lucky_number = true;
+    var lucky_number = null;
+
+
+    // TODO: Make a more efficient way of searching through all the lucky numbers
+    // Binary search? Count the digits of the input, and start at 2^digit#?
+    var i = 0;
+    while(searching_lucky_number){
+        // console.log("Is " + user_input + " > " + lut[i] + "?");
+        if(user_input <= lut[i]){
+            lucky_number = lut[i];
+            searching_lucky_number = false;
+        }
+        i++;
+    }
+
+    if(lucky_number){
+        document.querySelector('#lucky_number').textContent = lucky_number;
+    }
+    else {
+        document.querySelector('#lucky_number').textContent = "Could not find the lucky number...";
+    }
 }
 
 
@@ -35,10 +66,6 @@ function generate_lucky_number() {
 
 // Javascript strings are immutable. There is no character replacement. The best you can
 // do is to create a new string. See http://stackoverflow.com/a/1431113
-
-
-function generate_lucky_number_using_lut() {
-}
 
 const MAX_DIGITS = 7;
 var lut = [];
@@ -55,10 +82,7 @@ function generate_flags() {
         // console.log("i: " + i);
         console.log("num: " + num);
     }
-
 }
-
-
 
 function generate_lut() {
     // TODO: Loop through MAX_DIGITS digits!
