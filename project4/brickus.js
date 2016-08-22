@@ -46,11 +46,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     // See http://stackoverflow.com/a/6802970 for moving html elements
 
-    var tiles = document.getElementsByClassName("tile");
+    var pieces = document.getElementsByClassName("piece");
 
-    for (var i = tiles.length - 1; i >= 0; i--) {
-        var tile = tiles[i];
-        tile.addEventListener("mousedown", function(mouse_event) {
+    for (var i = pieces.length - 1; i >= 0; i--) {
+        pieces[i].addEventListener("mousedown", function(mouse_event) {
             // TODO: Have a check to make sure that players can only select
             // their own pieces and pieces that aren't already laid down
 
@@ -62,6 +61,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
             var mouse_x = mouse_event.clientX;
             var mouse_y = mouse_event.clientY;
+
+            grabbed_piece.style.zIndex = "1";
 
             // The grabbed location relative to the piece will be mouse_x - piece_x
 
@@ -86,14 +87,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
             // .tile needs to be set to absolute for this to work
             grabbed_piece.style.left = (x - grabbed_x) + "px";
             grabbed_piece.style.top = (y - grabbed_y) + "px";
+
+            // TODO: If the cursor goes off-screen (negative or farther than viewport/document),
+            // force the piece to be dropped (z will be reset, piece is no longer the grabbed piece)
+            // TODO: Create a "drop piece" function so that it can be forced programmatically
         }
     });
 
     // TODO: Make sure the currently grabbed piece has the highest z value
     window.addEventListener("mouseup", function(mouse_event) {
+        if(!grabbed_piece) {
+            // ignore if no piece is grabbed
+            return;
+        }
+
         var piece = mouse_event.srcElement;
-        var rect = piece.getBoundingClientRect();
+        console.log(piece);
+        var rect = grabbed_piece.getBoundingClientRect();
         grabbed_piece = mouse_event.srcElement;
+
 
         var piece_x = rect.left;
         var piece_y = rect.top;
@@ -112,13 +124,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
             // If the piece is within that grid, snap it to the grid location
             var grid_cell_rect = grid_cell.getBoundingClientRect();
             // piece css needs to be set to absolute for this to work
+            // Make sure to factor in the 1 px border
             piece.style.left = (grid_cell_rect.left+1) + "px";
             piece.style.top = (grid_cell_rect.top+1) + "px";
         }
         else {
             // Return piece to toolbar?
         }
-
+        grabbed_piece.style.zIndex = "0";
         grabbed_piece = null;
         grabbed_x = null;
         grabbed_y = null;
