@@ -23,8 +23,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     //
     // See this for setting event handlers: http://stackoverflow.com/a/6348597
 
-    console.log("attaching event handlers!!!");
-
     // Set an event listener for the r button, to rotate a piece
     window.addEventListener("keyup", function(event) {
         // See if keyup is ENTER
@@ -91,6 +89,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
     });
 
+    // TODO: Make sure the currently grabbed piece has the highest z value
     window.addEventListener("mouseup", function(mouse_event) {
         var piece = mouse_event.srcElement;
         var rect = piece.getBoundingClientRect();
@@ -108,9 +107,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         // Check to make sure the piece is a grid piece
         if(hasClass(grid_cell, "gameboard-cell")){
-            console.log("Dropped piece on a grid cell!");
-            console.log(grid_cell);
-
             // TODO: Check to make sure the piece fits in the spot
 
             // If the piece is within that grid, snap it to the grid location
@@ -129,10 +125,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 
 
-    // Rotate the currently selected piece
-    function rotate_piece() {
-        console.log("Rotate piece");
-    }
 
     // How to clone HTML objects:
     // http://stackoverflow.com/a/921316
@@ -141,8 +133,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 });
 
+//
+//// Helper functions:
+//
 
-// Helper functions:
+// Rotate the currently selected piece
+function rotate_piece() {
+    console.log("Rotate piece");
+}
+
 // See http://stackoverflow.com/a/5898748
 function hasClass(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;

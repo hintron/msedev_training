@@ -16,7 +16,7 @@ body {
 /************************************/
 
 .toolbar {
-    height: 600px;
+    height: 700px;
     width: 100px;
 }
 
@@ -32,12 +32,12 @@ body {
 
 #player3_toolbar {
     float: right;
-    background-color: green;
+    background-color: red;
 }
 
 #player4_toolbar {
     float: right;
-    background-color: red;
+    background-color: green;
 }
 
 
@@ -93,7 +93,6 @@ body {
 
 /* The CSS for a single tile unit */
 .tile {
-    /* display: block; */
     position: absolute;
     width: 20px;
     height: 20px;
@@ -112,11 +111,11 @@ body {
 }
 
 #player3_toolbar .tile {
-    border-color: #33ff33;
+    border-color: #ff6666;
 }
 
 #player4_toolbar .tile {
-    border-color: #ff6666;
+    border-color: #33ff33;
 }
 
 
