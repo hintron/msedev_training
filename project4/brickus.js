@@ -52,9 +52,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         pieces[i].addEventListener("mousedown", function(mouse_event) {
             // TODO: Have a check to make sure that players can only select
             // their own pieces and pieces that aren't already laid down
-
-            var rect = mouse_event.srcElement.getBoundingClientRect();
-            grabbed_piece = mouse_event.srcElement;
+            var rect = mouse_event.currentTarget.getBoundingClientRect();
+            grabbed_piece = mouse_event.currentTarget;
 
             var piece_x = rect.left;
             var piece_y = rect.top;
@@ -101,21 +100,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
             return;
         }
 
-        var piece = mouse_event.srcElement;
-        console.log(piece);
         var rect = grabbed_piece.getBoundingClientRect();
-        grabbed_piece = mouse_event.srcElement;
-
-
         var piece_x = rect.left;
         var piece_y = rect.top;
 
         // Locate the grid cell underneath the grabbed piece
         // look for the grid piece under the top left corner
         // To do this, quickly hide the grabbed piece and see what's underneath, then unhide it!
-        piece.style.visibility = "hidden";
+        grabbed_piece.style.visibility = "hidden";
         var grid_cell = document.elementFromPoint(piece_x, piece_y);
-        piece.style.visibility = "";
+        grabbed_piece.style.visibility = "";
 
         // Check to make sure the piece is a grid piece
         if(hasClass(grid_cell, "gameboard-cell")){
@@ -125,12 +119,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var grid_cell_rect = grid_cell.getBoundingClientRect();
             // piece css needs to be set to absolute for this to work
             // Make sure to factor in the 1 px border
-            piece.style.left = (grid_cell_rect.left+1) + "px";
-            piece.style.top = (grid_cell_rect.top+1) + "px";
+            grabbed_piece.style.left = (grid_cell_rect.left+1) + "px";
+            grabbed_piece.style.top = (grid_cell_rect.top+1) + "px";
         }
         else {
             // Return piece to toolbar?
         }
+
+
+        // Reset the z index
         grabbed_piece.style.zIndex = "0";
         grabbed_piece = null;
         grabbed_x = null;
@@ -160,3 +157,16 @@ function hasClass(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
 
+// NOTE: This isn't needed, since I saved the piece to a global var
+// // Get the containing "piece" element
+// function get_ancestor_piece(el) {
+//     var parent = el.parentElement;
+//     while(parent && !hasClass(parent, "piece")){
+//         console.log("Iteration!");
+//         parent = parent.parentElement;
+//     }
+//     if(!parent) {
+//         console.log("Could not find ancestor with class \".piece\"!");
+//     }
+//     return parent;
+// }

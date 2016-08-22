@@ -91,23 +91,33 @@ body {
 /* Tiles */
 /************************************/
 
+.piece {
+    position: absolute;
+}
+
+.tile_row {
+
+}
+
 /* The CSS for a single tile unit */
 .tile {
-    position: absolute;
     width: 20px;
     height: 20px;
     border-width: 5px;
     border-style: solid;
     background-color: #ffffff;
 }
-.tile_row {
 
+/* Make a tile blank, but make sure it still takes up space */
+.empty_tile {
+    visibility: hidden;
 }
 
-.piece {
 
-}
 
+/************************************/
+/* Toolbars */
+/************************************/
 
 #player1_toolbar .tile {
     border-color: #ccbb33;
