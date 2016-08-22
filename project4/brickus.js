@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             // Don't move the piece if it goes out of the screen
             var x = mouse_event.clientX;
             var y = mouse_event.clientY;
-            if(x < 0 || y < 0 || y > MAX_HEIGHT-(TILE_HEIGHT-grabbed_y) || y < TILE_HEIGHT-grabbed_y){
+            if(x < 0 || y < 0 || y > MAX_HEIGHT-(TILE_HEIGHT-grabbed_y) || y < grabbed_y){
                 return;
             }
             // console.log("x: " + mouse_event.clientX);
