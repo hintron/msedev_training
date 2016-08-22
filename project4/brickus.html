@@ -19,21 +19,52 @@
         <span>Yellow Score: </span>
         <span id="player1_score"></span>
 
+        <!-- div.piece>div.tile_row>div.tile.etile+div.tile+div.tile^div.tile_row>div.tile.etile+div.tile+div.tile.etile^div.tile_row>div.tile+div.tile+div.tile.etile -->
         <div class="piece">
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
-            <div class="tile"></div>
+            <div class="tile_row">
+                <div class="tile etile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile etile"></div>
+                <div class="tile"></div>
+                <div class="tile etile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile etile"></div>
+            </div>
         </div>
+
+<!-- <div class="piece">
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+        </div> -->
 
     </div>
     <div id="player2_toolbar" class="toolbar">
         <span>Blue Score: </span>
         <span id="player2_score"></span>
+        <!-- div.piece>div.tile_row*3>div.tile+div.tile+div.tile -->
         <div class="piece">
-            <div class="tile"></div>
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
         </div>
     </div>
     <!-- Note: Order is swapped, because that's how floats work -->
@@ -76,24 +107,8 @@
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
             </div>
             <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
@@ -120,24 +135,8 @@
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
             </div>
             <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
@@ -164,24 +163,8 @@
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
             </div>
             <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
@@ -208,24 +191,8 @@
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
             </div>
             <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
@@ -252,24 +219,8 @@
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
             </div>
             <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
@@ -296,200 +247,8 @@
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
             </div>
             <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-            </div>
-            <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-            </div>
-            <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-            </div>
-            <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-            </div>
-            <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-            </div>
-            <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-            </div>
-            <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-            </div>
-            <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-            </div>
-            <div class="gameboard-row">
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
-                <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>
                 <div class="gameboard-cell"></div>

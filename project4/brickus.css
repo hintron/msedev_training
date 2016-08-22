@@ -96,7 +96,6 @@ body {
 }
 
 .tile_row {
-
 }
 
 /* The CSS for a single tile unit */
@@ -106,10 +105,14 @@ body {
     border-width: 5px;
     border-style: solid;
     background-color: #ffffff;
+    margin-bottom: 1px;
+    margin-right: 1px;
+    float: left;
 }
 
 /* Make a tile blank, but make sure it still takes up space */
-.empty_tile {
+/* "empty tile" */
+.etile {
     visibility: hidden;
 }
 
