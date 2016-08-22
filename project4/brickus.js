@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // Create a gameboard that will store the pieces or just blocks
     // It needs to be a 20x20 board
     // It needs to know which piece belongs to who
-    // gameboard[20][20];
 
     // r is keycode 82
     const R_KEY = 82;
@@ -13,10 +12,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
     const TILE_WIDTH = 30;
     const TILE_HEIGHT = TILE_WIDTH;
 
+    const GAMEBOARD_WIDTH = 12;
+
     // If not null, then it means it is grabbed and should move around
     var grabbed_piece = null;
     var grabbed_x = null;
     var grabbed_y = null;
+
+    var current_player = 3;
+
+    // Each entry will hold a number for each player, 1 - 4
+    // null means it is free
+    // [row][column]
+    // See http://stackoverflow.com/a/966239
+    var gameboard = new Array(GAMEBOARD_WIDTH);
+    for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
+        gameboard[i] = new Array(GAMEBOARD_WIDTH);
+    }
 
     //
     //// Attach event handlers
@@ -40,14 +52,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
             rotate_piece();
         }
     });
-    // document.getElementById("new-problem-btn").addEventListener("click", newProblem);
-    // document.getElementById("reset-btn").addEventListener("click", reset);
-
 
     // See http://stackoverflow.com/a/6802970 for moving html elements
 
     var pieces = document.getElementsByClassName("piece");
-
     for (var i = pieces.length - 1; i >= 0; i--) {
         pieces[i].addEventListener("mousedown", function(mouse_event) {
             // TODO: Have a check to make sure that players can only select
@@ -111,8 +119,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
         var grid_cell = document.elementFromPoint(piece_x, piece_y);
         grabbed_piece.style.visibility = "";
 
-        // Check to make sure the piece is a grid piece
+        // Check to make sure the element under the piece is a grid cell
         if(hasClass(grid_cell, "gameboard-cell")){
+            // Figure out what index the grid_cell is at
+            var grid_cell_col = grid_cell.dataset.column;
+            var grid_cell_row = grid_cell.parentElement.dataset.row;
+
+            console.log("grid_cell_col");
+            console.log(grid_cell_col);
+            console.log("grid_cell_row");
+            console.log(grid_cell_row);
+
+
             // TODO: Check to make sure the piece fits in the spot
 
             // If the piece is within that grid, snap it to the grid location
@@ -121,6 +139,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
             // Make sure to factor in the 1 px border
             grabbed_piece.style.left = (grid_cell_rect.left+1) + "px";
             grabbed_piece.style.top = (grid_cell_rect.top+1) + "px";
+
+            // TODO: Set the gameboard to register the pieces
+
+            // Read the data-* html attributes for info on the pieces
+            // var bitmap = grabbed_piece.dataset.bitmap;
+            // var width = grabbed_piece.dataset.width;
+
+            // for (var i = 0; i < width; i++) {
+            //     for (var j = 0; j < width; j++) {
+            //         console.log(bitmap);
+            //         console.log(gameboard);
+            //         if(+bitmap[i*width+j]){
+            //             gameboard[i][j];
+            //         };
+            //         console.log(gameboard);
+            //     }
+            // }
+
+
         }
         else {
             // Return piece to toolbar?
