@@ -51,11 +51,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     var tiles = document.getElementsByClassName("tile");
 
-    console.log(tiles);
-
     for (var i = tiles.length - 1; i >= 0; i--) {
         var tile = tiles[i];
         tile.addEventListener("mousedown", function(mouse_event) {
+            // TODO: Have a check to make sure that players can only select
+            // their own pieces and pieces that aren't already laid down
+
             var rect = mouse_event.srcElement.getBoundingClientRect();
             grabbed_piece = mouse_event.srcElement;
 

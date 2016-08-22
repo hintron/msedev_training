@@ -61,10 +61,30 @@ body {
 
 /************************************/
 /* Gameboard */
+/* Using method 1 (floats) from project 1 part 2 */
 /************************************/
 
 #gameboard {
-    display: inline-block;
+    padding: 20px 40px 50px 40px;
+    /* This makes the outer div actually have a height, because it would be zero with two floated block elements */
+    overflow: hidden;
+    /* TODO: Make a min width so that the floated rows don't get all messed up */
+    /* min-width: 500px; */
+}
+
+.gameboard-row {
+    clear: both;
+}
+
+.gameboard-cell {
+    float: left;
+    /* Adjust cells so border looks nicer */
+    margin: 0 -1px -1px 0;
+    width: 30px;
+    height: 30px;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #eeeeee;
 }
 
 /************************************/
@@ -77,9 +97,33 @@ body {
     position: absolute;
     width: 20px;
     height: 20px;
-    border: 5px solid gray;
-    background-color: white;
+    border-width: 5px;
+    border-style: solid;
+    background-color: #ffffff;
 }
+
+
+#player1_toolbar .tile {
+    border-color: #ccbb33;
+}
+
+#player2_toolbar .tile {
+    border-color: #3388ee;
+}
+
+#player3_toolbar .tile {
+    border-color: #33ff33;
+}
+
+#player4_toolbar .tile {
+    border-color: #ff6666;
+}
+
+
+.toolbar {
+    padding-left: 5px;
+}
+
 
 .tile_row {
 
