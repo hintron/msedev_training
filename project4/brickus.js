@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
-    // TODO: Create a gameboard that will store the pieces or just blocks
+    // Create a gameboard that will store the pieces or just blocks
     // It needs to be a 20x20 board
     // It needs to know which piece belongs to who
     // gameboard[20][20];
@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var grabbed_piece = null;
     var grabbed_x = null;
     var grabbed_y = null;
-
 
     //
     //// Attach event handlers
@@ -93,11 +92,40 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 
     window.addEventListener("mouseup", function(mouse_event) {
-        console.log("Drop peice");
+        var piece = mouse_event.srcElement;
+        var rect = piece.getBoundingClientRect();
+        grabbed_piece = mouse_event.srcElement;
+
+        var piece_x = rect.left;
+        var piece_y = rect.top;
+
+        // Locate the grid cell underneath the grabbed piece
+        // look for the grid piece under the top left corner
+        // To do this, quickly hide the grabbed piece and see what's underneath, then unhide it!
+        piece.style.visibility = "hidden";
+        var grid_cell = document.elementFromPoint(piece_x, piece_y);
+        piece.style.visibility = "";
+
+        // Check to make sure the piece is a grid piece
+        if(hasClass(grid_cell, "gameboard-cell")){
+            console.log("Dropped piece on a grid cell!");
+            console.log(grid_cell);
+
+            // TODO: Check to make sure the piece fits in the spot
+
+            // If the piece is within that grid, snap it to the grid location
+            var grid_cell_rect = grid_cell.getBoundingClientRect();
+            // piece css needs to be set to absolute for this to work
+            piece.style.left = (grid_cell_rect.left+1) + "px";
+            piece.style.top = (grid_cell_rect.top+1) + "px";
+        }
+        else {
+            // Return piece to toolbar?
+        }
+
         grabbed_piece = null;
         grabbed_x = null;
         grabbed_y = null;
-        // TODO: Snap to grid - Have it snap to the closest grid location
     });
 
 
@@ -114,4 +142,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 
+// Helper functions:
+// See http://stackoverflow.com/a/5898748
+function hasClass(element, cls) {
+    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+}
 
