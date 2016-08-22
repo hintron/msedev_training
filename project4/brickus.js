@@ -56,8 +56,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     for (var i = tiles.length - 1; i >= 0; i--) {
         var tile = tiles[i];
         tile.addEventListener("mousedown", function(mouse_event) {
-            var rect = tile.getBoundingClientRect();
-            grabbed_piece = tile;
+            var rect = mouse_event.srcElement.getBoundingClientRect();
+            grabbed_piece = mouse_event.srcElement;
 
             var piece_x = rect.left;
             var piece_y = rect.top;
