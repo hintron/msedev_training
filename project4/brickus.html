@@ -76,16 +76,40 @@
     <div id="player4_toolbar" class="toolbar">
         <span>Green Score: </span>
         <span id="player4_score"></span>
-        <div class="piece">
-            <div class="tile"></div>
+
+        <!-- .piece[data-width=1][data-bitmap="1"][data-player=4]>.tile_row>.tile -->
+        <div class="piece" data-width="1" data-bitmap="1" data-player="4">
+            <div class="tile_row">
+                <div class="tile"></div>
+            </div>
         </div>
+
+
     </div>
     <div id="player3_toolbar" class="toolbar">
         <span>Red Score: </span>
         <span id="player3_score"></span>
-        <div class="piece">
-            <div class="tile"></div>
+
+        <!-- .piece[data-width=1][data-bitmap="1"][data-player=3]>.tile_row>.tile -->
+        <div class="piece" data-width="1" data-bitmap="1" data-player="3">
+            <div class="tile_row">
+                <div class="tile"></div>
+            </div>
         </div>
+        <!-- .piece[data-width=2][data-bitmap="1100"][data-player=3]>(.tile_row>.tile+.tile)+(.tile_row>.etile+.etile) -->
+        <div class="piece" data-width="2" data-bitmap="1100" data-player="3">
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="etile"></div>
+                <div class="tile"></div>
+            </div>
+        </div>
+
+
+
     </div>
 
     <!-- Note: Non-floated divs come after floated divs, in order for it to fill up the center space -->

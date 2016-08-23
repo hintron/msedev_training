@@ -159,20 +159,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
             console.log("grid_cell_row");
             console.log(grid_cell_row);
 
-
-            // TODO: Check to make sure the piece fits in the spot
-
-            // If the piece is within that grid, snap it to the grid location
-            var grid_cell_rect = grid_cell.getBoundingClientRect();
-            // piece css needs to be set to absolute for this to work
-            // Make sure to factor in the 1 px border
-            grabbed_piece.style.left = (grid_cell_rect.left+1) + "px";
-            grabbed_piece.style.top = (grid_cell_rect.top+1) + "px";
-
-
             // Read the data-* html attributes for info on the pieces
             var bitmap = grabbed_piece.dataset.bitmap;
             var width = +grabbed_piece.dataset.width;
+
 
             // Check to make sure the data embedded in the html makes sense
             if(width*width != bitmap.length){
@@ -181,10 +171,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 console.log(width);
                 console.log("bitmap.length");
                 console.log(bitmap.length);
-
-                // TODO: Return?
+                drop_piece();
+                return;
             }
 
+            // Check to make sure the piece fits on the gameboard
+            if(grid_cell_col + width-1 >= GAMEBOARD_WIDTH || grid_cell_row + width-1 >= GAMEBOARD_WIDTH){
+                console.log("Piece does not fit on the gameboard!");
+                drop_piece();
+                return;
+            }
+
+
+            // If the piece is within that grid, snap it to the grid location
+            var grid_cell_rect = grid_cell.getBoundingClientRect();
+            // piece css needs to be set to absolute for this to work
+            // Make sure to factor in the 1 px border
+            grabbed_piece.style.left = (grid_cell_rect.left+1) + "px";
+            grabbed_piece.style.top = (grid_cell_rect.top+1) + "px";
 
             var player = +grabbed_piece.dataset.player;
 
@@ -197,7 +201,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
             // Set the gameboard to register the pieces for the player
-
             console.log(bitmap);
             // TODO: Break this out into a function
             // Start at the location of the upper left corner of the piece,
@@ -215,16 +218,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
             calculate_points();
         }
-        else {
-            // Return piece to toolbar?
-        }
 
+        drop_piece();
+    });
+
+
+
+    function drop_piece() {
         // Reset the z index
         grabbed_piece.style.zIndex = "0";
         grabbed_piece = null;
         grabbed_x = null;
         grabbed_y = null;
-    });
+    }
+
+
+
 
 
     function calculate_points() {
