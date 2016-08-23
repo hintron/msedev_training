@@ -65,11 +65,42 @@ function mousedown_handler(mouse_event) {
     // their own pieces and pieces that aren't already laid down
 
 
-    var rect = mouse_event.currentTarget.getBoundingClientRect();
     grabbed_piece = mouse_event.currentTarget;
+    var rect = grabbed_piece.getBoundingClientRect();
 
 
     // TODO: Erase the points on the gameboard if the piece is picked up off the gameboard
+    var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);
+    if(gameboard_cell){
+        console.log("Remove points here!");
+
+        // Figure out what index the gameboard_cell is at
+        var gameboard_cell_col = +gameboard_cell.dataset.column;
+        var gameboard_cell_row = +gameboard_cell.parentElement.dataset.row;
+        console.log("gameboard_cell_col: " + gameboard_cell_col);
+        console.log("gameboard_cell_row: " + gameboard_cell_row);
+
+        // Read the data-* html attributes for info on the pieces
+        var bitmap = grabbed_piece.dataset.bitmap;
+        var cols = +grabbed_piece.dataset.cols;
+        var rows = +grabbed_piece.dataset.rows;
+
+        // Clear the gameboard of the points of the selected piece
+        for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
+            for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
+                // Grab the char at the string
+                bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
+                if(bit){
+                    // Clear the piece
+                    gameboard[i][j] = 0;
+                };
+            }
+        }
+
+        // Update the scoreboard
+        calculate_points();
+    }
+
 
     // "free" the pieces from the toolbar by setting them to absolute
     // Also, set it to block display, so it doesn't fall up
@@ -135,9 +166,6 @@ function mouseup_handler(mouse_event) {
     // Figure out what index the gameboard_cell is at
     var gameboard_cell_col = +gameboard_cell.dataset.column;
     var gameboard_cell_row = +gameboard_cell.parentElement.dataset.row;
-
-    // console.log("gameboard_cell_col: " + gameboard_cell_col);
-    // console.log("gameboard_cell_row: " + gameboard_cell_row);
 
     // Read the data-* html attributes for info on the pieces
     var bitmap = grabbed_piece.dataset.bitmap;
@@ -212,6 +240,9 @@ function mouseup_handler(mouse_event) {
 
 /**
     Returns the underlying gameboard_cell from the passed element, or null if it isn't under it
+
+    @param element : IN. The element to search beneath (the top left corner).
+    @return : The gameboard grid cell element if successful, or null if the gameboard is not under the top-left corner of the piece.
 
 **/
 function get_underlying_gameboard_cell(element) {
