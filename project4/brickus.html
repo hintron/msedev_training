@@ -19,8 +19,8 @@
         <span>Yellow Score: </span>
         <span id="player1_score"></span>
 
-        <!-- .piece[data-width=3][data-bitmap="011010110"][data-player=1]>(.tile_row>.tile.etile+.tile+.tile)+(.tile_row>.tile.etile+.tile+.tile.etile)+(.tile_row>.tile+.tile+.tile.etile) -->
-        <div class="piece" data-width="3" data-bitmap="011010110" data-player="1">
+        <!-- .piece[data-rows=3][data-cols=3][data-bitmap="011010110"][data-player=1]>(.tile_row>.tile.etile+.tile+.tile)+(.tile_row>.tile.etile+.tile+.tile.etile)+(.tile_row>.tile+.tile+.tile.etile) -->
+        <div class="piece" data-rows="3" data-cols="3" data-bitmap="011010110" data-player="1">
             <div class="tile_row">
                 <div class="tile etile"></div>
                 <div class="tile"></div>
@@ -48,8 +48,8 @@
     <div id="player2_toolbar" class="toolbar">
         <span>Blue Score: </span>
         <span id="player2_score"></span>
-        <!-- .piece[data-width=3][data-bitmap="111111111"][data-player=2]>.tile_row*3>.tile+.tile+.tile -->
-        <div class="piece" data-width="3" data-bitmap="111111111" data-player="2">
+        <!-- .piece[data-rows=3][data-cols=3][data-bitmap="111111111"][data-player=2]>.tile_row*3>.tile+.tile+.tile -->
+        <div class="piece" data-rows="3" data-cols="3" data-bitmap="111111111" data-player="2">
             <div class="tile_row">
                 <div class="tile"></div>
                 <div class="tile"></div>
@@ -77,8 +77,8 @@
         <span>Green Score: </span>
         <span id="player4_score"></span>
 
-        <!-- .piece[data-width=1][data-bitmap="1"][data-player=4]>.tile_row>.tile -->
-        <div class="piece" data-width="1" data-bitmap="1" data-player="4">
+        <!-- .piece[data-rows=1][data-cols=1][data-bitmap="1"][data-player=4]>.tile_row>.tile -->
+        <div class="piece" data-rows="1" data-cols="1" data-bitmap="1" data-player="4">
             <div class="tile_row">
                 <div class="tile"></div>
             </div>
@@ -90,20 +90,10 @@
         <span>Red Score: </span>
         <span id="player3_score"></span>
 
-        <!-- .piece[data-width=1][data-bitmap="1"][data-player=3]>.tile_row>.tile -->
-        <div class="piece" data-width="1" data-bitmap="1" data-player="3">
+        <!-- .piece[data-rows=1][data-cols=2][data-bitmap="11"][data-player=3]>(.tile_row>.tile+.tile) -->
+        <div class="piece" data-rows="1" data-cols="2" data-bitmap="11" data-player="3">
             <div class="tile_row">
                 <div class="tile"></div>
-            </div>
-        </div>
-        <!-- .piece[data-width=2][data-bitmap="1100"][data-player=3]>(.tile_row>.tile+.tile)+(.tile_row>.etile+.etile) -->
-        <div class="piece" data-width="2" data-bitmap="1100" data-player="3">
-            <div class="tile_row">
-                <div class="tile"></div>
-                <div class="tile"></div>
-            </div>
-            <div class="tile_row">
-                <div class="etile"></div>
                 <div class="tile"></div>
             </div>
         </div>

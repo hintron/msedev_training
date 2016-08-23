@@ -154,29 +154,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var grid_cell_col = +grid_cell.dataset.column;
             var grid_cell_row = +grid_cell.parentElement.dataset.row;
 
-            console.log("grid_cell_col");
-            console.log(grid_cell_col);
-            console.log("grid_cell_row");
-            console.log(grid_cell_row);
+            console.log("grid_cell_col: " + grid_cell_col);
+            console.log("grid_cell_row: " + grid_cell_row);
 
             // Read the data-* html attributes for info on the pieces
             var bitmap = grabbed_piece.dataset.bitmap;
-            var width = +grabbed_piece.dataset.width;
+            var cols = +grabbed_piece.dataset.cols;
+            var rows = +grabbed_piece.dataset.rows;
 
 
             // Check to make sure the data embedded in the html makes sense
-            if(width*width != bitmap.length){
-                console.log("Bitmap length does not match the width specified in the data properties!!");
-                console.log("width");
-                console.log(width);
-                console.log("bitmap.length");
-                console.log(bitmap.length);
+            if(rows*cols != bitmap.length){
+                console.log("Bitmap length does not match the rows and cols specified in the data properties!!");
+                console.log("rows: " + rows);
+                console.log("cols: " + cols);
+                console.log("bitmap.length: " + bitmap.length);
                 drop_piece();
                 return;
             }
 
             // Check to make sure the piece fits on the gameboard
-            if(grid_cell_col + width-1 >= GAMEBOARD_WIDTH || grid_cell_row + width-1 >= GAMEBOARD_WIDTH){
+            if(grid_cell_col + cols-1 >= GAMEBOARD_WIDTH || grid_cell_row + rows-1 >= GAMEBOARD_WIDTH){
                 console.log("Piece does not fit on the gameboard!");
                 drop_piece();
                 return;
@@ -205,10 +203,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
             // TODO: Break this out into a function
             // Start at the location of the upper left corner of the piece,
             // and iterate through the bitmap to set the gameboard
-            for (var i = grid_cell_row; i < grid_cell_row+width; i++) {
-                for (var j = grid_cell_col; j < grid_cell_col+width; j++) {
+            for (var i = grid_cell_row; i < grid_cell_row+rows; i++) {
+                for (var j = grid_cell_col; j < grid_cell_col+cols; j++) {
                     // Grab the char at the string
-                    var bit = +bitmap.charAt((i-grid_cell_row)*width+(j-grid_cell_col));
+                    var bit = +bitmap.charAt((i-grid_cell_row)*rows+(j-grid_cell_col));
                     if(bit){
                         gameboard[i][j] = player;
                     };
