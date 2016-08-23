@@ -136,6 +136,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         //// Check to make sure the element under the piece is a grid cell
         //
         // Keep digging until either a gameboard cell is found or the document body
+        // See http://stackoverflow.com/a/9488090
         while (document.body !== gameboard_cell && !has_class(gameboard_cell, "gameboard-cell")){
             hidden_stack.push(gameboard_cell);
             gameboard_cell.style.visibility = "hidden";
@@ -283,10 +284,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
 
         console.log("free_spaces: " + free_spaces);
-        console.log("player1_score: " + player1_score);
-        console.log("player2_score: " + player2_score);
-        console.log("player3_score: " + player3_score);
-        console.log("player4_score: " + player4_score);
+        document.getElementById("player1_score").textContent = player1_score;
+        document.getElementById("player2_score").textContent = player2_score;
+        document.getElementById("player3_score").textContent = player3_score;
+        document.getElementById("player4_score").textContent = player4_score;
     }
 
     // How to clone HTML objects:
@@ -309,6 +310,7 @@ function rotate_piece() {
 function has_class(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
+
 
 
 // TODO: Create a reset game function

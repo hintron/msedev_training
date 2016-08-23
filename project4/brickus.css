@@ -18,6 +18,11 @@ body {
 .toolbar {
     height: 700px;
     width: 100px;
+    font-family: Arial, sans-serif;
+}
+
+.score {
+    font-size: 36px;
 }
 
 #player1_toolbar {
@@ -28,18 +33,20 @@ body {
 #player2_toolbar {
     float: left;
     background-color: blue;
+    color: #eeeeee;
 }
 
 #player3_toolbar {
     float: right;
     background-color: red;
+    color: #eeeeee;
 }
 
 #player4_toolbar {
     float: right;
     background-color: green;
+    color: #eeeeee;
 }
-
 
 /************************************/
 /* header container */
