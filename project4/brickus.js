@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function(event) {
 
     // Create a gameboard that will store the pieces or just blocks
@@ -19,7 +20,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var grabbed_x = null;
     var grabbed_y = null;
 
+
     var current_player = 3;
+
+    var player1_score = 0;
+    var player2_score = 0;
+    var player3_score = 0;
+    var player4_score = 0;
+    var free_spaces = GAMEBOARD_WIDTH * GAMEBOARD_WIDTH;
+
 
     // Each entry will hold a number for each player, 1 - 4
     // null means it is free
@@ -117,10 +126,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
         // To do this, quickly hide the grabbed piece and see what's underneath, then unhide it!
         grabbed_piece.style.visibility = "hidden";
         var grid_cell = document.elementFromPoint(piece_x, piece_y);
+
+        // console.log(grid_cell);
+        // Let pieces snap to the grid if the underlying tile of a piece is an invisible piece,
+        // but make sure to grab the underlying grid cell
+        var temp;
+        if(has_class(grid_cell, "piece")){
+
+            do {
+                grid_cell.style.visibility = "hidden";
+                temp = document.elementFromPoint(piece_x, piece_y);
+                grid_cell.style.visibility = "";
+                grid_cell = temp;
+            }
+            while (grid_cell && !has_class(grid_cell, "gameboard-cell"));
+
+        }
+
         grabbed_piece.style.visibility = "";
 
+
+
+
         // Check to make sure the element under the piece is a grid cell
-        if(hasClass(grid_cell, "gameboard-cell")){
+        if(has_class(grid_cell, "gameboard-cell")){
             // Figure out what index the grid_cell is at
             var grid_cell_col = grid_cell.dataset.column;
             var grid_cell_row = grid_cell.parentElement.dataset.row;
@@ -143,8 +172,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
             // TODO: Set the gameboard to register the pieces
 
             // Read the data-* html attributes for info on the pieces
-            // var bitmap = grabbed_piece.dataset.bitmap;
-            // var width = grabbed_piece.dataset.width;
+            var bitmap = grabbed_piece.dataset.bitmap;
+            var width = grabbed_piece.dataset.width;
+            var player = grabbed_piece.dataset.player;
+            console.log("bitmap");
+            console.log(bitmap);
+            console.log("width");
+            console.log(width);
+            console.log("player");
+            console.log(player);
+
+
+            // TODO: Set the gameboard pieces to the player
 
             // for (var i = 0; i < width; i++) {
             //     for (var j = 0; j < width; j++) {
@@ -156,6 +195,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             //         console.log(gameboard);
             //     }
             // }
+
+            // calculate_points();
 
 
         }
@@ -172,6 +213,53 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 
 
+    function calculate_points() {
+        free_spaces = GAMEBOARD_WIDTH*GAMEBOARD_WIDTH;
+
+        player1_score = 0;
+        player2_score = 0;
+        player3_score = 0;
+        player4_score = 0;
+
+        // TODO: Update the point totals for all players
+        for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
+            for (var j = 0; j < GAMEBOARD_WIDTH; j++) {
+                switch(gameboard[i][j]){
+                    case 0:
+                    case null:
+                        free_spaces--;
+                        break;
+                    case 1:
+                        player1_score++;
+                        break;
+                    case 2:
+                        player2_score++;
+                        break;
+                    case 3:
+                        player3_score++;
+                        break;
+                    case 4:
+                        player4_score++;
+                        break;
+                    default:
+                        console.log("Unknown gameboard point!");
+                        break;
+                }
+            }
+        }
+
+        console.log("Player Scores:");
+        console.log("free_spaces");
+        console.log(free_spaces);
+        console.log("player1_score");
+        console.log(player1_score);
+        console.log("player2_score");
+        console.log(player2_score);
+        console.log("player3_score");
+        console.log(player3_score);
+        console.log("player4_score");
+        console.log(player4_score);
+    }
 
     // How to clone HTML objects:
     // http://stackoverflow.com/a/921316
@@ -190,15 +278,18 @@ function rotate_piece() {
 }
 
 // See http://stackoverflow.com/a/5898748
-function hasClass(element, cls) {
+function has_class(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
+
+
+// TODO: Create a reset game function
 
 // NOTE: This isn't needed, since I saved the piece to a global var
 // // Get the containing "piece" element
 // function get_ancestor_piece(el) {
 //     var parent = el.parentElement;
-//     while(parent && !hasClass(parent, "piece")){
+//     while(parent && !has_class(parent, "piece")){
 //         console.log("Iteration!");
 //         parent = parent.parentElement;
 //     }
