@@ -99,7 +99,12 @@ body {
 /************************************/
 
 .piece {
-    position: absolute;
+    margin: 0 0 10px 0;
+    /* Make it inline-block so that width is only as large as the tiles inside */
+    display:  inline-block;
+    /* This makes the height of each piece "fill in" while position = static,
+    so that my piece movement logic works */
+    overflow: hidden;
     /* Show the true size of the pieces */
     /* border: 1px dotted; */
 }

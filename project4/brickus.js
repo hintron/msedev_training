@@ -14,9 +14,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     // If not null, then it means it is grabbed and should move around
     var grabbed_piece = null;
+    // These are the coordinates relative to the upper-left corner of the grabbed piece
     var grabbed_x = null;
     var grabbed_y = null;
-
 
     var current_player = 3;
 
@@ -71,6 +71,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
             var rect = mouse_event.currentTarget.getBoundingClientRect();
             grabbed_piece = mouse_event.currentTarget;
+
+            // "free" the pieces from the toolbar by setting them to absolute
+            // Also, set it to block display, so it doesn't fall up
+            grabbed_piece.style.position = "absolute";
+            grabbed_piece.style.display = "block";
 
             var piece_x = rect.left;
             var piece_y = rect.top;
