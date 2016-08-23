@@ -127,102 +127,111 @@ document.addEventListener("DOMContentLoaded", function(event) {
         grabbed_piece.style.visibility = "hidden";
         var gameboard_cell = document.elementFromPoint(piece_x, piece_y);
 
-        // console.log(gameboard_cell);
         // Let pieces snap to the grid if the underlying tile of a piece is an invisible piece,
         // but make sure to grab the underlying grid cell
-        var temp;
-        if(has_class(gameboard_cell, "piece")){
-            do {
-                gameboard_cell.style.visibility = "hidden";
-                temp = document.elementFromPoint(piece_x, piece_y);
-                gameboard_cell.style.visibility = "";
-                gameboard_cell = temp;
-            }
-            while (gameboard_cell && !has_class(gameboard_cell, "gameboard-cell"));
+        var i,j,bit,temp;
+        var hidden_stack = new Array();
+
+        //
+        //// Check to make sure the element under the piece is a grid cell
+        //
+        // Keep digging until either a gameboard cell is found or the document body
+        while (document.body !== gameboard_cell && !has_class(gameboard_cell, "gameboard-cell")){
+            hidden_stack.push(gameboard_cell);
+            gameboard_cell.style.visibility = "hidden";
+            temp = document.elementFromPoint(piece_x, piece_y);
+            gameboard_cell = temp;
         }
 
+        // Unhide everything that was hidden
+        for (var i = hidden_stack.length - 1; i >= 0; i--) {
+            temp = hidden_stack.pop();
+            temp.style.visibility = "";
+        }
         grabbed_piece.style.visibility = "";
 
-        // Check to make sure the element under the piece is a grid cell
-        if(has_class(gameboard_cell, "gameboard-cell")){
-            // Figure out what index the gameboard_cell is at
-            var gameboard_cell_col = +gameboard_cell.dataset.column;
-            var gameboard_cell_row = +gameboard_cell.parentElement.dataset.row;
-
-            console.log("gameboard_cell_col: " + gameboard_cell_col);
-            console.log("gameboard_cell_row: " + gameboard_cell_row);
-
-            // Read the data-* html attributes for info on the pieces
-            var bitmap = grabbed_piece.dataset.bitmap;
-            var cols = +grabbed_piece.dataset.cols;
-            var rows = +grabbed_piece.dataset.rows;
-            var player = +grabbed_piece.dataset.player;
-
-
-            // Check to make sure the data embedded in the html makes sense
-            if(rows*cols != bitmap.length){
-                console.log("Bitmap length does not match the rows and cols specified in the data properties!!");
-                console.log("rows: " + rows);
-                console.log("cols: " + cols);
-                console.log("bitmap.length: " + bitmap.length);
-                drop_piece();
-                return;
-            }
-
-            // Check to make sure the piece fits on the gameboard
-            if(gameboard_cell_col + cols-1 >= GAMEBOARD_WIDTH || gameboard_cell_row + rows-1 >= GAMEBOARD_WIDTH){
-                console.log("Piece does not fit on the gameboard!");
-                drop_piece();
-                return;
-            }
-
-
-            var i,j,bit;
-
-            // Check to make sure the piece is not going over other pieces
-            // TODO: Break this into its own function?
-            for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
-                for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
-                    // Grab the char at the string
-                    bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
-                    if(bit && gameboard[i][j]){
-                        console.log("Can't place piece at that spot!");
-                        drop_piece();
-                        return;
-                    };
-                }
-            }
-
-
-            //
-            //// Snap to gameboard grid!
-            //
-
-            // If the piece is within that grid, snap it to the grid location
-            var gameboard_cell_rect = gameboard_cell.getBoundingClientRect();
-            // piece css needs to be set to absolute for this to work
-            // Make sure to factor in the 1 px border
-            grabbed_piece.style.left = (gameboard_cell_rect.left+1) + "px";
-            grabbed_piece.style.top = (gameboard_cell_rect.top+1) + "px";
-
-
-            // Set the gameboard to register the pieces for the player
-            // Start at the location of the upper left corner of the piece,
-            // and iterate through the bitmap to set the gameboard
-            // TODO: Break this out into a function
-            for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
-                for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
-                    // Grab the char at the string
-                    bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
-                    if(bit){
-                        gameboard[i][j] = player;
-                    };
-                }
-            }
-            // console.log(gameboard);
-
-            calculate_points();
+        if(document.body === gameboard_cell) {
+            // Piece was not dropped on the gameboard, so drop the piece
+            console.log("Piece was not dropped on the gameboard");
+            drop_piece();
+            return;
         }
+
+        // Figure out what index the gameboard_cell is at
+        var gameboard_cell_col = +gameboard_cell.dataset.column;
+        var gameboard_cell_row = +gameboard_cell.parentElement.dataset.row;
+
+        console.log("gameboard_cell_col: " + gameboard_cell_col);
+        console.log("gameboard_cell_row: " + gameboard_cell_row);
+
+        // Read the data-* html attributes for info on the pieces
+        var bitmap = grabbed_piece.dataset.bitmap;
+        var cols = +grabbed_piece.dataset.cols;
+        var rows = +grabbed_piece.dataset.rows;
+        var player = +grabbed_piece.dataset.player;
+
+
+        // Check to make sure the data embedded in the html makes sense
+        if(rows*cols != bitmap.length){
+            console.log("Bitmap length does not match the rows and cols specified in the data properties!!");
+            console.log("rows: " + rows);
+            console.log("cols: " + cols);
+            console.log("bitmap.length: " + bitmap.length);
+            drop_piece();
+            return;
+        }
+
+        // Check to make sure the piece fits on the gameboard
+        if(gameboard_cell_col + cols-1 >= GAMEBOARD_WIDTH || gameboard_cell_row + rows-1 >= GAMEBOARD_WIDTH){
+            console.log("Piece does not fit on the gameboard!");
+            drop_piece();
+            return;
+        }
+
+        // TODO:
+        // // Check to make sure the piece is not going over other pieces
+        // // TODO: Break this into its own function?
+        // for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
+        //     for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
+        //         // Grab the char at the string
+        //         bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
+        //         if(bit && gameboard[i][j]){
+        //             console.log("Can't place piece at that spot!");
+        //             drop_piece();
+        //             return;
+        //         };
+        //     }
+        // }
+
+
+        //
+        //// Snap to gameboard grid!
+        //
+
+        // If the piece is within that grid, snap it to the grid location
+        var gameboard_cell_rect = gameboard_cell.getBoundingClientRect();
+        // piece css needs to be set to absolute for this to work
+        // Make sure to factor in the 1 px border
+        grabbed_piece.style.left = (gameboard_cell_rect.left+1) + "px";
+        grabbed_piece.style.top = (gameboard_cell_rect.top+1) + "px";
+
+
+        // Set the gameboard to register the pieces for the player
+        // Start at the location of the upper left corner of the piece,
+        // and iterate through the bitmap to set the gameboard
+        // TODO: Break this out into a function
+        for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
+            for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
+                // Grab the char at the string
+                bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
+                if(bit){
+                    gameboard[i][j] = player;
+                };
+            }
+        }
+        // console.log(gameboard);
+
+        calculate_points();
 
         drop_piece();
     });
