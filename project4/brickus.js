@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var mouse_x = mouse_event.clientX;
             var mouse_y = mouse_event.clientY;
 
+            // Make sure the currently grabbed piece has the highest z value
             grabbed_piece.style.zIndex = "1";
 
             // The grabbed location relative to the piece will be mouse_x - piece_x
@@ -110,7 +111,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
     });
 
-    // TODO: Make sure the currently grabbed piece has the highest z value
     window.addEventListener("mouseup", function(mouse_event) {
         if(!grabbed_piece) {
             // ignore if no piece is grabbed
@@ -132,7 +132,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         // but make sure to grab the underlying grid cell
         var temp;
         if(has_class(gameboard_cell, "piece")){
-
             do {
                 gameboard_cell.style.visibility = "hidden";
                 temp = document.elementFromPoint(piece_x, piece_y);
@@ -140,13 +139,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 gameboard_cell = temp;
             }
             while (gameboard_cell && !has_class(gameboard_cell, "gameboard-cell"));
-
         }
 
         grabbed_piece.style.visibility = "";
-
-
-
 
         // Check to make sure the element under the piece is a grid cell
         if(has_class(gameboard_cell, "gameboard-cell")){
@@ -161,6 +156,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var bitmap = grabbed_piece.dataset.bitmap;
             var cols = +grabbed_piece.dataset.cols;
             var rows = +grabbed_piece.dataset.rows;
+            var player = +grabbed_piece.dataset.player;
 
 
             // Check to make sure the data embedded in the html makes sense
@@ -181,6 +177,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
 
 
+            var i,j,bit;
+
+            // Check to make sure the piece is not going over other pieces
+            // TODO: Break this into its own function?
+            for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
+                for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
+                    // Grab the char at the string
+                    bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
+                    if(bit && gameboard[i][j]){
+                        console.log("Can't place piece at that spot!");
+                        drop_piece();
+                        return;
+                    };
+                }
+            }
+
+
+            //
+            //// Snap to gameboard grid!
+            //
+
             // If the piece is within that grid, snap it to the grid location
             var gameboard_cell_rect = gameboard_cell.getBoundingClientRect();
             // piece css needs to be set to absolute for this to work
@@ -188,16 +205,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
             grabbed_piece.style.left = (gameboard_cell_rect.left+1) + "px";
             grabbed_piece.style.top = (gameboard_cell_rect.top+1) + "px";
 
-            var player = +grabbed_piece.dataset.player;
 
             // Set the gameboard to register the pieces for the player
             // Start at the location of the upper left corner of the piece,
             // and iterate through the bitmap to set the gameboard
             // TODO: Break this out into a function
-            for (var i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
-                for (var j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
+            for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
+                for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
                     // Grab the char at the string
-                    var bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
+                    bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
                     if(bit){
                         gameboard[i][j] = player;
                     };
