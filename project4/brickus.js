@@ -8,10 +8,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // r is keycode 82
     const R_KEY = 82;
 
-    // const MAX_WIDTH = ;
-    const MAX_HEIGHT = 600;
-    const TILE_WIDTH = 30;
-    const TILE_HEIGHT = TILE_WIDTH;
+    const MAX_HEIGHT = 700;
 
     const GAMEBOARD_WIDTH = 12;
 
@@ -69,6 +66,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         pieces[i].addEventListener("mousedown", function(mouse_event) {
             // TODO: Have a check to make sure that players can only select
             // their own pieces and pieces that aren't already laid down
+
+            // TODO: Erase the count on the gameboard if the piece is on a gameboard
+
             var rect = mouse_event.currentTarget.getBoundingClientRect();
             grabbed_piece = mouse_event.currentTarget;
 
@@ -95,7 +95,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
             // Don't move the piece if it goes out of the screen
             var x = mouse_event.clientX;
             var y = mouse_event.clientY;
-            if(x < 0 || y < 0 || y > MAX_HEIGHT-(TILE_HEIGHT-grabbed_y) || y < grabbed_y){
+            // TODO: Why are pieces freezing game when hit bottom?
+            if(x < 0 || y < 0 || y > MAX_HEIGHT-grabbed_y || y < grabbed_y){
+                drop_piece();
                 return;
             }
             // console.log("x: " + mouse_event.clientX);
