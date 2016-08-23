@@ -63,16 +63,16 @@ for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
 function mousedown_handler(mouse_event) {
     // TODO: Have a check to make sure that players can only select
     // their own pieces and pieces that aren't already laid down
-
-
     grabbed_piece = mouse_event.currentTarget;
     var rect = grabbed_piece.getBoundingClientRect();
 
 
     // TODO: Erase the points on the gameboard if the piece is picked up off the gameboard
     var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);
-    if(gameboard_cell){
+    if(gameboard_cell && grabbed_piece.brickus_placed){
         console.log("Remove points here!");
+        grabbed_piece.brickus_placed = false;
+
 
         // Figure out what index the gameboard_cell is at
         var gameboard_cell_col = +gameboard_cell.dataset.column;
@@ -191,20 +191,18 @@ function mouseup_handler(mouse_event) {
         return;
     }
 
-    // TODO:
-    // // Check to make sure the piece is not going over other pieces
-    // // TODO: Break this into its own function?
-    // for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
-    //     for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
-    //         // Grab the char at the string
-    //         bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
-    //         if(bit && gameboard[i][j]){
-    //             console.log("Can't place piece at that spot!");
-    //             drop_piece();
-    //             return;
-    //         };
-    //     }
-    // }
+    // Check to make sure the piece is not going over other pieces
+    for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
+        for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
+            // Grab the char at the string
+            bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
+            if(bit && gameboard[i][j]){
+                console.log("Can't place piece at that spot!");
+                drop_piece();
+                return;
+            };
+        }
+    }
 
 
     //
@@ -218,11 +216,14 @@ function mouseup_handler(mouse_event) {
     grabbed_piece.style.left = (gameboard_cell_rect.left+1) + "px";
     grabbed_piece.style.top = (gameboard_cell_rect.top+1) + "px";
 
+    // Set the piece as "placed" - so if a piece was never "snapped,"
+    // don't let points get removed next time it is picked up
+    grabbed_piece.brickus_placed = true;
+
 
     // Set the gameboard to register the pieces for the player
     // Start at the location of the upper left corner of the piece,
     // and iterate through the bitmap to set the gameboard
-    // TODO: Break this out into a function
     for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
         for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
             // Grab the char at the string
