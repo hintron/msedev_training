@@ -64,10 +64,12 @@ function mousedown_handler(mouse_event) {
     // TODO: Have a check to make sure that players can only select
     // their own pieces and pieces that aren't already laid down
 
-    // TODO: Erase the count on the gameboard if the piece is on a gameboard
 
     var rect = mouse_event.currentTarget.getBoundingClientRect();
     grabbed_piece = mouse_event.currentTarget;
+
+
+    // TODO: Erase the points on the gameboard if the piece is picked up off the gameboard
 
     // "free" the pieces from the toolbar by setting them to absolute
     // Also, set it to block display, so it doesn't fall up
@@ -119,41 +121,11 @@ function mouseup_handler(mouse_event) {
         return;
     }
 
-    var rect = grabbed_piece.getBoundingClientRect();
-    var piece_x = rect.left;
-    var piece_y = rect.top;
-
-    // Locate the grid cell underneath the grabbed piece
-    // look for the grid piece under the top left corner
-    // To do this, quickly hide the grabbed piece and see what's underneath, then unhide it!
-    grabbed_piece.style.visibility = "hidden";
-    var gameboard_cell = document.elementFromPoint(piece_x, piece_y);
-
-    // Let pieces snap to the grid if the underlying tile of a piece is an invisible piece,
-    // but make sure to grab the underlying grid cell
-    var i,j,bit,temp;
-    var hidden_stack = new Array();
-
     //
     //// Check to make sure the element under the piece is a grid cell
     //
-    // Keep digging until either a gameboard cell is found or the document body
-    // See http://stackoverflow.com/a/9488090
-    while (document.body !== gameboard_cell && !has_class(gameboard_cell, "gameboard-cell")){
-        hidden_stack.push(gameboard_cell);
-        gameboard_cell.style.visibility = "hidden";
-        temp = document.elementFromPoint(piece_x, piece_y);
-        gameboard_cell = temp;
-    }
-
-    // Unhide everything that was hidden
-    for (var i = hidden_stack.length - 1; i >= 0; i--) {
-        temp = hidden_stack.pop();
-        temp.style.visibility = "";
-    }
-    grabbed_piece.style.visibility = "";
-
-    if(document.body === gameboard_cell) {
+    var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);
+    if(gameboard_cell == null) {
         // Piece was not dropped on the gameboard, so drop the piece
         console.log("Piece was not dropped on the gameboard");
         drop_piece();
@@ -164,8 +136,8 @@ function mouseup_handler(mouse_event) {
     var gameboard_cell_col = +gameboard_cell.dataset.column;
     var gameboard_cell_row = +gameboard_cell.parentElement.dataset.row;
 
-    console.log("gameboard_cell_col: " + gameboard_cell_col);
-    console.log("gameboard_cell_row: " + gameboard_cell_row);
+    // console.log("gameboard_cell_col: " + gameboard_cell_col);
+    // console.log("gameboard_cell_row: " + gameboard_cell_row);
 
     // Read the data-* html attributes for info on the pieces
     var bitmap = grabbed_piece.dataset.bitmap;
@@ -235,9 +207,53 @@ function mouseup_handler(mouse_event) {
     // console.log(gameboard);
 
     calculate_points();
-
     drop_piece();
 }
+
+/**
+    Returns the underlying gameboard_cell from the passed element, or null if it isn't under it
+
+**/
+function get_underlying_gameboard_cell(element) {
+    var rect = element.getBoundingClientRect();
+    var piece_x = rect.left;
+    var piece_y = rect.top;
+
+    // Locate the grid cell underneath the grabbed piece
+    // look for the grid piece under the top left corner
+    // To do this, quickly hide the grabbed piece and see what's underneath, then unhide it!
+    element.style.visibility = "hidden";
+    var gameboard_cell = document.elementFromPoint(piece_x, piece_y);
+
+    // Let pieces snap to the grid if the underlying tile of a piece is an invisible piece,
+    // but make sure to grab the underlying grid cell
+    var i,j,bit,temp;
+    var hidden_stack = new Array();
+
+    // Keep digging until either a gameboard cell is found or the document body
+    // See http://stackoverflow.com/a/9488090
+    while (document.body !== gameboard_cell && !has_class(gameboard_cell, "gameboard-cell")){
+        hidden_stack.push(gameboard_cell);
+        gameboard_cell.style.visibility = "hidden";
+        temp = document.elementFromPoint(piece_x, piece_y);
+        gameboard_cell = temp;
+    }
+
+    // Unhide everything that was hidden
+    for (var i = hidden_stack.length - 1; i >= 0; i--) {
+        temp = hidden_stack.pop();
+        temp.style.visibility = "";
+    }
+    element.style.visibility = "";
+
+    if(document.body === gameboard_cell) {
+        return null;
+    }
+    else {
+        return gameboard_cell;
+    }
+}
+
 
 function drop_piece() {
     // Reset the z index
@@ -282,7 +298,7 @@ function calculate_points() {
         }
     }
 
-    console.log("free_spaces: " + free_spaces);
+    // console.log("free_spaces: " + free_spaces);
     document.getElementById("player1_score").textContent = player1_score;
     document.getElementById("player2_score").textContent = player2_score;
     document.getElementById("player3_score").textContent = player3_score;
