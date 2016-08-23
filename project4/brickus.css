@@ -93,6 +93,8 @@ body {
 
 .piece {
     position: absolute;
+    /* Show the true size of the pieces */
+    /* border: 1px dotted; */
 }
 
 .tile_row {

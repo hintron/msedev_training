@@ -151,8 +151,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         // Check to make sure the element under the piece is a grid cell
         if(has_class(grid_cell, "gameboard-cell")){
             // Figure out what index the grid_cell is at
-            var grid_cell_col = grid_cell.dataset.column;
-            var grid_cell_row = grid_cell.parentElement.dataset.row;
+            var grid_cell_col = +grid_cell.dataset.column;
+            var grid_cell_row = +grid_cell.parentElement.dataset.row;
 
             console.log("grid_cell_col");
             console.log(grid_cell_col);
@@ -169,41 +169,55 @@ document.addEventListener("DOMContentLoaded", function(event) {
             grabbed_piece.style.left = (grid_cell_rect.left+1) + "px";
             grabbed_piece.style.top = (grid_cell_rect.top+1) + "px";
 
-            // TODO: Set the gameboard to register the pieces
 
             // Read the data-* html attributes for info on the pieces
             var bitmap = grabbed_piece.dataset.bitmap;
-            var width = grabbed_piece.dataset.width;
-            var player = grabbed_piece.dataset.player;
-            console.log("bitmap");
+            var width = +grabbed_piece.dataset.width;
+
+            // Check to make sure the data embedded in the html makes sense
+            if(width*width != bitmap.length){
+                console.log("Bitmap length does not match the width specified in the data properties!!");
+                console.log("width");
+                console.log(width);
+                console.log("bitmap.length");
+                console.log(bitmap.length);
+
+                // TODO: Return?
+            }
+
+
+            var player = +grabbed_piece.dataset.player;
+
+            // console.log("bitmap");
+            // console.log(bitmap);
+            // console.log("width");
+            // console.log(width);
+            // console.log("player");
+            // console.log(player);
+
+
+            // Set the gameboard to register the pieces for the player
+
             console.log(bitmap);
-            console.log("width");
-            console.log(width);
-            console.log("player");
-            console.log(player);
+            // TODO: Break this out into a function
+            // Start at the location of the upper left corner of the piece,
+            // and iterate through the bitmap to set the gameboard
+            for (var i = grid_cell_row; i < grid_cell_row+width; i++) {
+                for (var j = grid_cell_col; j < grid_cell_col+width; j++) {
+                    // Grab the char at the string
+                    var bit = +bitmap.charAt((i-grid_cell_row)*width+(j-grid_cell_col));
+                    if(bit){
+                        gameboard[i][j] = player;
+                    };
+                }
+            }
+            console.log(gameboard);
 
-
-            // TODO: Set the gameboard pieces to the player
-
-            // for (var i = 0; i < width; i++) {
-            //     for (var j = 0; j < width; j++) {
-            //         console.log(bitmap);
-            //         console.log(gameboard);
-            //         if(+bitmap[i*width+j]){
-            //             gameboard[i][j];
-            //         };
-            //         console.log(gameboard);
-            //     }
-            // }
-
-            // calculate_points();
-
-
+            calculate_points();
         }
         else {
             // Return piece to toolbar?
         }
-
 
         // Reset the z index
         grabbed_piece.style.zIndex = "0";
@@ -214,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
     function calculate_points() {
-        free_spaces = GAMEBOARD_WIDTH*GAMEBOARD_WIDTH;
+        free_spaces = 0;
 
         player1_score = 0;
         player2_score = 0;
@@ -227,7 +241,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 switch(gameboard[i][j]){
                     case 0:
                     case null:
-                        free_spaces--;
+                    case undefined:
+                        free_spaces++;
                         break;
                     case 1:
                         player1_score++;
@@ -248,17 +263,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         }
 
-        console.log("Player Scores:");
-        console.log("free_spaces");
-        console.log(free_spaces);
-        console.log("player1_score");
-        console.log(player1_score);
-        console.log("player2_score");
-        console.log(player2_score);
-        console.log("player3_score");
-        console.log(player3_score);
-        console.log("player4_score");
-        console.log(player4_score);
+        console.log("free_spaces: " + free_spaces);
+        console.log("player1_score: " + player1_score);
+        console.log("player2_score: " + player2_score);
+        console.log("player3_score: " + player3_score);
+        console.log("player4_score: " + player4_score);
     }
 
     // How to clone HTML objects:
