@@ -16,9 +16,10 @@ body {
 /************************************/
 
 .toolbar {
-    height: 700px;
-    width: 100px;
+    height: 1000px;
+    width: 120px;
     font-family: Arial, sans-serif;
+    padding-left: 5px;
 }
 
 .score {
@@ -47,6 +48,24 @@ body {
     background-color: green;
     color: #eeeeee;
 }
+
+#player1_toolbar .tile {
+    border-color: #ccbb33;
+}
+
+#player2_toolbar .tile {
+    border-color: #3388ee;
+}
+
+#player3_toolbar .tile {
+    border-color: #ff6666;
+}
+
+#player4_toolbar .tile {
+    border-color: #33ff33;
+}
+
+
 
 /************************************/
 /* header container */
@@ -110,6 +129,8 @@ body {
 }
 
 .tile_row {
+    /* Fills out the space in a tile_row */
+    overflow: hidden;
 }
 
 /* The CSS for a single tile unit */
@@ -125,36 +146,9 @@ body {
 }
 
 /* Make a tile blank, but make sure it still takes up space */
-/* "empty tile" */
+/* "empty tile" - Simply add this class to a regular .tile div to make it invisible! */
 .etile {
     visibility: hidden;
-}
-
-
-
-/************************************/
-/* Toolbars */
-/************************************/
-
-#player1_toolbar .tile {
-    border-color: #ccbb33;
-}
-
-#player2_toolbar .tile {
-    border-color: #3388ee;
-}
-
-#player3_toolbar .tile {
-    border-color: #ff6666;
-}
-
-#player4_toolbar .tile {
-    border-color: #33ff33;
-}
-
-
-.toolbar {
-    padding-left: 5px;
 }
 
 
