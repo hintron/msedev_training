@@ -1,7 +1,5 @@
 /*
     Future Improvements:
-    * After all the pieces are rendered, turn them into absolute,
-        so that they don't fall up after picking up the pieces
     * Make it so that clicking on an etile portion of a piece DOESN'T pick it up
     * Create more pieces so that the game is more balances
     * Create player turns and a "turn done" button so that players can't
@@ -41,9 +39,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var pieces = document.getElementsByClassName("piece");
     for (var i = pieces.length - 1; i >= 0; i--) {
         pieces[i].addEventListener("mousedown", mousedown_handler);
+        // Set all pieces to absolute positioning now that they are rendered
+        // Get bounding rect
+        // See http://stackoverflow.com/a/11396681
+        var rect = pieces[i].getBoundingClientRect();
+        pieces[i].style.position = "absolute";
+        // Reset the coordinates to where it was, since setting to absolute move the piece
+        pieces[i].style.left = rect.left + "px";
+        pieces[i].style.top = rect.top + "px";
     }
     window.addEventListener("mousemove", mousemove_handler);
     window.addEventListener("mouseup", mouseup_handler);
+
 });
 
 // r is keycode 82
@@ -69,6 +76,8 @@ var gameboard = new Array(GAMEBOARD_WIDTH);
 for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
     gameboard[i] = new Array(GAMEBOARD_WIDTH);
 }
+
+
 
 
 
@@ -111,12 +120,6 @@ function mousedown_handler(mouse_event) {
         calculate_points();
     }
 
-
-    // "free" the pieces from the toolbar by setting them to absolute
-    // Also, set it to block display, so it doesn't fall up
-    grabbed_piece.style.position = "absolute";
-    grabbed_piece.style.display = "block";
-
     var piece_x = rect.left;
     var piece_y = rect.top;
 
@@ -145,7 +148,7 @@ function mousemove_handler(mouse_event) {
         // console.log("x: " + mouse_event.clientX);
         // console.log("y: " + mouse_event.clientY);
 
-        // .tile needs to be set to absolute for this to work
+        // piece needs to be set to absolute for this to work
         grabbed_piece.style.left = (x - grabbed_x) + "px";
         grabbed_piece.style.top = (y - grabbed_y) + "px";
 

@@ -17,6 +17,7 @@ body {
 
 .toolbar {
     /* Let height auto-fill */
+    height: 800px;
     width: 200px;
     font-family: Arial, sans-serif;
     padding: 0 3px;
