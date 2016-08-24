@@ -1,7 +1,7 @@
 /*
     Future Improvements:
     * Make it so that clicking on an etile portion of a piece DOESN'T pick it up
-    * Create more pieces so that the game is more balances
+    * Create more pieces so that the game is more balanced
     * Create player turns and a "turn done" button so that players can't
         move different player's pieces accidentally
     * Make grid snapping be to the closest corner
@@ -10,12 +10,8 @@
 
 */
 
-
-
-
-
 //
-//// Attach event handlers
+//// Attach event handlers and initialize code
 //
 document.addEventListener("DOMContentLoaded", function(event) {
     // See this for setting event handlers: http://stackoverflow.com/a/6348597
@@ -64,8 +60,6 @@ var grabbed_piece = null;
 var grabbed_x = null;
 var grabbed_y = null;
 
-// var current_player = 3;
-
 // Create a gameboard that will store the pieces or just blocks
 // It needs to know which piece belongs to who
 // Each entry will hold a number for each player, 1 - 4
@@ -78,15 +72,11 @@ for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
 }
 
 
-
-
-
 function mousedown_handler(mouse_event) {
     // TODO: Have a check to make sure that players can only select
     // their own pieces and pieces that aren't already laid down
     grabbed_piece = mouse_event.currentTarget;
     var rect = grabbed_piece.getBoundingClientRect();
-
 
     // Erase the points on the gameboard if the piece is picked up off the gameboard
     var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);
@@ -130,7 +120,6 @@ function mousedown_handler(mouse_event) {
     grabbed_piece.style.zIndex = "1";
 
     // The grabbed location relative to the piece will be mouse_x - piece_x
-
     // Save the location of mouse within the piece
     grabbed_x = mouse_x - piece_x;
     grabbed_y = mouse_y - piece_y;
@@ -141,7 +130,7 @@ function mousemove_handler(mouse_event) {
         // Don't move the piece if it goes out of the screen
         var x = mouse_event.clientX;
         var y = mouse_event.clientY;
-        // TODO: Why are pieces freezing game when hit bottom?
+        // TODO: Why are pieces freezing the game when hit bottom?
         if(x < grabbed_x || y < grabbed_y /*|| y > MAX_HEIGHT-grabbed_y*/){
             return;
         }
@@ -154,7 +143,6 @@ function mousemove_handler(mouse_event) {
 
         // TODO: If the cursor goes off-screen (negative or farther than viewport/document),
         // force the piece to be dropped (z will be reset, piece is no longer the grabbed piece)
-        // TODO: Create a "drop piece" function so that it can be forced programmatically
     }
 }
 
@@ -217,7 +205,6 @@ function mouseup_handler(mouse_event) {
         }
     }
 
-
     //
     //// Snap to gameboard grid!
     //
@@ -233,7 +220,6 @@ function mouseup_handler(mouse_event) {
     // don't let points get removed next time it is picked up
     grabbed_piece.brickus_placed = true;
 
-
     // Set the gameboard to register the pieces for the player
     // Start at the location of the upper left corner of the piece,
     // and iterate through the bitmap to set the gameboard
@@ -247,8 +233,6 @@ function mouseup_handler(mouse_event) {
             };
         }
     }
-    // console.log(gameboard);
-
     calculate_points();
     drop_piece();
 }
@@ -370,26 +354,3 @@ function rotate_piece() {
 function has_class(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
-
-
-
-// TODO: Create a reset game function
-
-// NOTE: This isn't needed, since I saved the piece to a global var
-// // Get the containing "piece" element
-// function get_ancestor_piece(el) {
-//     var parent = el.parentElement;
-//     while(parent && !has_class(parent, "piece")){
-//         console.log("Iteration!");
-//         parent = parent.parentElement;
-//     }
-//     if(!parent) {
-//         console.log("Could not find ancestor with class \".piece\"!");
-//     }
-//     return parent;
-// }
-
-
-// How to clone HTML objects:
-// http://stackoverflow.com/a/921316
-// Also https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
