@@ -1,6 +1,5 @@
 /*
     Future Improvements:
-    * Make the more recent pieces always have a higher z value
     * Create more pieces so that the game is more balanced
     * Create player turns and a "turn done" button so that players can't
         move different player's pieces accidentally

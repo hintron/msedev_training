@@ -1,0 +1,19 @@
+body {
+    /* text-align: center; */
+}
+
+h1 {
+    text-align: center;
+    background-color: #eeeedd;
+}
+
+p {
+    font-family: sans-serif;
+    background-color:  #aaee99;
+}
+
+div {
+    background-color: #abbccd;
+    padding: 5px;
+    margin: 10px 0 0 0;
+}
