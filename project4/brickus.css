@@ -72,9 +72,8 @@ body {
 /************************************/
 
 #gameboard_container {
-    /* float: left; */
     text-align: center;
-    min-width: 300px;
+    padding: 10px 0 0 8px;
 }
 
 
@@ -89,9 +88,7 @@ body {
 /************************************/
 
 #gameboard {
-    padding: 20px 40px 50px 40px;
-    /* This makes the outer div actually have a height, because it would be zero with two floated block elements */
-    overflow: hidden;
+    display: inline-block;
     /* TODO: Make a min width so that the floated rows don't get all messed up */
     min-width: 380px;
 }
@@ -117,7 +114,7 @@ body {
 
 .piece {
     /* Make it inline-block so that width is only as large as the tiles inside */
-    display:  inline-block;
+    display: inline-block;
     /* This makes the height of each piece "fill in" while position = static,
     so that my piece movement logic works */
     overflow: hidden;
