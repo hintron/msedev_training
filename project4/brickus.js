@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
     });
 
-    document.getElementById("rotate_btn").addEventListener("click", rotate_piece);
     // Set an event listener for the r button, to rotate a piece
     window.addEventListener("keyup", function(event) {
         // See if keyup is ENTER
@@ -70,29 +69,27 @@ function mousedown_handler(mouse_event) {
     // TODO: Erase the points on the gameboard if the piece is picked up off the gameboard
     var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);
     if(gameboard_cell && grabbed_piece.brickus_placed){
-        console.log("Remove points here!");
         grabbed_piece.brickus_placed = false;
-
 
         // Figure out what index the gameboard_cell is at
         var gameboard_cell_col = +gameboard_cell.dataset.column;
         var gameboard_cell_row = +gameboard_cell.parentElement.dataset.row;
-        console.log("gameboard_cell_col: " + gameboard_cell_col);
-        console.log("gameboard_cell_row: " + gameboard_cell_row);
 
         // Read the data-* html attributes for info on the pieces
         var bitmap = grabbed_piece.dataset.bitmap;
         var cols = +grabbed_piece.dataset.cols;
         var rows = +grabbed_piece.dataset.rows;
 
+        var i,j,bit,index;
         // Clear the gameboard of the points of the selected piece
-        for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
-            for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
+        for (i = 0; i < rows; i++) {
+            for (j = 0; j < cols; j++) {
                 // Grab the char at the string
-                bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
+                index = (i*cols)+j;
+                bit = +bitmap.charAt(index);
                 if(bit){
                     // Clear the piece
-                    gameboard[i][j] = 0;
+                    gameboard[i+gameboard_cell_row][j+gameboard_cell_col] = 0;
                 };
             }
         }
@@ -129,8 +126,7 @@ function mousemove_handler(mouse_event) {
         var x = mouse_event.clientX;
         var y = mouse_event.clientY;
         // TODO: Why are pieces freezing game when hit bottom?
-        if(x < 0 || y < 0 || y > MAX_HEIGHT-grabbed_y || y < grabbed_y){
-            drop_piece();
+        if(x < grabbed_x || y < grabbed_y /*|| y > MAX_HEIGHT-grabbed_y*/){
             return;
         }
         // console.log("x: " + mouse_event.clientX);
@@ -191,13 +187,14 @@ function mouseup_handler(mouse_event) {
         return;
     }
 
+    var i,j,bit,index;
     // Check to make sure the piece is not going over other pieces
-    for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
-        for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
             // Grab the char at the string
-            bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
-            if(bit && gameboard[i][j]){
-                console.log("Can't place piece at that spot!");
+            index = (i*cols)+j;
+            bit = +bitmap.charAt(index);
+            if(bit && gameboard[i+gameboard_cell_row][j+gameboard_cell_col]){
                 drop_piece();
                 return;
             };
@@ -224,12 +221,13 @@ function mouseup_handler(mouse_event) {
     // Set the gameboard to register the pieces for the player
     // Start at the location of the upper left corner of the piece,
     // and iterate through the bitmap to set the gameboard
-    for (i = gameboard_cell_row; i < gameboard_cell_row+rows; i++) {
-        for (j = gameboard_cell_col; j < gameboard_cell_col+cols; j++) {
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
             // Grab the char at the string
-            bit = +bitmap.charAt((i-gameboard_cell_row)*rows+(j-gameboard_cell_col));
+            index = (i*cols)+j;
+            bit = +bitmap.charAt(index);
             if(bit){
-                gameboard[i][j] = player;
+                gameboard[i+gameboard_cell_row][j+gameboard_cell_col] = player;
             };
         }
     }
