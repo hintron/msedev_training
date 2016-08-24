@@ -16,10 +16,10 @@ body {
 /************************************/
 
 .toolbar {
-    height: 1000px;
-    width: 120px;
+    /* Let height auto-fill */
+    width: 200px;
     font-family: Arial, sans-serif;
-    padding-left: 5px;
+    padding: 0 3px;
 }
 
 .score {
@@ -79,10 +79,8 @@ body {
 
 
 #header_container {
-    /* position: fixed; */
     background-color: #00ddcc;
     text-align: center;
-    /* padding: 10px 0; */
 }
 
 /************************************/
@@ -95,7 +93,7 @@ body {
     /* This makes the outer div actually have a height, because it would be zero with two floated block elements */
     overflow: hidden;
     /* TODO: Make a min width so that the floated rows don't get all messed up */
-    /* min-width: 500px; */
+    min-width: 380px;
 }
 
 .gameboard-row {
@@ -118,7 +116,6 @@ body {
 /************************************/
 
 .piece {
-    margin: 0 0 10px 0;
     /* Make it inline-block so that width is only as large as the tiles inside */
     display:  inline-block;
     /* This makes the height of each piece "fill in" while position = static,

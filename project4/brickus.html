@@ -14,6 +14,8 @@
         player 2 = Blue
         player 3 = Red
         player 4 = Green
+
+        bitmap is the left to right, top to bottom representation of the piece, with 1's being a visible piece and 0's being an empty piece
      -->
     <div id="player1_toolbar" class="toolbar">
         <div>
@@ -26,14 +28,14 @@
         <!--     **************        -->
 
 
-        <!-- .piece[data-rows=1][data-cols=1][data-bitmap="1"][data-player=4]>.tile_row>.tile -->
+        <!-- .piece[data-rows=1][data-cols=1][data-bitmap="1"][data-player=1]>.tile_row>.tile -->
         <div class="piece" data-rows="1" data-cols="1" data-bitmap="1" data-player="1">
             <div class="tile_row">
                 <div class="tile"></div>
             </div>
         </div>
 
-        <!-- .piece[data-rows=1][data-cols=2][data-bitmap="11"][data-player=3]>(.tile_row>.tile+.tile) -->
+        <!-- .piece[data-rows=1][data-cols=2][data-bitmap="11"][data-player=1]>(.tile_row>.tile+.tile) -->
         <div class="piece" data-rows="1" data-cols="2" data-bitmap="11" data-player="1">
             <div class="tile_row">
                 <div class="tile"></div>
@@ -45,6 +47,63 @@
         <div class="piece" data-rows="1" data-cols="3" data-bitmap="111" data-player="1">
             <div class="tile_row">
                 <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+        </div>
+        <!-- .piece[data-rows=1][data-cols=4][data-bitmap="1111"][data-player=1]>(.tile_row>.tile*4) -->
+        <div class="piece" data-rows="1" data-cols="4" data-bitmap="1111" data-player="1">
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+        </div>
+
+        <!-- .piece[data-rows=2][data-cols=1][data-bitmap="11"][data-player=1]>(.tile_row>.tile)*2 -->
+        <div class="piece" data-rows="2" data-cols="1" data-bitmap="11" data-player="1">
+            <div class="tile_row">
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile"></div>
+            </div>
+        </div>
+
+        <!-- .piece[data-rows=3][data-cols=1][data-bitmap="111"][data-player=1]>(.tile_row>.tile)*3 -->
+        <div class="piece" data-rows="3" data-cols="1" data-bitmap="111" data-player="1">
+            <div class="tile_row">
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile"></div>
+            </div>
+        </div>
+
+
+        <!-- .piece[data-rows=2][data-cols=2][data-bitmap="0111"][data-player=1]>(.tile_row>.tile.etile+.tile)+(.tile_row>.tile*2) -->
+        <div class="piece" data-rows="2" data-cols="2" data-bitmap="0111" data-player="1">
+            <div class="tile_row">
+                <div class="tile etile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+        </div>
+
+        <!-- .piece[data-rows=2][data-cols=2][data-bitmap="1011"][data-player=1]>(.tile_row>.tile+.tile.etile)+(.tile_row>.tile*2) -->
+        <div class="piece" data-rows="2" data-cols="2" data-bitmap="1011" data-player="1">
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile etile"></div>
+            </div>
+            <div class="tile_row">
                 <div class="tile"></div>
                 <div class="tile"></div>
             </div>
@@ -61,6 +120,19 @@
                 <div class="tile"></div>
             </div>
         </div>
+
+        <!-- .piece[data-rows=2][data-cols=2][data-bitmap="1110"][data-player=1]>(.tile_row>.tile*2)+(.tile_row>.tile+.tile.etile) -->
+        <div class="piece" data-rows="2" data-cols="2" data-bitmap="1110" data-player="1">
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile etile"></div>
+            </div>
+        </div>
+
 
         <!-- .piece[data-rows=2][data-cols=2][data-bitmap="1111"][data-player=1]>(.tile_row>.tile*2)*2 -->
         <div class="piece" data-rows="2" data-cols="2" data-bitmap="1111" data-player="1">
@@ -89,6 +161,19 @@
             </div>
         </div>
 
+        <!-- .piece[data-rows=2][data-cols=3][data-bitmap="111010"][data-player=1]>(.tile_row>.tile*3)+(.tile_row>.tile.etile+.tile+.tile.etile) -->
+        <div class="piece" data-rows="2" data-cols="3" data-bitmap="111010" data-player="1">
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile etile"></div>
+                <div class="tile"></div>
+                <div class="tile etile"></div>
+            </div>
+        </div>
 
         <!-- .piece[data-rows=2][data-cols=3][data-bitmap="001111"][data-player=1]>(.tile_row>.tile.etile+.tile.etile+.tile)+(.tile_row>.tile*3) -->
         <div class="piece" data-rows="2" data-cols="3" data-bitmap="001111" data-player="1">
@@ -104,8 +189,6 @@
             </div>
         </div>
 
-
-
         <!-- .piece[data-rows=2][data-cols=3][data-bitmap="011110"][data-player=1]>(.tile_row>.tile.etile+.tile+.tile)+(.tile_row>.tile+.tile+.tile.etile) -->
         <div class="piece" data-rows="2" data-cols="3" data-bitmap="011110" data-player="1">
             <div class="tile_row">
@@ -120,8 +203,9 @@
             </div>
         </div>
 
-        <!-- .piece[data-rows=1][data-cols=4][data-bitmap="1111"][data-player=1]>(.tile_row>.tile)*4 -->
-        <div class="piece" data-rows="1" data-cols="4" data-bitmap="1111" data-player="1">
+
+        <!-- .piece[data-rows=4][data-cols=1][data-bitmap="1111"][data-player=1]>(.tile_row>.tile)*4 -->
+        <div class="piece" data-rows="4" data-cols="1" data-bitmap="1111" data-player="1">
             <div class="tile_row">
                 <div class="tile"></div>
             </div>
@@ -136,8 +220,27 @@
             </div>
         </div>
 
+        <!-- .piece[data-rows=3][data-cols=3][data-bitmap="010111010"][data-player=1]>(.tile_row>.tile.etile+.tile+.tile.etile)+(.tile_row>.tile+.tile+.tile)+(.tile_row>.tile.etile+.tile+.tile.etile) -->
+        <div class="piece" data-rows="3" data-cols="3" data-bitmap="010111010" data-player="1">
+            <div class="tile_row">
+                <div class="tile etile"></div>
+                <div class="tile"></div>
+                <div class="tile etile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile etile"></div>
+                <div class="tile"></div>
+                <div class="tile etile"></div>
+            </div>
+        </div>
 
         <!-- .piece[data-rows=3][data-cols=3][data-bitmap="011010110"][data-player=1]>(.tile_row>.tile.etile+.tile+.tile)+(.tile_row>.tile.etile+.tile+.tile.etile)+(.tile_row>.tile+.tile+.tile.etile) -->
+
         <div class="piece" data-rows="3" data-cols="3" data-bitmap="011010110" data-player="1">
             <div class="tile_row">
                 <div class="tile etile"></div>
@@ -156,6 +259,25 @@
             </div>
         </div>
 
+
+        <!-- .piece[data-rows=3][data-cols=3][data-bitmap="110010011"][data-player=1]>(.tile_row>.tile+.tile+.tile.etile)+(.tile_row>.tile.etile+.tile+.tile.etile)+(.tile_row>.tile.etile+.tile+.tile) -->
+        <div class="piece" data-rows="3" data-cols="3" data-bitmap="110010011" data-player="1">
+            <div class="tile_row">
+                <div class="tile"></div>
+                <div class="tile"></div>
+                <div class="tile etile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile etile"></div>
+                <div class="tile"></div>
+                <div class="tile etile"></div>
+            </div>
+            <div class="tile_row">
+                <div class="tile etile"></div>
+                <div class="tile"></div>
+                <div class="tile"></div>
+            </div>
+        </div>
 
 
     </div>
@@ -247,9 +369,11 @@
     <!-- See http://stackoverflow.com/a/2603709 -->
     <div id="gameboard_container">
 
+<!--
         <div id="header_container">
             <span>Rotate selected piece by hitting the r key</span>
         </div>
+-->
 
         <!--     **************        -->
         <!--      Gameboard            -->

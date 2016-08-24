@@ -172,7 +172,7 @@ function mouseup_handler(mouse_event) {
 
     // Check to make sure the data embedded in the html makes sense
     if(rows*cols != bitmap.length){
-        console.log("Bitmap length does not match the rows and cols specified in the data properties!!");
+        alert("Bitmap length does not match the rows and cols specified in the data properties!!");
         console.log("rows: " + rows);
         console.log("cols: " + cols);
         console.log("bitmap.length: " + bitmap.length);
@@ -245,7 +245,6 @@ function mouseup_handler(mouse_event) {
 
 **/
 function get_underlying_gameboard_cell(element) {
-    console.log("Getting underlying gameboard cell...");
     var rect = element.getBoundingClientRect();
     var piece_x = rect.left;
     var piece_y = rect.top;
@@ -257,7 +256,6 @@ function get_underlying_gameboard_cell(element) {
     var gameboard_cell = document.elementFromPoint(piece_x, piece_y);
 
     if(gameboard_cell == null){
-        console.log("returning from Getting underlying gameboard cell null...");
         return null;
     }
 
