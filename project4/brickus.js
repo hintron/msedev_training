@@ -247,6 +247,7 @@ function mouseup_handler(mouse_event) {
 
 **/
 function get_underlying_gameboard_cell(element) {
+    console.log("Getting underlying gameboard cell...");
     var rect = element.getBoundingClientRect();
     var piece_x = rect.left;
     var piece_y = rect.top;
@@ -257,28 +258,34 @@ function get_underlying_gameboard_cell(element) {
     element.style.visibility = "hidden";
     var gameboard_cell = document.elementFromPoint(piece_x, piece_y);
 
+    if(gameboard_cell == null){
+        console.log("returning from Getting underlying gameboard cell null...");
+        return null;
+    }
+
     // Let pieces snap to the grid if the underlying tile of a piece is an invisible piece,
     // but make sure to grab the underlying grid cell
-    var i,j,bit,temp;
+    var i,temp;
     var hidden_stack = new Array();
 
-    // Keep digging until either a gameboard cell is found or the document body
+    // Keep digging until either a gameboard cell is found or the root document html element
     // See http://stackoverflow.com/a/9488090
-    while (document.body !== gameboard_cell && !has_class(gameboard_cell, "gameboard-cell")){
+    while (document.documentElement !== gameboard_cell && !has_class(gameboard_cell, "gameboard-cell")){
         hidden_stack.push(gameboard_cell);
         gameboard_cell.style.visibility = "hidden";
         temp = document.elementFromPoint(piece_x, piece_y);
         gameboard_cell = temp;
+        i++;
     }
 
     // Unhide everything that was hidden
-    for (var i = hidden_stack.length - 1; i >= 0; i--) {
+    for (i = hidden_stack.length - 1; i >= 0; i--) {
         temp = hidden_stack.pop();
         temp.style.visibility = "";
     }
     element.style.visibility = "";
 
-    if(document.body === gameboard_cell) {
+    if(document.documentElement === gameboard_cell) {
         return null;
     }
     else {
