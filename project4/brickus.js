@@ -63,6 +63,12 @@ var grabbed_piece = null;
 var grabbed_x = null;
 var grabbed_y = null;
 
+
+// A monotonically increasing z value for every time a piece is touched.
+// This will never realistically overflow with regular human use
+var global_z_count = 1;
+
+
 // Create a gameboard that will store the pieces or just blocks
 // It needs to know which piece belongs to who
 // Each entry will hold a number for each player, 1 - 4
@@ -126,7 +132,10 @@ function mousedown_handler(mouse_event) {
     var mouse_y = mouse_event.clientY;
 
     // Make sure the currently grabbed piece has the highest z value
-    grabbed_piece.style.zIndex = "1";
+    // With a monotonically increasing z number, the most recently
+    // touched piece will be displayed on top
+    grabbed_piece.style.zIndex = global_z_count;
+    global_z_count++;
 
     // The grabbed location relative to the piece will be mouse_x - piece_x
     // Save the location of mouse within the piece
@@ -149,9 +158,6 @@ function mousemove_handler(mouse_event) {
         // piece needs to be set to absolute for this to work
         grabbed_piece.style.left = (x - grabbed_x) + "px";
         grabbed_piece.style.top = (y - grabbed_y) + "px";
-
-        // TODO: If the cursor goes off-screen (negative or farther than viewport/document),
-        // force the piece to be dropped (z will be reset, piece is no longer the grabbed piece)
     }
 }
 
@@ -336,8 +342,6 @@ function get_underlying_gameboard_cell_by_point(piece_x, piece_y){
 
 
 function drop_piece() {
-    // Reset the z index
-    grabbed_piece.style.zIndex = "0";
     grabbed_piece = null;
     grabbed_x = null;
     grabbed_y = null;
