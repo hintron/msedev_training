@@ -1,10 +1,9 @@
 /*
     Future Improvements:
-    * Make it so that clicking on an etile portion of a piece DOESN'T pick it up
+    * Make the more recent pieces always have a higher z value
     * Create more pieces so that the game is more balanced
     * Create player turns and a "turn done" button so that players can't
         move different player's pieces accidentally
-    * Make grid snapping be to the closest corner
     * Make scrolling not mess up piece movement and placement
     * Build up the infrastructure so that the players can rotate pieces
 
@@ -53,6 +52,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 const R_KEY = 82;
 const MAX_HEIGHT = 700;
 const GAMEBOARD_WIDTH = 12;
+const GAMEBOARD_CELL_WIDTH = 30;
+const GAMEBOARD_CELL_HALF_WIDTH = GAMEBOARD_CELL_WIDTH/2;
+// The offset is to find the neighbors of the currently selected gameboard cell
+const GAMEBOARD_CELL_OFFSET = GAMEBOARD_CELL_WIDTH + GAMEBOARD_CELL_HALF_WIDTH;
 
 // If not null, then it means it is grabbed and should move around
 var grabbed_piece = null;
@@ -164,14 +167,9 @@ function mouseup_handler(mouse_event) {
     var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);
     if(gameboard_cell == null) {
         // Piece was not dropped on the gameboard, so drop the piece
-        console.log("Piece was not dropped on the gameboard");
         drop_piece();
         return;
     }
-
-    // Figure out what index the gameboard_cell is at
-    var gameboard_cell_col = +gameboard_cell.dataset.column;
-    var gameboard_cell_row = +gameboard_cell.parentElement.dataset.row;
 
     // Read the data-* html attributes for info on the pieces
     var bitmap = grabbed_piece.dataset.bitmap;
@@ -189,6 +187,46 @@ function mouseup_handler(mouse_event) {
         drop_piece();
         return;
     }
+
+
+    //
+    //// Snap to gameboard grid!
+    //
+    // If the piece is within that grid, snap it to the grid location
+
+    // To accommodate closest grid snapping, find all the adjacent grid cells and see which is closest
+    // By default, it snaps to the upper left corner
+    var upper_left_rect = gameboard_cell.getBoundingClientRect();
+    var upper_left_x = upper_left_rect.left;
+    var upper_left_y = upper_left_rect.top;
+
+    var upper_right_corner_cell = get_underlying_gameboard_cell_by_point(upper_left_x + GAMEBOARD_CELL_OFFSET, upper_left_y);
+    var lower_right_corner_cell = get_underlying_gameboard_cell_by_point(upper_left_x + GAMEBOARD_CELL_OFFSET, upper_left_y + GAMEBOARD_CELL_OFFSET);
+    var lower_left_corner_cell = get_underlying_gameboard_cell_by_point(upper_left_x, upper_left_y + GAMEBOARD_CELL_OFFSET);
+
+    // Find the closest grid cell to snap to, and set it to gameboard cell
+    var grabbed_piece_rect = grabbed_piece.getBoundingClientRect();
+    var grabbed_piece_x = grabbed_piece_rect.left;
+    var grabbed_piece_y = grabbed_piece_rect.top;
+    var x_breakpoint = upper_left_x + GAMEBOARD_CELL_HALF_WIDTH;
+    var y_breakpoint = upper_left_y + GAMEBOARD_CELL_HALF_WIDTH;
+    // If it snaps to something other than the upper left, change the gameboard_cell pointer
+    if(upper_right_corner_cell && grabbed_piece_x > x_breakpoint && grabbed_piece_y <= y_breakpoint){
+        gameboard_cell = upper_right_corner_cell;
+    }
+    else if(lower_right_corner_cell && grabbed_piece_x > x_breakpoint && grabbed_piece_y > y_breakpoint){
+        gameboard_cell = lower_right_corner_cell;
+    }
+    else if(lower_left_corner_cell && grabbed_piece_x <= x_breakpoint && grabbed_piece_y > y_breakpoint){
+        gameboard_cell = lower_left_corner_cell;
+    }
+    else {
+        // Default - the gameboard will stay as the upper left cell and snap to upper left corner
+    }
+
+    // Figure out what index the gameboard_cell is at
+    var gameboard_cell_col = +gameboard_cell.dataset.column;
+    var gameboard_cell_row = +gameboard_cell.parentElement.dataset.row;
 
     // Check to make sure the piece fits on the gameboard
     if(gameboard_cell_col + cols-1 >= GAMEBOARD_WIDTH || gameboard_cell_row + rows-1 >= GAMEBOARD_WIDTH){
@@ -211,11 +249,6 @@ function mouseup_handler(mouse_event) {
         }
     }
 
-    //
-    //// Snap to gameboard grid!
-    //
-
-    // If the piece is within that grid, snap it to the grid location
     var gameboard_cell_rect = gameboard_cell.getBoundingClientRect();
     // piece css needs to be set to absolute for this to work
     // Make sure to factor in the 1 px border
@@ -259,8 +292,15 @@ function get_underlying_gameboard_cell(element) {
     // look for the grid piece under the top left corner
     // To do this, quickly hide the grabbed piece and see what's underneath, then unhide it!
     element.style.visibility = "hidden";
-    var gameboard_cell = document.elementFromPoint(piece_x, piece_y);
+    var gameboard_cell = get_underlying_gameboard_cell_by_point(piece_x, piece_y);
+    element.style.visibility = "";
 
+    return gameboard_cell;
+}
+
+
+function get_underlying_gameboard_cell_by_point(piece_x, piece_y){
+    var gameboard_cell = document.elementFromPoint(piece_x, piece_y);
     if(gameboard_cell == null){
         return null;
     }
@@ -285,7 +325,6 @@ function get_underlying_gameboard_cell(element) {
         temp = hidden_stack.pop();
         temp.style.visibility = "";
     }
-    element.style.visibility = "";
 
     if(document.documentElement === gameboard_cell) {
         return null;
