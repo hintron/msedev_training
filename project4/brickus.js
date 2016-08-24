@@ -1,3 +1,20 @@
+/*
+    Future Improvements:
+    * After all the pieces are rendered, turn them into absolute,
+        so that they don't fall up after picking up the pieces
+    * Make it so that clicking on an etile portion of a piece DOESN'T pick it up
+    * Create more pieces so that the game is more balances
+    * Create player turns and a "turn done" button so that players can't
+        move different player's pieces accidentally
+    * Make grid snapping be to the closest corner
+    * Make scrolling not mess up piece movement and placement
+    * Build up the infrastructure so that the players can rotate pieces
+
+*/
+
+
+
+
 
 //
 //// Attach event handlers
@@ -29,9 +46,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     window.addEventListener("mouseup", mouseup_handler);
 });
 
-
-
-
 // r is keycode 82
 const R_KEY = 82;
 const MAX_HEIGHT = 700;
@@ -46,10 +60,9 @@ var grabbed_y = null;
 // var current_player = 3;
 
 // Create a gameboard that will store the pieces or just blocks
-// It needs to be a 20x20 board
 // It needs to know which piece belongs to who
 // Each entry will hold a number for each player, 1 - 4
-// null means it is free
+// 0, undefined, or null means it is a free space
 // [row][column]
 // See http://stackoverflow.com/a/966239
 var gameboard = new Array(GAMEBOARD_WIDTH);
@@ -66,7 +79,7 @@ function mousedown_handler(mouse_event) {
     var rect = grabbed_piece.getBoundingClientRect();
 
 
-    // TODO: Erase the points on the gameboard if the piece is picked up off the gameboard
+    // Erase the points on the gameboard if the piece is picked up off the gameboard
     var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);
     if(gameboard_cell && grabbed_piece.brickus_placed){
         grabbed_piece.brickus_placed = false;
@@ -305,7 +318,7 @@ function calculate_points() {
     var player3_score = 0;
     var player4_score = 0;
 
-    // TODO: Update the point totals for all players
+    // Update the point totals for all players
     for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
         for (var j = 0; j < GAMEBOARD_WIDTH; j++) {
             switch(gameboard[i][j]){
