@@ -73,8 +73,14 @@ for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
 
 
 function mousedown_handler(mouse_event) {
-    // TODO: Have a check to make sure that players can only select
-    // their own pieces and pieces that aren't already laid down
+    // NOTE: If the element that emitted the event is just a tile_row,
+    // it means that an etile was underneath it. So ignore it.
+    if(has_class(mouse_event.target, "tile_row")){
+        return;
+    }
+
+    // TODO: Have a check to make sure that players can only select their own pieces
+
     grabbed_piece = mouse_event.currentTarget;
     var rect = grabbed_piece.getBoundingClientRect();
 

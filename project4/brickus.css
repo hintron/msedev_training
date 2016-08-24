@@ -138,12 +138,16 @@ body {
     margin-bottom: 1px;
     margin-right: 1px;
     float: left;
+    /* Make pieces look drag-able */
+    cursor: move;
 }
 
 /* Make a tile blank, but make sure it still takes up space */
 /* "empty tile" - Simply add this class to a regular .tile div to make it invisible! */
 .etile {
     visibility: hidden;
+    /* Make etile not look drag-able */
+    cursor: default;
 }
 
 
