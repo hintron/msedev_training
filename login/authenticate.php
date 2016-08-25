@@ -1,4 +1,7 @@
- <?php
+
+
+
+<?php
     //
     //// Project 7 - Login System (eventually for brickus)
     //
@@ -39,6 +42,7 @@
 
 
     // Get user input
+    error_log(print_r($_POST,1));
     $username = $_POST["username"];
     $password = $_POST["password"];
 
