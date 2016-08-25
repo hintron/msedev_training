@@ -3,6 +3,10 @@
     //// Project 7 - Login System
     //
 
+    // TODO: Create an input form and get it submitting to this php code
+    // TODO: Figure out how to use PDO with MySQL
+    // TODO: Save the passkey to the db
+
     // Symlink the parent public "login" folder into MAMP/htdocs with the following command:
     // ln -s /Users/mghinton/Documents/msedev_training/login /Applications/MAMP/htdocs/login
     // ln -s should always use absolute references or it will mess up! See http://ss64.com/bash/ln.html
@@ -15,64 +19,78 @@
     // tail -f /Applications/MAMP/logs/php_error.log
     error_log("What's up!");
 
-
-    // I decided to use PHP PDO instead of mysqli because it can load data straight
-    // into classes and it also is database agnostic, so it is portable code.
-
-    // For how to insert data directly into classes, see http://stackoverflow.com/a/368990
-
-
-
     // I created my dbs using utf8_general_ci so n and ñ are sorted next to each other
     // See http://stackoverflow.com/a/367731
 
 
-    // Hash the input password of the user
-    // See https://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
-    // http://php.net/manual/en/function.password-hash.php
+    class User {
+        // These properties need to match the fields
+        public $id;
+        public $username;
+        public $first_name;
+        public $last_name;
+        public $password_hash;
+        public $birthday;
 
-
-    $password = "mytestpassword";
-    $username = "hintron";
-
-
-    // This will salt and stretch a password with a random salt
-    // The used algorithm, cost, and salt are returned as part of the hash
-    $passkey = password_hash($password, PASSWORD_DEFAULT);
-
-    if(password_verify($password, $passkey)){
-        echo "Password verified: $passkey<br/>";
-
-    }
-    else {
-        echo "Password incorrect: $passkey<br/>";
+        public function getFullName() {
+            return $this->first_name.' '.$this->last_name;
+        }
     }
 
-    // TODO: Create an input form and get it submitting to this php code
-    // TODO: Figure out how to use PDO with MySQL
-    // TODO: Create a "User" class
-    // TODO: Save the passkey to the db
+
+    // I decided to use PHP PDO instead of mysqli because it can load data straight
+    // into classes and it also is database agnostic, so it is portable code.
+
+    // For the PHP PDO docs, see http://php.net/manual/en/book.pdo.php
+    try {
+        $hostname = "localhost";
+        // user: root
+        // password: root
+        // hostname: localhost
+        // dbname: brickus
+
+        // Connect
+        $dbh = new PDO("mysql:host=$hostname;dbname=brickus", "root", "root");
+
+        // Prepare the sql statement
+        $username = "jld";
+        $stmt = $dbh->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->execute(array($username));
+
+        // Grab all the records returned from execute
+        // For how to insert data directly into classes, see http://stackoverflow.com/a/368990
+        // See http://php.net/manual/en/pdostatement.setfetchmode.php
+        $stmt->setFetchMode(PDO::FETCH_INTO, new User);
+        $return = $stmt->fetchAll();
+        // error_log(print_r($stmt,1));
+        error_log(print_r($return,1));
 
 
-    // try
-    // {
-    //     $dbh = new PDO("mysql:host=$hostname;dbname=school", $username, $password)
+        $user = $return[0];
+        echo 'Welcome, ' . $user->username . '!<br />';
 
-    //     $stmt = $dbh->query("SELECT * FROM students");
+        // Hash the input password of the user
+        // See https://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
+        // http://php.net/manual/en/function.password-hash.php
 
-    //     /* MAGIC HAPPENS HERE */
-    //     $stmt->setFetchMode(PDO::FETCH_INTO, new Student);
+        $password = "mytestpassword";
 
-    //     // foreach($stmt as $student) {
-    //     //     echo $student->getFullName().'<br />';
-    //     // }
+        // This will salt and stretch a password with a random salt
+        // The used algorithm, cost, and salt are returned as part of the hash
+        // $passkey = password_hash($password, PASSWORD_DEFAULT);
 
-    //     $dbh = null;
-    // }
-    // catch(PDOException $e)
-    // {
-    //     echo $e->getMessage();
-    // }
+        if(password_verify($password, $user->password_hash)){
+            echo "Password verified!<br/>";
+        }
+        else {
+            echo "ERROR: Password incorrect...<br/>";
+        }
+        $dbh = null;
+    }
+    catch(PDOException $e) {
+        error_log("PDO Error:");
+        error_log($e->getMessage());
+    }
 
 
 ?>
