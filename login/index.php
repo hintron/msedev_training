@@ -1,96 +1,51 @@
- <?php
-    //
-    //// Project 7 - Login System
-    //
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Brickus Login</title>
+    <link rel="stylesheet" href="">
+</head>
+<body>
+    <!-- Login Form: -->
+    <!-- Register Form: -->
 
-    // TODO: Create an input form and get it submitting to this php code
-    // TODO: Figure out how to use PDO with MySQL
-    // TODO: Save the passkey to the db
+    <!-- See https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/My_first_HTML_form -->
+    <form action="/login/authenticate.php" method="post">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" />
+        </div>
 
-    // Symlink the parent public "login" folder into MAMP/htdocs with the following command:
-    // ln -s /Users/mghinton/Documents/msedev_training/login /Applications/MAMP/htdocs/login
-    // ln -s should always use absolute references or it will mess up! See http://ss64.com/bash/ln.html
-    // Then input this link into the browser to execute this file:
-    // http://localhost:8888/login/
-    echo "Hello, World!<br/>";
+<!--
+        <div>
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" />
+        </div>
+        <div>
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" />
+        </div>
+        <div>
+            <label for="birthday">Birth Date:</label>
+            <input type="text" id="birthday" name="birthday" />
+        </div>
+ -->
 
-    // Listen to the error log with the following command:
-    // (It won't exist until something is printed to it)
-    // tail -f /Applications/MAMP/logs/php_error.log
-    error_log("What's up!");
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" />
+        </div>
 
-    // I created my dbs using utf8_general_ci so n and ñ are sorted next to each other
-    // See http://stackoverflow.com/a/367731
+        <div class="button">
+            <button type="submit" id="login-btn">Login</button>
+        </div>
 
+    </form>
+    <div  class="button">
+        <!-- TODO: When the user clicks to register, unhide the first and last name and birthday fields. Also check a hidden checkbox that says user is registering -->
+        <button id="register-btn">New User? Click here to register</button>
+    </div>
 
-    class User {
-        // These properties need to match the fields
-        public $id;
-        public $username;
-        public $first_name;
-        public $last_name;
-        public $password_hash;
-        public $birthday;
-
-        public function getFullName() {
-            return $this->first_name.' '.$this->last_name;
-        }
-    }
-
-
-    // I decided to use PHP PDO instead of mysqli because it can load data straight
-    // into classes and it also is database agnostic, so it is portable code.
-
-    // For the PHP PDO docs, see http://php.net/manual/en/book.pdo.php
-    try {
-        $hostname = "localhost";
-        // user: root
-        // password: root
-        // hostname: localhost
-        // dbname: brickus
-
-        // Connect
-        $dbh = new PDO("mysql:host=$hostname;dbname=brickus", "root", "root");
-
-        // Prepare the sql statement
-        $username = "jld";
-        $stmt = $dbh->prepare("SELECT * FROM users WHERE username = ?");
-        $stmt->execute(array($username));
-
-        // Grab all the records returned from execute
-        // For how to insert data directly into classes, see http://stackoverflow.com/a/368990
-        // See http://php.net/manual/en/pdostatement.setfetchmode.php
-        $stmt->setFetchMode(PDO::FETCH_INTO, new User);
-        $return = $stmt->fetchAll();
-        // error_log(print_r($stmt,1));
-        error_log(print_r($return,1));
-
-
-        $user = $return[0];
-        echo 'Welcome, ' . $user->username . '!<br />';
-
-        // Hash the input password of the user
-        // See https://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
-        // http://php.net/manual/en/function.password-hash.php
-
-        $password = "mytestpassword";
-
-        // This will salt and stretch a password with a random salt
-        // The used algorithm, cost, and salt are returned as part of the hash
-        // $passkey = password_hash($password, PASSWORD_DEFAULT);
-
-        if(password_verify($password, $user->password_hash)){
-            echo "Password verified!<br/>";
-        }
-        else {
-            echo "ERROR: Password incorrect...<br/>";
-        }
-        $dbh = null;
-    }
-    catch(PDOException $e) {
-        error_log("PDO Error:");
-        error_log($e->getMessage());
-    }
-
-
-?>
+</body>
+</html>
