@@ -1,6 +1,3 @@
-
-
-
 <?php
     //
     //// Project 7 - Login System (eventually for brickus)
@@ -42,9 +39,19 @@
 
 
     // Get user input
+
     error_log(print_r($_POST,1));
     $username = $_POST["username"];
     $password = $_POST["password"];
+    if(array_key_exists("new_user", $_POST)){
+        error_log("Registering new user!");
+    }
+    else {
+        error_log("Authenticating user!");
+    }
+
+
+
 
     // I decided to use PHP PDO instead of mysqli because it can load data straight
     // into classes and it also is database agnostic, so it is portable code.
@@ -72,8 +79,6 @@
         // error_log(print_r($stmt,1));
         // error_log(print_r($return,1));
 
-        $user = $return[0];
-
         // Hash the input password of the user
         // See https://alias.io/2010/01/store-passwords-safely-with-php-and-mysql/
         // http://php.net/manual/en/function.password-hash.php
@@ -82,12 +87,12 @@
         // The used algorithm, cost, and salt are returned as part of the hash
         // $passkey = password_hash($password, PASSWORD_DEFAULT);
 
-        if(password_verify($password, $user->password_hash)){
+        if(count($return) && password_verify($password, $return[0]->password_hash)){
             echo "Password verified!<br/>";
-            echo 'Welcome, ' . $user->username . '!<br />';
+            echo 'Welcome, ' . $username . '!<br />';
         }
         else {
-            echo "ERROR: Failed to authenticate for user \"" . $user->username . "\"<br />";
+            echo "ERROR: Failed to authenticate user \"" . $username . "\"<br />";
         }
         $dbh = null;
     }

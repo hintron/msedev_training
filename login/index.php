@@ -17,11 +17,11 @@
         <h3>Login:</h3>
         <div>
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" />
+            <input type="text" name="username" />
         </div>
         <div>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" />
+            <input type="password" name="password" />
         </div>
 
         <div>
@@ -42,27 +42,27 @@
         <h3>Create a new user:</h3>
         <div>
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" />
+            <input type="text" name="username" />
         </div>
         <div>
             <label for="first_name">First Name:</label>
-            <input type="text" id="first_name" name="first_name" />
+            <input type="text" name="first_name" />
         </div>
         <div>
             <label for="last_name">Last Name:</label>
-            <input type="text" id="last_name" name="last_name" />
+            <input type="text" name="last_name" />
         </div>
         <div>
             <label for="birthday">Birth Date:</label>
-            <input type="text" id="birthday" name="birthday" />
+            <input type="text" name="birthday" />
         </div>
         <div>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" />
+            <input type="password" name="password" />
         </div>
         <div>
             <label for="repeat_password">Repeat Password:</label>
-            <input type="password" id="repeat_password" name="repeat_password" />
+            <input type="password" name="repeat_password" />
         </div>
         <!-- The presence of this checkbox means it is a new user registration -->
         <div>

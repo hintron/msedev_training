@@ -14,11 +14,8 @@ $(function(){
         $(".register").addClass("hidden");
     });
 
-
     // TODO: Check that both passwords match
-
     // TODO: Check that date is of the correct format
-
     // TODO: Check to make sure username and passwords are not empty
 
 });
