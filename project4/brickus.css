@@ -8,6 +8,8 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    /* Force a scrollbar to always be there, so the width is constant */
+    overflow-y: scroll;
 }
 
 
