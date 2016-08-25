@@ -84,12 +84,23 @@ function mousedown_handler(mouse_event) {
     // NOTE: If the element that emitted the event is just a tile_row,
     // it means that an etile was underneath it. So ignore it.
     if(has_class(mouse_event.target, "tile_row")){
-        return;
+        // Check underneath the mouseclick to see if there is another draggable piece
+        var returned_piece = get_underlying_draggable_piece(mouse_event.target, mouse_event.clientX, mouse_event.clientY);
+        if(returned_piece){
+            // console.log("Grabbing the piece under the top-most piece!");
+            grabbed_piece = returned_piece;
+        }
+        else {
+            // There was no draggable piece under the empty tile
+            return;
+        }
+    }
+    else {
+        grabbed_piece = mouse_event.currentTarget;
     }
 
     // TODO: Have a check to make sure that players can only select their own pieces
 
-    grabbed_piece = mouse_event.currentTarget;
     var rect = grabbed_piece.getBoundingClientRect();
 
     // Erase the points on the gameboard if the piece is picked up off the gameboard
@@ -281,6 +292,8 @@ function mouseup_handler(mouse_event) {
     drop_piece();
 }
 
+
+
 /**
     Returns the underlying gameboard_cell from the passed element, or null if it isn't under it
 
@@ -322,7 +335,6 @@ function get_underlying_gameboard_cell_by_point(piece_x, piece_y){
         gameboard_cell.style.visibility = "hidden";
         temp = document.elementFromPoint(piece_x, piece_y);
         gameboard_cell = temp;
-        i++;
     }
 
     // Unhide everything that was hidden
@@ -338,6 +350,52 @@ function get_underlying_gameboard_cell_by_point(piece_x, piece_y){
         return gameboard_cell;
     }
 }
+
+
+/**
+    searches beneath the passed coordinates until it finds a draggable piece
+**/
+function get_underlying_draggable_piece(element, piece_x, piece_y){
+    var underlying_element = element;
+    var last_piece;
+    var hidden_stack = new Array();
+    // When true, it means that the next piece found is draggable, so exit
+    var stop_at_next_piece = false;
+
+    // Keep digging until either the correct element is found or the root document html element
+    do {
+        underlying_element.style.visibility = "hidden";
+        hidden_stack.push(underlying_element);
+        underlying_element = document.elementFromPoint(piece_x, piece_y);
+        // Remember the last piece element we touched
+        if(!has_class(underlying_element, "etile") && has_class(underlying_element, "tile")){
+            // The next piece selected will be a good piece
+            stop_at_next_piece = true;
+        }
+
+        if(has_class(underlying_element, "piece")){
+            last_piece = underlying_element;
+        }
+    }
+    // Keep looping through until document is reached or stop is true and the element is a piece
+    while(document.documentElement !== underlying_element && !(stop_at_next_piece && has_class(underlying_element, "piece")) );
+
+    // Unhide everything that was hidden
+    for (var i = hidden_stack.length - 1; i >= 0; i--) {
+        hidden_stack.pop().style.visibility = "";
+    }
+
+    if(document.documentElement === underlying_element) {
+        return null;
+    }
+    else {
+        return last_piece;
+    }
+}
+
+
+
+
 
 
 function drop_piece() {
