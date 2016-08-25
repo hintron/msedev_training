@@ -3,9 +3,7 @@
     * Create more pieces so that the game is more balanced
     * Create player turns and a "turn done" button so that players can't
         move different player's pieces accidentally
-    * Make scrolling not mess up piece movement and placement
     * Build up the infrastructure so that the players can rotate pieces
-
 */
 
 //
@@ -39,8 +37,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         var rect = pieces[i].getBoundingClientRect();
         pieces[i].style.position = "absolute";
         // Reset the coordinates to where it was, since setting to absolute move the piece
-        pieces[i].style.left = rect.left + "px";
-        pieces[i].style.top = rect.top + "px";
+        pieces[i].style.left = (rect.left + window.pageXOffset) + "px";
+        pieces[i].style.top = (rect.top + window.pageYOffset) + "px";
     }
     window.addEventListener("mousemove", mousemove_handler);
     window.addEventListener("mouseup", mouseup_handler);
@@ -136,12 +134,12 @@ function mousedown_handler(mouse_event) {
 
     // Save the grab position relative to the piece
     var grabbed_piece_rect = grabbed_piece.getBoundingClientRect();
-    var grabbed_piece_x = grabbed_piece_rect.left;
-    var grabbed_piece_y = grabbed_piece_rect.top;
+    var grabbed_piece_x = grabbed_piece_rect.left + window.pageXOffset;
+    var grabbed_piece_y = grabbed_piece_rect.top + window.pageYOffset;
 
     // Save the location of mouse within the piece
-    grab_relative_x = mouse_event.clientX - grabbed_piece_x;
-    grab_relative_y = mouse_event.clientY - grabbed_piece_y;
+    grab_relative_x = mouse_event.pageX - grabbed_piece_x;
+    grab_relative_y = mouse_event.pageY - grabbed_piece_y;
 
     // Make sure the currently grabbed piece has the highest z value
     // With a monotonically increasing z number, the most recently
@@ -154,8 +152,8 @@ function mousemove_handler(mouse_event) {
     if(grabbed_piece){
         // Don't move the piece if it goes out of the screen
 
-        var mouse_x = mouse_event.clientX;
-        var mouse_y = mouse_event.clientY;
+        var mouse_x = mouse_event.pageX;
+        var mouse_y = mouse_event.pageY;
 
         // TODO: Why are pieces freezing the game when hit bottom?
         if(mouse_x < grab_relative_x || mouse_y < grab_relative_y /*|| mouse_y > MAX_HEIGHT-grab_relative_y*/){
@@ -206,6 +204,9 @@ function mouseup_handler(mouse_event) {
     //// Snap to gameboard grid!
     //
     // If the piece is within that grid, snap it to the grid location
+
+    // NOTE: Only snap to visible points (don't account for scrolling by adding offsets),
+    // because get_underlying_gameboard_cell_by_point() only deals with visible points
 
     // To accommodate closest grid snapping, find all the adjacent grid cells and see which is closest
     // By default, it snaps to the upper left corner
@@ -265,8 +266,8 @@ function mouseup_handler(mouse_event) {
     var gameboard_cell_rect = gameboard_cell.getBoundingClientRect();
     // piece css needs to be set to absolute for this to work
     // Make sure to factor in the 1 px border
-    grabbed_piece.style.left = (gameboard_cell_rect.left+1) + "px";
-    grabbed_piece.style.top = (gameboard_cell_rect.top+1) + "px";
+    grabbed_piece.style.left = (gameboard_cell_rect.left + window.pageXOffset+1) + "px";
+    grabbed_piece.style.top = (gameboard_cell_rect.top + window.pageYOffset+1) + "px";
 
     // Set the piece as "placed" - so if a piece was never "snapped,"
     // don't let points get removed next time it is picked up
@@ -296,7 +297,6 @@ function mouseup_handler(mouse_event) {
 
     @param element : IN. The element to search beneath (the top left corner).
     @return : The gameboard grid cell element if successful, or null if the gameboard is not under the top-left corner of the piece.
-
 **/
 function get_underlying_gameboard_cell(element) {
     var rect = element.getBoundingClientRect();
@@ -306,6 +306,8 @@ function get_underlying_gameboard_cell(element) {
     // Locate the grid cell underneath the grabbed piece
     // look for the grid piece under the top left corner
     // To do this, quickly hide the grabbed piece and see what's underneath, then unhide it!
+    // NOTE: the x and y coordinates need to be relative to the viewport, not the document
+    // (i.e. do not compensate for scrolling)
     element.style.visibility = "hidden";
     var gameboard_cell = get_underlying_gameboard_cell_by_point(piece_x, piece_y);
     element.style.visibility = "";
@@ -313,7 +315,17 @@ function get_underlying_gameboard_cell(element) {
     return gameboard_cell;
 }
 
+/**
+    NOTE: elementFromPoint() takes VISIBLE points, so the passed coordinates need to be relative to the viewport
+    (top-left corner of the visible area, regardless of scrolling). So this means it takes clientX, not pageX, and
+    window.pageXOffset should NOT be added to el.getBoundingClientRect().left or .top.
+    See https://developer.mozilla.org/en-US/docs/Web/API/Document/elementFromPoint
 
+    @param piece_x : IN. The x coordinate relative to the current viewport, not the document (i.e. clientX, not pageX)
+    @param piece_y : IN. The y coordinate relative to the viewport
+
+    @return : The gameboard grid cell element if successful, or null if the gameboard is not under the top-left corner of the piece.
+**/
 function get_underlying_gameboard_cell_by_point(piece_x, piece_y){
     var gameboard_cell = document.elementFromPoint(piece_x, piece_y);
     if(gameboard_cell == null){
@@ -350,7 +362,13 @@ function get_underlying_gameboard_cell_by_point(piece_x, piece_y){
 
 
 /**
-    searches beneath the passed coordinates until it finds a draggable piece
+    Searches beneath the passed coordinates until it finds a draggable piece
+
+    @param element : IN. The element to look under (looks under the top left corner)
+    @param piece_x : IN. The x coordinate relative to the current viewport, not the document (i.e. don't add scrollXOffset)
+    @param piece_y : IN. The y coordinate relative to the viewport
+
+    @return : The next draggable piece underneath, or null if none.
 **/
 function get_underlying_draggable_piece(element, piece_x, piece_y){
     var underlying_element = element;
@@ -389,10 +407,6 @@ function get_underlying_draggable_piece(element, piece_x, piece_y){
         return last_piece;
     }
 }
-
-
-
-
 
 
 function drop_piece() {
