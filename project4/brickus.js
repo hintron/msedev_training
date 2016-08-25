@@ -58,9 +58,9 @@ const GAMEBOARD_CELL_OFFSET = GAMEBOARD_CELL_WIDTH + GAMEBOARD_CELL_HALF_WIDTH;
 
 // If not null, then it means it is grabbed and should move around
 var grabbed_piece = null;
-// These are the coordinates relative to the upper-left corner of the grabbed piece
-var grabbed_x = null;
-var grabbed_y = null;
+// These are the coordinates of the grab location relative to the upper-left corner of the grabbed piece
+var grab_relative_x = null;
+var grab_relative_y = null;
 
 
 // A monotonically increasing z value for every time a piece is touched.
@@ -101,7 +101,6 @@ function mousedown_handler(mouse_event) {
 
     // TODO: Have a check to make sure that players can only select their own pieces
 
-    var rect = grabbed_piece.getBoundingClientRect();
 
     // Erase the points on the gameboard if the piece is picked up off the gameboard
     var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);
@@ -135,39 +134,37 @@ function mousedown_handler(mouse_event) {
         calculate_points();
     }
 
-    var piece_x = rect.left;
-    var piece_y = rect.top;
+    // Save the grab position relative to the piece
+    var grabbed_piece_rect = grabbed_piece.getBoundingClientRect();
+    var grabbed_piece_x = grabbed_piece_rect.left;
+    var grabbed_piece_y = grabbed_piece_rect.top;
 
-    var mouse_x = mouse_event.clientX;
-    var mouse_y = mouse_event.clientY;
+    // Save the location of mouse within the piece
+    grab_relative_x = mouse_event.clientX - grabbed_piece_x;
+    grab_relative_y = mouse_event.clientY - grabbed_piece_y;
 
     // Make sure the currently grabbed piece has the highest z value
     // With a monotonically increasing z number, the most recently
     // touched piece will be displayed on top
     grabbed_piece.style.zIndex = global_z_count;
     global_z_count++;
-
-    // The grabbed location relative to the piece will be mouse_x - piece_x
-    // Save the location of mouse within the piece
-    grabbed_x = mouse_x - piece_x;
-    grabbed_y = mouse_y - piece_y;
 }
 
 function mousemove_handler(mouse_event) {
     if(grabbed_piece){
         // Don't move the piece if it goes out of the screen
-        var x = mouse_event.clientX;
-        var y = mouse_event.clientY;
+
+        var mouse_x = mouse_event.clientX;
+        var mouse_y = mouse_event.clientY;
+
         // TODO: Why are pieces freezing the game when hit bottom?
-        if(x < grabbed_x || y < grabbed_y /*|| y > MAX_HEIGHT-grabbed_y*/){
+        if(mouse_x < grab_relative_x || mouse_y < grab_relative_y /*|| mouse_y > MAX_HEIGHT-grab_relative_y*/){
             return;
         }
-        // console.log("x: " + mouse_event.clientX);
-        // console.log("y: " + mouse_event.clientY);
 
         // piece needs to be set to absolute for this to work
-        grabbed_piece.style.left = (x - grabbed_x) + "px";
-        grabbed_piece.style.top = (y - grabbed_y) + "px";
+        grabbed_piece.style.left = (mouse_x - grab_relative_x) + "px";
+        grabbed_piece.style.top = (mouse_y - grab_relative_y) + "px";
     }
 }
 
@@ -400,8 +397,8 @@ function get_underlying_draggable_piece(element, piece_x, piece_y){
 
 function drop_piece() {
     grabbed_piece = null;
-    grabbed_x = null;
-    grabbed_y = null;
+    grab_relative_x = null;
+    grab_relative_y = null;
 }
 
 function calculate_points() {
