@@ -320,6 +320,7 @@ function get_underlying_gameboard_cell(element) {
     (top-left corner of the visible area, regardless of scrolling). So this means it takes clientX, not pageX, and
     window.pageXOffset should NOT be added to el.getBoundingClientRect().left or .top.
     See https://developer.mozilla.org/en-US/docs/Web/API/Document/elementFromPoint
+    Also, see http://stackoverflow.com/questions/9262741/what-is-the-difference-between-pagex-y-clientx-y-screenx-y-in-javascript?noredirect=1&lq=1
 
     @param piece_x : IN. The x coordinate relative to the current viewport, not the document (i.e. clientX, not pageX)
     @param piece_y : IN. The y coordinate relative to the viewport
