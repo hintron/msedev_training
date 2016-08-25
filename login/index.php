@@ -24,14 +24,14 @@
             <input type="password" id="password" name="password" />
         </div>
 
-        <div class="button">
-            <button type="submit">Login</button>
+        <div>
+            <button class="button" type="submit">Login</button>
         </div>
 
     </form>
-    <div class="button login">
+    <div>
         <!-- TODO: When the user clicks to register, unhide the first and last name and birthday fields. Also check a hidden checkbox that says user is registering -->
-        <button id="switch-to-register-btn">New User? Click here to register</button>
+        <button id="switch-to-register-btn" class="button login">New User? Click here to register</button>
     </div>
 
 
@@ -70,14 +70,14 @@
         </div>
 
 
-        <div class="button">
-            <button type="submit">Register</button>
+        <div>
+            <button class="button" type="submit">Register</button>
         </div>
 
     </form>
-    <div class="button register hidden">
+    <div>
         <!-- TODO: When the user clicks to register, unhide the first and last name and birthday fields. Also check a hidden checkbox that says user is registering -->
-        <button id="switch-to-login-btn">Already a user? Click here to login</button>
+        <button id="switch-to-login-btn" class="button register hidden">Already a user? Click here to login</button>
     </div>
 
 </body>
