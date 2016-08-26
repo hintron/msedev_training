@@ -3,8 +3,8 @@
     session_start();
     // This will only echo the first time, when a session is created by the server
     if(SID){
-        echo "Creating new session: " . SID . "<br>";
-        echo "Session cookie name: " . session_name() . "<br>";
+        error_log("Creating new session: " . SID);
+        error_log("Session cookie name: " . session_name());
     }
 
     // Check if the user is already logged in
@@ -12,12 +12,12 @@
         echo "Welcome to the member's area, " . $_SESSION['username'] . "!<br>";
         // Go to the dashboard
         // See http://stackoverflow.com/a/9539996
-        readFile("dashboard.html");
+        readFile("views/dashboard.html");
 
     } else {
-        echo "Please log in first to see this page.";
+        // echo "Please log in first to see this page.";
         // Output login html
-        readFile("login.html");
+        readFile("views/login.html");
     }
 
 
