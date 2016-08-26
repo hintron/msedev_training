@@ -1,0 +1,20 @@
+div {
+    margin: 10px 0;
+    padding: 10px;
+}
+/* Check this out. Awesome. */
+/* http://css3buttongenerator.com/ */
+.button {
+    font-family: Courier New;
+    color: #ffffff;
+    font-size: 16px;
+    background: #3498db;
+    padding: 5px 15px;
+    text-decoration: none;
+    margin: 5px 0;
+}
+
+.button:hover {
+    background: #3cb0fd;
+    text-decoration: none;
+}

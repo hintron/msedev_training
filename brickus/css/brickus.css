@@ -1,0 +1,160 @@
+/* Get rid of default browser spacing */
+body {
+    margin: 0;
+    /* Disable text selection, so it doesn't activate during drag and drop */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* Force a scrollbar to always be there, so the width is constant */
+    overflow-y: scroll;
+}
+
+
+/************************************/
+/* Toolbars */
+/************************************/
+
+.toolbar {
+    /* Let height auto-fill */
+    height: 800px;
+    width: 200px;
+    font-family: Arial, sans-serif;
+    padding: 0 3px;
+}
+
+.score {
+    font-size: 36px;
+}
+
+#player1_toolbar {
+    float: left;
+    background-color: yellow;
+}
+
+#player2_toolbar {
+    float: left;
+    background-color: blue;
+    color: #eeeeee;
+}
+
+#player3_toolbar {
+    float: right;
+    background-color: red;
+    color: #eeeeee;
+}
+
+#player4_toolbar {
+    float: right;
+    background-color: green;
+    color: #eeeeee;
+}
+
+#player1_toolbar .tile {
+    border-color: #ccbb33;
+}
+
+#player2_toolbar .tile {
+    border-color: #3388ee;
+}
+
+#player3_toolbar .tile {
+    border-color: #ff6666;
+}
+
+#player4_toolbar .tile {
+    border-color: #33ff33;
+}
+
+
+
+/************************************/
+/* header container */
+/************************************/
+
+#gameboard_container {
+    text-align: center;
+    padding: 10px 0 0 8px;
+}
+
+
+#header_container {
+    background-color: #00ddcc;
+    text-align: center;
+}
+
+/************************************/
+/* Gameboard */
+/* Using method 1 (floats) from project 1 part 2 */
+/************************************/
+
+#gameboard {
+    display: inline-block;
+    /* TODO: Make a min width so that the floated rows don't get all messed up */
+    min-width: 380px;
+}
+
+.gameboard-row {
+    clear: both;
+}
+
+.gameboard-cell {
+    float: left;
+    /* Adjust cells so border looks nicer */
+    margin: 0 -1px -1px 0;
+    width: 30px;
+    height: 30px;
+    border-style: solid;
+    border-width: 1px;
+    background-color: #eeeeee;
+}
+
+/************************************/
+/* Tiles */
+/************************************/
+
+.piece {
+    /* Make it inline-block so that width is only as large as the tiles inside */
+    display: inline-block;
+    /* This makes the height of each piece "fill in" while position = static,
+    so that my piece movement logic works */
+    overflow: hidden;
+    /* Show the true size of the pieces */
+    /* border: 1px dotted; */
+}
+
+.tile_row {
+    /* Fills out the space in a tile_row */
+    overflow: hidden;
+}
+
+/* The CSS for a single tile unit */
+.tile {
+    width: 20px;
+    height: 20px;
+    border-width: 5px;
+    border-style: solid;
+    background-color: #ffffff;
+    margin-bottom: 1px;
+    margin-right: 1px;
+    float: left;
+    /* Make pieces look drag-able */
+    cursor: move;
+}
+
+/* Make a tile blank, but make sure it still takes up space */
+/* "empty tile" - Simply add this class to a regular .tile div to make it invisible! */
+.etile {
+    visibility: hidden;
+    /* Make etile not look drag-able */
+    cursor: default;
+}
+
+
+
+
+
+
+
