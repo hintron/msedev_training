@@ -39,7 +39,7 @@
 
     <!-- See https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/My_first_HTML_form -->
     <form action="/login/authenticate.php" method="post" class="hidden register">
-        <h3>Create a new user:</h3>
+        <h3>Register:</h3>
         <div>
             <label for="username">Username:</label>
             <input type="text" name="username" />
