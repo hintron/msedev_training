@@ -9,7 +9,7 @@
     // ln -s /Users/mghinton/Documents/msedev_training/login /Applications/MAMP/htdocs/login
     // ln -s should always use absolute references or it will mess up! See http://ss64.com/bash/ln.html
     // Then input this link into the browser to execute this file:
-    // http://localhost:8888/login/
+    // http://localhost:8888/project7/
 
     // Listen to the error log with the following command:
     // (It won't exist until something is printed to it)

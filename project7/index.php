@@ -13,7 +13,7 @@
     <!-- Register Form: -->
 
     <!-- See https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/My_first_HTML_form -->
-    <form action="/login/authenticate.php" method="post" class="login">
+    <form action="/project7/authenticate.php" method="post" class="login">
         <h3>Login:</h3>
         <div>
             <label for="username">Username:</label>
@@ -38,7 +38,7 @@
 
 
     <!-- See https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Forms/My_first_HTML_form -->
-    <form action="/login/authenticate.php" method="post" class="hidden register">
+    <form action="/project7/authenticate.php" method="post" class="hidden register">
         <h3>Register:</h3>
         <div>
             <label for="username">Username:</label>
