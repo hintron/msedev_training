@@ -83,7 +83,7 @@ body {
 #header_container {
     background-color: #00ddcc;
     text-align: center;
-    padding: 10px 0;
+    padding: 5px 0;
 }
 
 
@@ -94,7 +94,7 @@ body {
     background: #3498db;
     padding: 5px 15px;
     text-decoration: none;
-    margin: 5px;
+    /* margin: 5px 5px 0 5px; */
 }
 
 #current_player_turn {
