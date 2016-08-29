@@ -1,26 +1,20 @@
-/*
-    Future Improvements:
-    * Create more pieces so that the game is more balanced
-    * Create player turns and a "turn done" button so that players can't
-        move different player's pieces accidentally
-    * Build up the infrastructure so that the players can rotate pieces
-*/
+$(function(){
+    //
+    //// Attach event handlers and initialize code
+    //
+    console.log("Hello, World!");
 
-//
-//// Attach event handlers and initialize code
-//
-document.addEventListener("DOMContentLoaded", function(event) {
     // See this for setting event handlers: http://stackoverflow.com/a/6348597
 
     // Set an event listener for the r button, to rotate a piece
-    window.addEventListener("keyup", function(event) {
+    $(window).on("keyup", function(event) {
         if (event.keyCode == R_KEY) {
             rotate_piece();
         }
     });
 
     // Set an event listener for the r button, to rotate a piece
-    window.addEventListener("keyup", function(event) {
+    $(window).on("keyup", function(event) {
         // See if keyup is ENTER
         if (event.keyCode == R_KEY) {
             rotate_piece();
@@ -28,20 +22,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 
     // See http://stackoverflow.com/a/6802970 for moving html elements
-    var pieces = document.getElementsByClassName("piece");
+    var pieces = $(".piece");
     for (var i = pieces.length - 1; i >= 0; i--) {
-        pieces[i].addEventListener("mousedown", mousedown_handler);
+        var piece = $(pieces[i]);
+        piece.on("mousedown", mousedown_handler);
         // Set all pieces to absolute positioning now that they are rendered
         // Get bounding rect
         // See http://stackoverflow.com/a/11396681
         var rect = pieces[i].getBoundingClientRect();
-        pieces[i].style.position = "absolute";
+        piece.css( "position", "absolute");
         // Reset the coordinates to where it was, since setting to absolute move the piece
-        pieces[i].style.left = (rect.left + window.pageXOffset) + "px";
-        pieces[i].style.top = (rect.top + window.pageYOffset) + "px";
+        piece.css( "left", (rect.left + window.pageXOffset) + "px");
+        piece.css( "top", (rect.top + window.pageYOffset) + "px");
     }
-    window.addEventListener("mousemove", mousemove_handler);
-    window.addEventListener("mouseup", mouseup_handler);
+    $(window).on("mousemove", mousemove_handler);
+    $(window).on("mouseup", mouseup_handler);
 
 });
 
@@ -81,7 +76,7 @@ for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
 function mousedown_handler(mouse_event) {
     // NOTE: If the element that emitted the event is just a tile_row,
     // it means that an etile was underneath it. So ignore it.
-    if(has_class(mouse_event.target, "tile_row")){
+    if($(mouse_event.target).hasClass("tile_row")){
         // Check underneath the mouseclick to see if there is another draggable piece
         var returned_piece = get_underlying_draggable_piece(mouse_event.target, mouse_event.clientX, mouse_event.clientY);
         if(returned_piece){
@@ -340,7 +335,7 @@ function get_underlying_gameboard_cell_by_point(piece_x, piece_y){
 
     // Keep digging until either a gameboard cell is found or the root document html element
     // See http://stackoverflow.com/a/9488090
-    while (document.documentElement !== gameboard_cell && !has_class(gameboard_cell, "gameboard-cell")){
+    while (document.documentElement !== gameboard_cell && !$(gameboard_cell).hasClass("gameboard-cell")){
         hidden_stack.push(gameboard_cell);
         gameboard_cell.style.visibility = "hidden";
         temp = document.elementFromPoint(piece_x, piece_y);
@@ -384,17 +379,17 @@ function get_underlying_draggable_piece(element, piece_x, piece_y){
         hidden_stack.push(underlying_element);
         underlying_element = document.elementFromPoint(piece_x, piece_y);
         // Remember the last piece element we touched
-        if(!has_class(underlying_element, "etile") && has_class(underlying_element, "tile")){
+        if(!$(underlying_element).hasClass("etile") && $(underlying_element).hasClass("tile")){
             // The next piece selected will be a good piece
             stop_at_next_piece = true;
         }
 
-        if(has_class(underlying_element, "piece")){
+        if($(underlying_element).hasClass("piece")){
             last_piece = underlying_element;
         }
     }
     // Keep looping through until document is reached or stop is true and the element is a piece
-    while(document.documentElement !== underlying_element && !(stop_at_next_piece && has_class(underlying_element, "piece")) );
+    while(document.documentElement !== underlying_element && !(stop_at_next_piece && $(underlying_element).hasClass("piece")) );
 
     // Unhide everything that was hidden
     for (var i = hidden_stack.length - 1; i >= 0; i--) {
@@ -452,10 +447,10 @@ function calculate_points() {
     }
 
     // console.log("free_spaces: " + free_spaces);
-    document.getElementById("player1_score").textContent = player1_score;
-    document.getElementById("player2_score").textContent = player2_score;
-    document.getElementById("player3_score").textContent = player3_score;
-    document.getElementById("player4_score").textContent = player4_score;
+    $("#player1_score").html(player1_score);
+    $("#player2_score").html(player2_score);
+    $("#player3_score").html(player3_score);
+    $("#player4_score").html(player4_score);
 }
 
 
@@ -468,7 +463,3 @@ function rotate_piece() {
     console.log("Rotate piece");
 }
 
-// See http://stackoverflow.com/a/5898748
-function has_class(element, cls) {
-    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
-}

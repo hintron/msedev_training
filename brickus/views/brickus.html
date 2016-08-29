@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Brickus</title>
     <link rel="stylesheet" href="css/brickus.css">
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="js/brickus.js"></script>
 </head>
 <body>
@@ -1079,15 +1080,16 @@
 
     </div>
 
+    <div id="header_container">
+        **<span id="current_player_turn">Yellow</span>'s turn**
+        <button class="button" id="finish_turn_btn">Finish Turn</button>
+    </div>
     <!-- Note: Non-floated divs come after floated divs, in order for it to fill up the center space -->
     <!-- See http://stackoverflow.com/a/2603709 -->
     <div id="gameboard_container">
 
-<!--
-        <div id="header_container">
-            <span>Rotate selected piece by hitting the r key</span>
-        </div>
--->
+
+
 
         <!--     **************        -->
         <!--      Gameboard            -->
