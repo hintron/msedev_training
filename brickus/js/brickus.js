@@ -117,7 +117,7 @@ function finish_turn_handler() {
 
     // Clear the last snapped piece
     last_snapped_piece = null;
-
+    $("#finish_turn_btn").removeClass("bold");
 
     // TODO: Send a "turn finished" ajax call to the server
 }
@@ -165,6 +165,7 @@ function mousedown_handler(mouse_event) {
 
         // Unset the placed piece for this turn
         last_snapped_piece = null;
+        $("#finish_turn_btn").removeClass("bold");
 
         // Figure out what index the gameboard_cell is at
         var gameboard_cell_col = +gameboard_cell.dataset.column;
@@ -344,6 +345,7 @@ function mouseup_handler(mouse_event) {
     grabbed_piece.snapped_to_gameboard = true;
     // Set the grabbed piece as the last piece snapped to the grid
     last_snapped_piece = grabbed_piece;
+    $("#finish_turn_btn").addClass("bold");
 
     // Set the gameboard to register the pieces for the player
     // Start at the location of the upper left corner of the piece,

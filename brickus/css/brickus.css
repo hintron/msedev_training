@@ -94,7 +94,7 @@ body {
     background: #3498db;
     padding: 5px 15px;
     text-decoration: none;
-    margin: 0 5px;
+    margin: 5px;
 }
 
 #current_player_turn {
@@ -105,6 +105,11 @@ body {
     visibility: hidden;
 }
 
+.bold {
+    font-weight: bold;
+    /* color: #00ddcc; */
+    color: #00332f;
+}
 
 
 /************************************/
