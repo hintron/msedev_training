@@ -24,10 +24,7 @@
         $is_new_user = array_key_exists("new_user", $_POST);
 
         if($is_new_user){
-            // // Hash the input password of the user
-            // $pwd_hash = password_hash($password, PASSWORD_DEFAULT);
             $repeat_password = $_POST["repeat_password"];
-
             $first_name = $_POST["first_name"];
             $last_name = $_POST["last_name"];
             $birthday = $_POST["birthday"];
