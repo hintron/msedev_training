@@ -38,6 +38,15 @@ $(function(){
     $(window).on("mousemove", mousemove_handler);
     $(window).on("mouseup", mouseup_handler);
 
+    $("#finish_turn_btn").on("click", finish_turn_handler);
+
+
+    // TODO: Create a periodic AJAX ping to the server
+    // Use http://stackoverflow.com/a/5052661
+    // Only allow the ping if it is not the client player's own turn
+    // Use it here? Or at the bottom of the file?
+
+
 });
 
 // r is keycode 82
@@ -61,6 +70,21 @@ var grab_relative_y = null;
 var global_z_count = 1;
 
 
+
+const PLAYER_1 = 1;
+const PLAYER_2 = 2;
+const PLAYER_3 = 3;
+const PLAYER_4 = 4;
+
+const player_colors = [];
+player_colors[PLAYER_1] = "Yellow";
+player_colors[PLAYER_2] = "Blue";
+player_colors[PLAYER_3] = "Red";
+player_colors[PLAYER_4] = "Green";
+
+var current_player = PLAYER_1;
+
+
 // Create a gameboard that will store the pieces or just blocks
 // It needs to know which piece belongs to who
 // Each entry will hold a number for each player, 1 - 4
@@ -72,6 +96,26 @@ for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
     gameboard[i] = new Array(GAMEBOARD_WIDTH);
 }
 
+
+// TODO: Change the turn
+function finish_turn_handler() {
+    console.log("Finishing turn!");
+
+    // Set the current player as the next player
+    if(current_player == PLAYER_4){
+        current_player = PLAYER_1;
+    }
+    else {
+        current_player++;
+    }
+
+    console.log("It is now " + player_colors[current_player] + "'s turn!");
+
+    // Set the label as the current player
+    $("#current_player_turn").html(player_colors[current_player]);
+
+    // TODO: Send a "turn finished" ajax call to the server
+}
 
 function mousedown_handler(mouse_event) {
     // NOTE: If the element that emitted the event is just a tile_row,
@@ -93,7 +137,11 @@ function mousedown_handler(mouse_event) {
     }
 
     // TODO: Have a check to make sure that players can only select their own pieces
-
+    if(current_player != grabbed_piece.dataset.player){
+        console.log("Cannot select a piece that is not yours!");
+        drop_piece();
+        return;
+    }
 
     // Erase the points on the gameboard if the piece is picked up off the gameboard
     var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);

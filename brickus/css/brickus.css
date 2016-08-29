@@ -94,8 +94,13 @@ body {
     background: #3498db;
     padding: 5px 15px;
     text-decoration: none;
-    /* margin: 5px 0; */
+    margin: 0 5px;
 }
+
+#current_player_turn {
+    /* TODO: Make cool css for this; */
+}
+
 
 
 /************************************/
