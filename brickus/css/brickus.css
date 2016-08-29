@@ -101,6 +101,10 @@ body {
     /* TODO: Make cool css for this; */
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 
 
 /************************************/

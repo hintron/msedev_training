@@ -69,21 +69,24 @@ var grab_relative_y = null;
 // This will never realistically overflow with regular human use
 var global_z_count = 1;
 
-
-
+// Player constants
 const PLAYER_1 = 1;
 const PLAYER_2 = 2;
 const PLAYER_3 = 3;
 const PLAYER_4 = 4;
 
-const player_colors = [];
-player_colors[PLAYER_1] = "Yellow";
-player_colors[PLAYER_2] = "Blue";
-player_colors[PLAYER_3] = "Red";
-player_colors[PLAYER_4] = "Green";
+var PLAYER_COLORS = [];
+PLAYER_COLORS[PLAYER_1] = "Yellow";
+PLAYER_COLORS[PLAYER_2] = "Blue";
+PLAYER_COLORS[PLAYER_3] = "Red";
+PLAYER_COLORS[PLAYER_4] = "Green";
 
 var current_player = PLAYER_1;
 
+// Only let the user place one piece per turn
+// Keep track of the piece that was placed this turn
+// If this var is null, it means that no piece is placed yet
+var last_snapped_piece = null;
 
 // Create a gameboard that will store the pieces or just blocks
 // It needs to know which piece belongs to who
@@ -97,10 +100,8 @@ for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
 }
 
 
-// TODO: Change the turn
+// Change the turn
 function finish_turn_handler() {
-    console.log("Finishing turn!");
-
     // Set the current player as the next player
     if(current_player == PLAYER_4){
         current_player = PLAYER_1;
@@ -109,10 +110,14 @@ function finish_turn_handler() {
         current_player++;
     }
 
-    console.log("It is now " + player_colors[current_player] + "'s turn!");
+    console.log("It is now " + PLAYER_COLORS[current_player] + "'s turn!");
 
     // Set the label as the current player
-    $("#current_player_turn").html(player_colors[current_player]);
+    $("#current_player_turn").html(PLAYER_COLORS[current_player]);
+
+    // Clear the last snapped piece
+    last_snapped_piece = null;
+
 
     // TODO: Send a "turn finished" ajax call to the server
 }
@@ -143,10 +148,23 @@ function mousedown_handler(mouse_event) {
         return;
     }
 
+
+
+
     // Erase the points on the gameboard if the piece is picked up off the gameboard
     var gameboard_cell = get_underlying_gameboard_cell(grabbed_piece);
-    if(gameboard_cell && grabbed_piece.brickus_placed){
-        grabbed_piece.brickus_placed = false;
+    if(gameboard_cell && grabbed_piece.snapped_to_gameboard){
+        // Drop the piece if it is not the last piece played by that player
+        if(!last_snapped_piece || grabbed_piece !== last_snapped_piece){
+            console.log("Can only remove the one piece you snapped to the grid this turn!");
+            drop_piece();
+            return;
+        }
+
+        grabbed_piece.snapped_to_gameboard = false;
+
+        // Unset the placed piece for this turn
+        last_snapped_piece = null;
 
         // Figure out what index the gameboard_cell is at
         var gameboard_cell_col = +gameboard_cell.dataset.column;
@@ -215,6 +233,14 @@ function mouseup_handler(mouse_event) {
         return;
     }
 
+    // Do not let user snap piece to the grid if they already snapped one this turn
+    if(last_snapped_piece){
+        console.log("Do not let user snap piece to the grid if they already snapped one this turn");
+        drop_piece();
+        return;
+    }
+
+
     //
     //// Check to make sure the element under the piece is a grid cell
     //
@@ -224,6 +250,7 @@ function mouseup_handler(mouse_event) {
         drop_piece();
         return;
     }
+
 
     // Read the data-* html attributes for info on the pieces
     var bitmap = grabbed_piece.dataset.bitmap;
@@ -314,7 +341,9 @@ function mouseup_handler(mouse_event) {
 
     // Set the piece as "placed" - so if a piece was never "snapped,"
     // don't let points get removed next time it is picked up
-    grabbed_piece.brickus_placed = true;
+    grabbed_piece.snapped_to_gameboard = true;
+    // Set the grabbed piece as the last piece snapped to the grid
+    last_snapped_piece = grabbed_piece;
 
     // Set the gameboard to register the pieces for the player
     // Start at the location of the upper left corner of the piece,
