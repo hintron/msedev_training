@@ -111,16 +111,16 @@ class Games {
 
         // Add the user to the next open slot, if available
         if($game->player1_id == null){
-            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player1_id=?");
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player1_id=? WHERE id=?");
         }
         else if ($game->player2_id == null) {
-            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player2_id=?");
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player2_id=? WHERE id=?");
         }
         else if ($game->player3_id == null) {
-            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player3_id=?");
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player3_id=? WHERE id=?");
         }
         else if ($game->player4_id == null) {
-            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player4_id=?");
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player4_id=? WHERE id=?");
         }
         else {
             error_log("The game is full! Cannot insert user into the current game...");
@@ -128,7 +128,7 @@ class Games {
         }
 
         // Prepare the sql statement
-        $stmt->execute(array($user_id));
+        $stmt->execute(array($user_id, $game_id));
         if($stmt->rowCount()){
             return true;
         }
@@ -148,16 +148,16 @@ class Games {
 
         // Add the user to the next open slot, if available
         if($game->player1_id == $user_id){
-            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player1_id=NULL");
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player1_id=NULL WHERE id=?");
         }
         else if ($game->player2_id == $user_id) {
-            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player2_id=NULL");
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player2_id=NULL WHERE id=?");
         }
         else if ($game->player3_id == $user_id) {
-            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player3_id=NULL");
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player3_id=NULL WHERE id=?");
         }
         else if ($game->player4_id == $user_id) {
-            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player4_id=NULL");
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player4_id=NULL WHERE id=?");
         }
         else {
             error_log("The user is not part of the game! Cannot remove user from the game...");
@@ -165,7 +165,7 @@ class Games {
         }
 
         // Prepare the sql statement
-        $stmt->execute();
+        $stmt->execute(array($game_id));
         if($stmt->rowCount()){
             return true;
         }
@@ -173,6 +173,40 @@ class Games {
             return false;
         }
     }
+
+
+
+
+    public function end_game($game_id, $user_id) {
+        $game = $this->query_game($game_id);
+        if(!$game){
+            error_log("Could not find the game to remove user from...");
+            return false;
+        }
+
+        if(!$this->is_user_in_game($game_id, $user_id)){
+            error_log("The user is not part of the game! Use cannot end a game he/she is not a part of...");
+            return false;
+        }
+
+
+        $stmt = $this->dbh->prepare("UPDATE $this->table_name SET in_progress=0 WHERE id=?");
+
+        // Prepare the sql statement
+        $stmt->execute(array($game_id));
+        if($stmt->rowCount()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
+
+
+
+
 
 
 
