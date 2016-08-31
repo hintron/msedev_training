@@ -45,6 +45,23 @@ $(function(){
     // Use http://stackoverflow.com/a/5052661
     // Only allow the ping if it is not the client player's own turn
     // Use it here? Or at the bottom of the file?
+    (function ping_worker() {
+      $.ajax({
+        url: 'ajax_handlers/ping.php',
+        success: function(data) {
+            console.log("success callback");
+            console.log(data);
+
+            // $('.result').html(data);
+        },
+        complete: function() {
+            console.log("complete callback");
+            // Schedule the next request when the current one's complete
+            setTimeout(ping_worker, 1000);
+        }
+      });
+    })();
+
 
 
 });

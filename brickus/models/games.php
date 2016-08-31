@@ -192,6 +192,10 @@ class Games {
 
         $stmt = $this->dbh->prepare("UPDATE $this->table_name SET in_progress=0 WHERE id=?");
 
+
+        // TODO: Eventually, delete all piece records for a finished game, since they are no longer needed
+
+
         // Prepare the sql statement
         $stmt->execute(array($game_id));
         if($stmt->rowCount()){
@@ -201,11 +205,6 @@ class Games {
             return false;
         }
     }
-
-
-
-
-
 
 
 
