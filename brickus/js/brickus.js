@@ -160,12 +160,18 @@ function start_pinging(){
                 }
 
 
-                // If it is a new player's turn, update the current player plaque
+                // If it is a new player's turn, update the current player displayed
                 if(json.data.player_turn && player_turn != +json.data.player_turn){
                     console.log("Detected a change in player turn!");
                     player_turn = +json.data.player_turn;
                     $("#player_turn").html(PLAYER_COLORS[player_turn]);
                 }
+
+
+                // If it's the user's turn, turn off pinging until he/she finishes the turn
+
+
+
             },
             complete: function() {
                 if(pinging_active){
@@ -187,25 +193,45 @@ function stop_pinging(){
 
 // Change the turn
 function finish_turn_handler() {
-    // Set the current player as the next player
-    if(current_player == PLAYER_4){
-        current_player = PLAYER_1;
-    }
-    else {
-        current_player++;
-    }
 
-    console.log("It is now " + PLAYER_COLORS[current_player] + "'s turn!");
+    var jqxhr = $.ajax({
+        url: "ajax_handlers/finish_turn.php",
+        dataType: "json",
+        // NOTE: User data will already be sent in session data
+        // TODO: Send data on the piece that was placed
+        //  -where it was on the grid (grid location)
+        //  -bitmap
+        //  -cols
+        //  -rows
+        // The value, player will be already known
 
-    // Set the label as the current player
-    $("#player_turn").html(PLAYER_COLORS[current_player]);
+    });
 
-    // Clear the last snapped piece
-    last_snapped_piece = null;
-    $("#finish_turn_btn").removeClass("bold");
+    // Use promises!
+    jqxhr.done(function(json) {
+        console.log(json);
 
-    // TODO: Send a "turn finished" ajax call to the server
-    // TODO: Turn on pinging again
+        // // Set the current player as the next player
+        // if(current_player == PLAYER_4){
+        //     current_player = PLAYER_1;
+        // }
+        // else {
+        //     current_player++;
+        // }
+
+        console.log("It is now " + PLAYER_COLORS[player_turn] + "'s turn!");
+
+        // Set the label as the current player
+        $("#player_turn").html(PLAYER_COLORS[player_turn]);
+
+        // Clear the last snapped piece
+        last_snapped_piece = null;
+        $("#finish_turn_btn").removeClass("bold");
+
+        // TODO: Send a "turn finished" ajax call to the server
+        // TODO: Turn on pinging again
+        // start_pinging();
+    });
 
 }
 
@@ -229,7 +255,7 @@ function mousedown_handler(mouse_event) {
     }
 
     // TODO: Have a check to make sure that players can only select their own pieces
-    if(current_player != grabbed_piece.dataset.player){
+    if(player_turn && player_turn != grabbed_piece.dataset.player){
         console.log("Cannot select a piece that is not yours!");
         drop_piece();
         return;
