@@ -64,7 +64,6 @@ class Users {
         }
 
         // Check to make sure the passwords match
-        $repeat_password = $_POST["repeat_password"];
         if($repeat_password !== $password){
             echo "ERROR: Passwords do not match<br />";
             return false;

@@ -14,9 +14,4 @@
     readfile("views/brickus.html");
 
 
-
-
-
-
-
 ?>
