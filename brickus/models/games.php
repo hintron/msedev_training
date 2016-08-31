@@ -139,6 +139,45 @@ class Games {
 
 
 
+    public function remove_user_to_game($game_id, $user_id) {
+        $game = $this->query_game($game_id);
+        if(!$game){
+            error_log("Could not find the game to remove user from...");
+            return false;
+        }
+
+        // Add the user to the next open slot, if available
+        if($game->player1_id == $user_id){
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player1_id=NULL");
+        }
+        else if ($game->player2_id == $user_id) {
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player2_id=NULL");
+        }
+        else if ($game->player3_id == $user_id) {
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player3_id=NULL");
+        }
+        else if ($game->player4_id == $user_id) {
+            $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player4_id=NULL");
+        }
+        else {
+            error_log("The user is not part of the game! Cannot remove user from the game...");
+            return false;
+        }
+
+        // Prepare the sql statement
+        $stmt->execute();
+        if($stmt->rowCount()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
+
+
+
 
 
 
