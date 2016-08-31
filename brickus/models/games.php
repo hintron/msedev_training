@@ -79,7 +79,7 @@ class Games {
 
     public function create_game($user_id) {
         // Prepare the sql statement
-        $stmt = $this->dbh->prepare("INSERT INTO $this->table_name (player1_id, in_progress) VALUES (?, 1)");
+        $stmt = $this->dbh->prepare("INSERT INTO $this->table_name (player1_id, in_progress, player_turn) VALUES (?, 1, 1)");
         $stmt->execute(array($user_id));
         if($stmt->rowCount()){
             return true;
@@ -90,11 +90,24 @@ class Games {
     }
 
 
-
+    /**
+        Checks to see if the user is part of the game.
+        If so, it will return the player number that the user is.
+        If the user is not in the game, it will return false.
+    **/
     public function is_user_in_game($game_id, $user_id){
         $game = $this->query_game($game_id);
-        if($game->player1_id == $user_id || $game->player2_id == $user_id || $game->player3_id == $user_id || $game->player4_id == $user_id){
-            return true;
+        if($game->player1_id == $user_id){
+            return 1;
+        }
+        else if($game->player2_id == $user_id) {
+            return 2;
+        }
+        else if($game->player3_id == $user_id) {
+            return 3;
+        }
+        else if($game->player4_id == $user_id) {
+            return 4;
         }
         else {
             return false;

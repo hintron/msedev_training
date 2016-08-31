@@ -2,6 +2,7 @@
     include "models/users.php";
     // Start the session at the top before anything else.
     // See http://stackoverflow.com/questions/8812754/cannot-send-session-cache-limiter-headers-already-sent
+    // See http://stackoverflow.com/questions/1535697/how-do-php-sessions-work-not-how-are-they-used
     session_name("brickus_session_id");
     session_start();
     // This will only echo the first time, when a session is created by the server

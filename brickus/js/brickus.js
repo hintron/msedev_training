@@ -80,6 +80,11 @@ PLAYER_COLORS[PLAYER_4] = "Green";
 
 var current_player = PLAYER_1;
 
+
+// The server will tell the client what color she/he is
+var current_user_player_number = null;
+
+
 // Only let the user place one piece per turn
 // Keep track of the piece that was placed this turn
 // If this var is null, it means that no piece is placed yet
@@ -107,14 +112,44 @@ function start_pinging(){
     (function ping_worker() {
         $.ajax({
             url: 'ajax_handlers/ping.php',
-            success: function(data) {
-                console.log("success callback");
-                console.log(data);
+            dataType: "json",
+            success: function(json) {
+                // console.log("success callback");
+                // console.log(json);
+                // console.log(json.data.player_turn);
+                // console.log(json.data);
+                // console.log(json.data.username);
+
+                // TODO: Set all the playernames as the users
+
+                if(!current_user_player_number){
+                    switch (+json.data.player_turn){
+                        case 1:
+                            current_user_player_number = 1;
+                            $("#player1_name").html(json.data.username + "'s Score:");
+                            break;
+                        case 2:
+                            current_user_player_number = 2;
+                            $("#player2_name").html(json.data.username + "'s Score:");
+                            break;
+                        case 3:
+                            current_user_player_number = 3;
+                            $("#player3_name").html(json.data.username + "'s Score:");
+                            break;
+                        case 4:
+                            current_user_player_number = 4;
+                            $("#player4_name").html(json.data.username + "'s Score:");
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
 
                 // $('.result').html(data);
             },
             complete: function() {
-                console.log("complete callback");
                 if(pinging_active){
                     // Schedule the next request when the current one's complete
                     setTimeout(ping_worker, 1000);
@@ -152,6 +187,8 @@ function finish_turn_handler() {
     $("#finish_turn_btn").removeClass("bold");
 
     // TODO: Send a "turn finished" ajax call to the server
+    // TODO: Turn on pinging again
+
 }
 
 function mousedown_handler(mouse_event) {

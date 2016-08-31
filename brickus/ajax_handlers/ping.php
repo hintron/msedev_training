@@ -42,7 +42,8 @@
     }
 
     // Make sure the current user is part of the current game
-    if(!$games_model->is_user_in_game($current_game->id, $current_user->id)){
+    $player_number = $games_model->is_user_in_game($current_game->id, $current_user->id);
+    if(!$player_number){
         $json_response["msg"] = "The user " . $username . " is not part of the currently active game";
         echo json_encode($json_response);
         exit();
@@ -51,8 +52,13 @@
     // TODO: Create a server-side handler that returns game data and info in json form to an ajax call
     // Figure out if it's the pinging user's turn, and let them know if so
 
-
-    $json_response["msg"] = "Got here!";
+    $json_response["data"] = array(
+        "player_turn" => $current_game->player_turn,
+        "user_player_number" => $player_number,
+        "username" => $username,
+    );
+    $json_response["msg"] = "Ping successful!";
+    $json_response["success"] = true;
     echo json_encode($json_response);
     exit();
 
