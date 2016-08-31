@@ -19,12 +19,49 @@
     }
 
 
-    error_log("Finish Turn handler!");
+    // Figure out which user ended the turn
+    $username = $_SESSION["username"];
+    $games_model = new Games;
+    $users_model = new Users;
 
+    // Search for the first game possible
+    $current_game = $games_model->get_current_game();
+    // Make sure there is a current game going on
+    if(!$current_game){
+        $json_response["msg"] = "There are no games currently active.";
+        echo json_encode($json_response);
+        exit();
+    }
 
+    $current_user = $users_model->query_user($username);
+    // Make sure the current user exists in the db
+    if(!$current_user){
+        $json_response["msg"] = "The user " . $username . " is not registered in the db";
+        echo json_encode($json_response);
+        exit();
+    }
 
+    // Make sure the current user is part of the current game
+    $player_number = $games_model->is_user_in_game($current_game->id, $current_user->id);
+    if(!$player_number){
+        $json_response["msg"] = "The user " . $username . " is not part of the currently active game";
+        echo json_encode($json_response);
+        exit();
+    }
 
+    // TODO: Create a server-side handler that returns game data and info in json form to an ajax call
+    // Figure out if it's the pinging user's turn, and let them know if so
+
+    $json_response["data"] = array(
+        "game_id" => $current_game->id,
+        "user_player_number" => $player_number,
+        "player_turn" => $current_game->player_turn,
+        "username" => $username,
+    );
     // Check to make sure that it truly is the user's turn
+
+
+
 
     // Check to make sure that the piece hasn't been used before (same piece == same rows, same columns, and same bitmask for the same player - create a mysql query for this)
     // Make sure the piece doesn't exceed a certain value (5 in this case). If it does, then must be a hack

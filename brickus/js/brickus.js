@@ -78,7 +78,6 @@ PLAYER_COLORS[PLAYER_3] = "Red";
 PLAYER_COLORS[PLAYER_4] = "Green";
 
 // Keep track of whose turn it is
-var current_player = PLAYER_1;
 var player_turn = null;
 
 
@@ -133,12 +132,15 @@ function start_pinging(){
                             current_user_player_number = 4;
                             break;
                         default:
+                            console.log("Could not determine what color the user is...");
                             break;
                     }
                 }
 
+
+
                 // Set all the playernames as the users
-                // TODO: Only set this once?
+                // TODO: Only set this once? What if a player leaves the game?
                 if(json.data.player1_username){
                     $("#player1_name").html(json.data.player1_username + "'s Score:");
                 }
@@ -152,27 +154,29 @@ function start_pinging(){
                     $("#player4_name").html(json.data.player4_username + "'s Score:");
                 }
 
-
-                // Initially set whose turn it is if yet unknown
-                if(!player_turn){
-                    player_turn = +json.data.player_turn;
-                    $("#player_turn").html(PLAYER_COLORS[player_turn]);
-                }
+                // Add a (YOU) to indicate which color you are
+                var user_score_name = $("#player" + current_user_player_number + "_name");
+                user_score_name.text(user_score_name.text() + "(YOU)");
 
 
-                // If it is a new player's turn, update the current player displayed
-                if(json.data.player_turn && player_turn != +json.data.player_turn){
+                // Set whose turn it is if yet unknown or if it is a new player's turn
+                if(!player_turn && player_turn != +json.data.player_turn){
                     console.log("Detected a change in player turn!");
                     player_turn = +json.data.player_turn;
+                    // update the current player displayed
                     $("#player_turn").html(PLAYER_COLORS[player_turn]);
+                    // If it's the user's turn, turn off pinging until he/she finishes the turn
+                    if(player_turn == current_user_player_number){
+                        console.log("It's your turn! Turn off pinging while you figure out your next move...");
+                        stop_pinging();
+                    }
                 }
-
-
-                // If it's the user's turn, turn off pinging until he/she finishes the turn
 
 
 
             },
+
+            // Note: Complete executes after success does
             complete: function() {
                 if(pinging_active){
                     // Schedule the next request when the current one's complete
@@ -197,6 +201,7 @@ function finish_turn_handler() {
     var jqxhr = $.ajax({
         url: "ajax_handlers/finish_turn.php",
         dataType: "json",
+        method: "POST",
         // NOTE: User data will already be sent in session data
         // TODO: Send data on the piece that was placed
         //  -where it was on the grid (grid location)
@@ -204,20 +209,12 @@ function finish_turn_handler() {
         //  -cols
         //  -rows
         // The value, player will be already known
-
+        data: JSON.stringify({piece: "asdfasdfasdf"}),
     });
 
     // Use promises!
     jqxhr.done(function(json) {
         console.log(json);
-
-        // // Set the current player as the next player
-        // if(current_player == PLAYER_4){
-        //     current_player = PLAYER_1;
-        // }
-        // else {
-        //     current_player++;
-        // }
 
         console.log("It is now " + PLAYER_COLORS[player_turn] + "'s turn!");
 
