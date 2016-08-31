@@ -40,30 +40,8 @@ $(function(){
 
     $("#finish_turn_btn").on("click", finish_turn_handler);
 
-
-    // TODO: Create a periodic AJAX ping to the server
-    // Use http://stackoverflow.com/a/5052661
-    // Only allow the ping if it is not the client player's own turn
-    // Use it here? Or at the bottom of the file?
-    (function ping_worker() {
-      $.ajax({
-        url: 'ajax_handlers/ping.php',
-        success: function(data) {
-            console.log("success callback");
-            console.log(data);
-
-            // $('.result').html(data);
-        },
-        complete: function() {
-            console.log("complete callback");
-            // Schedule the next request when the current one's complete
-            setTimeout(ping_worker, 1000);
-        }
-      });
-    })();
-
-
-
+    // Turn on pinging
+    start_pinging();
 });
 
 // r is keycode 82
@@ -81,6 +59,8 @@ var grabbed_piece = null;
 var grab_relative_x = null;
 var grab_relative_y = null;
 
+// If true, pinging will be allowed to run. If false, it will stop running.
+var pinging_active = false;
 
 // A monotonically increasing z value for every time a piece is touched.
 // This will never realistically overflow with regular human use
@@ -115,6 +95,41 @@ var gameboard = new Array(GAMEBOARD_WIDTH);
 for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
     gameboard[i] = new Array(GAMEBOARD_WIDTH);
 }
+
+// Start up the pinging service
+// Only allow the ping if it is not the client player's own turn
+function start_pinging(){
+    pinging_active = true;
+
+    // Create a periodic AJAX ping to the server
+    // See http://stackoverflow.com/a/5052661
+    // This will keep running until pinging_active is set to false
+    (function ping_worker() {
+        $.ajax({
+            url: 'ajax_handlers/ping.php',
+            success: function(data) {
+                console.log("success callback");
+                console.log(data);
+
+                // $('.result').html(data);
+            },
+            complete: function() {
+                console.log("complete callback");
+                if(pinging_active){
+                    // Schedule the next request when the current one's complete
+                    setTimeout(ping_worker, 1000);
+                }
+            }
+        });
+    })();
+}
+
+// Turns off pinging
+function stop_pinging(){
+    pinging_active = false;
+}
+
+
 
 
 // Change the turn
