@@ -174,6 +174,9 @@ function start_pinging(){
 
 
 
+                // TODO: Receive a json array of pieces, loop through, and render the board each time
+
+
             },
 
             // Note: Complete executes after success does
@@ -209,7 +212,10 @@ function finish_turn_handler() {
         //  -cols
         //  -rows
         // The value, player will be already known
-        data: JSON.stringify({piece: "asdfasdfasdf"}),
+        data: {
+            // TODO: Send in the actual piece data
+            piece: JSON.stringify({a:"asdf", b:"asdf", c:4, test:"My bestest piece ever"})
+        },
     });
 
     // Use promises!

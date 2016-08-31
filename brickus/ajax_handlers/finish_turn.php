@@ -4,6 +4,11 @@
     session_name("brickus_session_id");
     session_start();
 
+
+    // Create a server-side handler that returns game data and info in json form to an ajax call
+    // Figure out if it's the pinging user's turn, and let them know if so
+
+
     $json_response = array(
         "data" => null,
         "success" => false,
@@ -49,15 +54,14 @@
         exit();
     }
 
-    // TODO: Create a server-side handler that returns game data and info in json form to an ajax call
-    // Figure out if it's the pinging user's turn, and let them know if so
-
-
-
-    // Check to make sure that it truly is the user's turn
-
+    // Advance the turn
     $new_player_turn = $games_model->next_turn($current_game->id, $current_user->id);
 
+    // TODO: Have the user send in the piece data
+    $piece = json_decode($_POST["piece"]);
+
+    // error_log(print_r($_POST,1));
+    // error_log(print_r($piece,1));
 
 
     $json_response["data"] = array(
