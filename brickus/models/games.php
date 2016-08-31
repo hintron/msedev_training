@@ -25,6 +25,12 @@ class Games {
     private $dbh;
     private $table_name;
 
+    const PLAYER_1 = 1;
+    const PLAYER_2 = 2;
+    const PLAYER_3 = 3;
+    const PLAYER_4 = 4;
+
+
    function __construct() {
         // Connect to the db
         $this->hostname = "localhost";
@@ -189,7 +195,10 @@ class Games {
 
 
 
-
+    /**
+        Ends the designated game by setting the in_progress field to 0.
+        Checks to make sure the user_id is actually part of the game
+    **/
     public function end_game($game_id, $user_id) {
         $game = $this->query_game($game_id);
         if(!$game){
@@ -221,9 +230,50 @@ class Games {
 
 
 
+    /**
+        Advances the game to the next turn for the designated game
+        Checks to make sure the user_id is actually part of the game
+
+        Returns the new player turn if successful, false if it failed to advance the turn
+    **/
+    public function next_turn($game_id, $user_id) {
+        $game = $this->query_game($game_id);
+        if(!$game){
+            error_log("Could not find the game to advance the turn for...");
+            return false;
+        }
+
+        if(!$this->is_user_in_game($game_id, $user_id)){
+            error_log("The user is not part of the game! Use cannot end a game he/she is not a part of...");
+            return false;
+        }
+
+        // Advance the player turn
+        $new_player_turn = $game->player_turn;
+        if($game->player_turn == self::PLAYER_4){
+            $new_player_turn = self::PLAYER_1;
+        }
+        else {
+            $new_player_turn++;
+        }
+
+        $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player_turn=$new_player_turn WHERE id=?");
+
+        // Prepare the sql statement
+        $stmt->execute(array($game_id));
+        if($stmt->rowCount()){
+            return $new_player_turn;
+        }
+        else {
+            return false;
+        }
+    }
 
 
 
+    // TODO: Record the scores for different pieces
+    // public function add_piece_to_score($game_id, $user_id, $piece_id) {
+    // }
 
 
 

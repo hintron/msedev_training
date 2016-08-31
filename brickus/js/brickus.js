@@ -197,7 +197,7 @@ function stop_pinging(){
 
 // Change the turn
 function finish_turn_handler() {
-
+    // Send a "turn finished" ajax call to the server
     var jqxhr = $.ajax({
         url: "ajax_handlers/finish_turn.php",
         dataType: "json",
@@ -216,6 +216,9 @@ function finish_turn_handler() {
     jqxhr.done(function(json) {
         console.log(json);
 
+        // Set the new player turn
+        player_turn = json.player_turn;
+
         console.log("It is now " + PLAYER_COLORS[player_turn] + "'s turn!");
 
         // Set the label as the current player
@@ -225,9 +228,8 @@ function finish_turn_handler() {
         last_snapped_piece = null;
         $("#finish_turn_btn").removeClass("bold");
 
-        // TODO: Send a "turn finished" ajax call to the server
-        // TODO: Turn on pinging again
-        // start_pinging();
+        // Turn on pinging again
+        start_pinging();
     });
 
 }

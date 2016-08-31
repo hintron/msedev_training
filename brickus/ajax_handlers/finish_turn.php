@@ -52,16 +52,20 @@
     // TODO: Create a server-side handler that returns game data and info in json form to an ajax call
     // Figure out if it's the pinging user's turn, and let them know if so
 
-    $json_response["data"] = array(
-        "game_id" => $current_game->id,
-        "user_player_number" => $player_number,
-        "player_turn" => $current_game->player_turn,
-        "username" => $username,
-    );
+
+
     // Check to make sure that it truly is the user's turn
 
+    $new_player_turn = $games_model->next_turn($current_game->id, $current_user->id);
 
 
+
+    $json_response["data"] = array(
+        "player_turn" => $new_player_turn,
+        // "user_player_number" => $player_number,
+        // "game_id" => $current_game->id,
+        // "username" => $username,
+    );
 
     // Check to make sure that the piece hasn't been used before (same piece == same rows, same columns, and same bitmask for the same player - create a mysql query for this)
     // Make sure the piece doesn't exceed a certain value (5 in this case). If it does, then must be a hack
