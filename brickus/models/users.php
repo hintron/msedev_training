@@ -41,6 +41,9 @@ class Users {
    }
 
 
+    /**
+        Returns the user record if found, else it returns false.
+    **/
     public function query_user($username) {
         // Prepare the sql statement
         $stmt = $this->dbh->prepare("SELECT * FROM users WHERE username = ?");
@@ -51,14 +54,21 @@ class Users {
         // See http://php.net/manual/en/pdostatement.setfetchmode.php
         $stmt->setFetchMode(PDO::FETCH_INTO, new User);
         $returned_users = $stmt->fetchAll();
-        return $returned_users;
+
+        if(count($returned_users)){
+            return $returned_users[0];
+        }
+        else {
+            // Could not find the user
+            return false;
+        }
     }
 
     public function create_user($username, $password, $repeat_password, $first_name, $last_name, $birthday) {
-        $returned_users = $this->query_user($username);
+        $returned_user = $this->query_user($username);
 
        // Make sure that the username isn't already taken
-        if(count($returned_users)){
+        if($returned_user){
             echo "ERROR: Username \"" . $username . "\" already taken<br />";
             return false;
         }
@@ -85,9 +95,9 @@ class Users {
 
 
     public function verify_user($username, $password){
-        $returned_users = $this->query_user($username);
+        $returned_user = $this->query_user($username);
         // Verify the save password using the save password hash
-        if(count($returned_users) && password_verify($password, $returned_users[0]->password_hash)){
+        if($returned_user && password_verify($password, $returned_user->password_hash)){
             return true;
         }
         else {

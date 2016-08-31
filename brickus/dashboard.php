@@ -13,7 +13,6 @@
     // Check if the user is already logged in
     if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
         echo "Welcome to the member's area, " . $_SESSION['username'] . "!<br>";
-
     }
     else {
         $users_model = new Users;
