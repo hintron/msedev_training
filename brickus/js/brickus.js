@@ -2,7 +2,6 @@ $(function(){
     //
     //// Attach event handlers and initialize code
     //
-    console.log("Hello, World!");
 
     // See this for setting event handlers: http://stackoverflow.com/a/6348597
 
@@ -78,7 +77,9 @@ PLAYER_COLORS[PLAYER_2] = "Blue";
 PLAYER_COLORS[PLAYER_3] = "Red";
 PLAYER_COLORS[PLAYER_4] = "Green";
 
+// Keep track of whose turn it is
 var current_player = PLAYER_1;
+var player_turn = null;
 
 
 // The server will tell the client what color she/he is
@@ -114,40 +115,57 @@ function start_pinging(){
             url: 'ajax_handlers/ping.php',
             dataType: "json",
             success: function(json) {
-                // console.log("success callback");
                 // console.log(json);
-                // console.log(json.data.player_turn);
-                // console.log(json.data);
-                // console.log(json.data.username);
 
-                // TODO: Set all the playernames as the users
-
+                // Figure out which player number (color) the current user is and set it ONE time
                 if(!current_user_player_number){
-                    switch (+json.data.player_turn){
+                    switch (+json.data.user_player_number){
                         case 1:
                             current_user_player_number = 1;
-                            $("#player1_name").html(json.data.username + "'s Score:");
                             break;
                         case 2:
                             current_user_player_number = 2;
-                            $("#player2_name").html(json.data.username + "'s Score:");
                             break;
                         case 3:
                             current_user_player_number = 3;
-                            $("#player3_name").html(json.data.username + "'s Score:");
                             break;
                         case 4:
                             current_user_player_number = 4;
-                            $("#player4_name").html(json.data.username + "'s Score:");
                             break;
                         default:
                             break;
                     }
+                }
 
+                // Set all the playernames as the users
+                // TODO: Only set this once?
+                if(json.data.player1_username){
+                    $("#player1_name").html(json.data.player1_username + "'s Score:");
+                }
+                if(json.data.player2_username){
+                    $("#player2_name").html(json.data.player2_username + "'s Score:");
+                }
+                if(json.data.player3_username){
+                    $("#player3_name").html(json.data.player3_username + "'s Score:");
+                }
+                if(json.data.player4_username){
+                    $("#player4_name").html(json.data.player4_username + "'s Score:");
                 }
 
 
-                // $('.result').html(data);
+                // Initially set whose turn it is if yet unknown
+                if(!player_turn){
+                    player_turn = +json.data.player_turn;
+                    $("#player_turn").html(PLAYER_COLORS[player_turn]);
+                }
+
+
+                // If it is a new player's turn, update the current player plaque
+                if(json.data.player_turn && player_turn != +json.data.player_turn){
+                    console.log("Detected a change in player turn!");
+                    player_turn = +json.data.player_turn;
+                    $("#player_turn").html(PLAYER_COLORS[player_turn]);
+                }
             },
             complete: function() {
                 if(pinging_active){
@@ -180,7 +198,7 @@ function finish_turn_handler() {
     console.log("It is now " + PLAYER_COLORS[current_player] + "'s turn!");
 
     // Set the label as the current player
-    $("#current_player_turn").html(PLAYER_COLORS[current_player]);
+    $("#player_turn").html(PLAYER_COLORS[current_player]);
 
     // Clear the last snapped piece
     last_snapped_piece = null;

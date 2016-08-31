@@ -53,10 +53,32 @@
     // Figure out if it's the pinging user's turn, and let them know if so
 
     $json_response["data"] = array(
-        "player_turn" => $current_game->player_turn,
+        "game_id" => $current_game->id,
         "user_player_number" => $player_number,
+        "player_turn" => $current_game->player_turn,
         "username" => $username,
     );
+
+
+    $player1 = $users_model->query_user_by_id($current_game->player1_id);
+    if($player1){
+        $json_response["data"]["player1_username"] = $player1->username;
+    }
+    $player2 = $users_model->query_user_by_id($current_game->player2_id);
+    if($player2){
+        $json_response["data"]["player2_username"] = $player2->username;
+    }
+    $player3 = $users_model->query_user_by_id($current_game->player3_id);
+    if($player3){
+        $json_response["data"]["player3_username"] = $player3->username;
+    }
+    $player4 = $users_model->query_user_by_id($current_game->player4_id);
+    if($player4){
+        $json_response["data"]["player4_username"] = $player4->username;
+    }
+
+
+
     $json_response["msg"] = "Ping successful!";
     $json_response["success"] = true;
     echo json_encode($json_response);

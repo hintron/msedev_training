@@ -64,6 +64,34 @@ class Users {
         }
     }
 
+
+    /**
+        Returns the user record if found, else it returns false.
+    **/
+    public function query_user_by_id($user_id) {
+        // Prepare the sql statement
+        $stmt = $this->dbh->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute(array($user_id));
+
+        // Grab all the records returned from execute
+        // For how to insert data directly into classes, see http://stackoverflow.com/a/368990
+        // See http://php.net/manual/en/pdostatement.setfetchmode.php
+        $stmt->setFetchMode(PDO::FETCH_INTO, new User);
+        $returned_users = $stmt->fetchAll();
+
+        if(count($returned_users)){
+            return $returned_users[0];
+        }
+        else {
+            // Could not find the user
+            return false;
+        }
+    }
+
+
+
+
+
     public function create_user($username, $password, $repeat_password, $first_name, $last_name, $birthday) {
         $returned_user = $this->query_user($username);
 
