@@ -1,6 +1,7 @@
 <?php
     include "../models/games.php";
     include "../models/users.php";
+    include "../models/pieces.php";
     session_name("brickus_session_id");
     session_start();
 
@@ -28,6 +29,7 @@
     $username = $_SESSION["username"];
     $games_model = new Games;
     $users_model = new Users;
+    $pieces_model = new Pieces;
 
     // Search for the first game possible
     $current_game = $games_model->get_current_game();
@@ -54,21 +56,25 @@
         exit();
     }
 
+    // error_log("Player " . $current_user->username . "(" . $username . "): " . $player_number . "  ended their turn!");
+
     // Advance the turn
     $new_player_turn = $games_model->next_turn($current_game->id, $current_user->id);
 
 
     if(!isset($_POST["piece"])){
-        $json_response["msg"] = "No piece was recorded for that turn";
+        $json_response["msg"] = "Turn completed successfully. No piece was recorded for this turn";
         $json_response["success"] = true;
         echo json_encode($json_response);
         exit();
     }
 
+
+
     // Make json decode turn it into an array
     // See http://stackoverflow.com/a/6815562
     $piece = json_decode($_POST["piece"], 1);
-    error_log(print_r($piece,1));
+    // error_log(print_r($piece,1));
 
 
     if(!isset($piece["bitmap"]) || !isset($piece["cols"]) || !isset($piece["rows"]) || !isset($piece["id"])){
@@ -78,9 +84,9 @@
         exit();
     }
 
-    $piece_bitmap = $piece["bitmap"];
     $piece_rows = $piece["rows"];
     $piece_cols = $piece["cols"];
+    $piece_bitmap = $piece["bitmap"];
     $piece_id = $piece["id"];
 
 
@@ -96,32 +102,24 @@
         exit();
     }
 
-
     // Check to make sure that the piece hasn't been used before (keep track of all the used ids)
     // TODO: This IS a vulnerability though - I'm trusting the user to not know how to send in a proper piece.... The server will need a whitelist of pieces to avoid this vulnerability
 
-
-
     // create a new piece if it is valid
+    $piece_created = $pieces_model->create_piece($current_game->id, $piece_rows, $piece_cols, $piece_bitmap, 0, 0, $player_number, $piece_value, $piece_id);
 
 
-
-
-
-    $json_response["data"] = array(
-        "player_turn" => $new_player_turn,
-        // "user_player_number" => $player_number,
-        // "game_id" => $current_game->id,
-        // "username" => $username,
-    );
-
-
-
-
+    if($piece_created){
+        $json_response["msg"] = "Piece was successfully recorded and turn is over!";
+        $json_response["success"] = true;
+        echo json_encode($json_response);
+    }
+    else {
+        $json_response["msg"] = "Could not record the piece placement... Did you already place the same piece?";
+        echo json_encode($json_response);
+    }
     // TODO: Send back the scores of each player, so the client side can check and update
 
-    $json_response["msg"] = "Turn was successfully recorded!";
-    $json_response["success"] = true;
-    echo json_encode($json_response);
+
     exit();
 ?>

@@ -200,6 +200,13 @@ function stop_pinging(){
 
 // Change the turn
 function finish_turn_handler() {
+    // Only let users end their own turn
+    if(player_turn != current_user_player_number){
+        console.log("It's not your turn! Can't finish the turn");
+        return;
+    }
+
+
     console.log(last_snapped_piece);
 
     // TODO: Send data on the piece that was placed
@@ -249,6 +256,13 @@ function finish_turn_handler() {
 }
 
 function mousedown_handler(mouse_event) {
+    // Do not allow any pieces to be picked up if not user's turn
+    if(player_turn != current_user_player_number){
+        console.log("It's not your turn!");
+        return;
+    }
+
+
     // NOTE: If the element that emitted the event is just a tile_row,
     // it means that an etile was underneath it. So ignore it.
     if($(mouse_event.target).hasClass("tile_row")){

@@ -1,6 +1,5 @@
 <?php
 
-// For a single row in Users
 class Game {
     // These properties need to match the db fields exactly
     public $id;
@@ -273,9 +272,16 @@ class Games {
     }
 
 
+    // TODO: Undo last turn function
+    // -Remove piece
+    // -Subtract score
+    // -Turn back the turn
 
-    // TODO: Record the scores for different pieces
-    // public function add_piece_to_score($game_id, $user_id, $piece_id) {
+
+
+    // // TODO: Record the scores for different pieces
+    // public function add_piece_to_score($game_id, $player_number, $score) {
+
     // }
 
 
