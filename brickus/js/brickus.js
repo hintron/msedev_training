@@ -174,12 +174,31 @@ function start_pinging(){
                 }
 
 
-
                 var all_pieces = json.data.all_pieces;
                 console.log(all_pieces);
+                // loop through and render each piece to the game board
+                if(all_pieces.length){
+                    var temp_piece;
+                    var temp_gameboard = $("#gameboard");
+                    var temp_new_location;
+                    for (var i = 0; i < all_pieces.length; i++) {
+                        temp_piece = $(".piece[data-id='" + all_pieces[i].html_piece_id + "'][data-player='" + all_pieces[i].player_number + "']");
+                        console.log(temp_piece);
 
-                // TODO: loop through and render each piece to the game board
+                        // TODO: Find the gameboard location
 
+                        // TODO: Move the piece to the correct spot on the gameboard
+                        temp_new_location = temp_gameboard.offset();
+                        // temp_new_location.left = temp_new_location.left + (temp_piece.gameboard_x*GAMEBOARD_CELL_WIDTH);
+                        // temp_new_location.top = temp_new_location.top + (temp_piece.gameboard_y*GAMEBOARD_CELL_WIDTH);
+                        temp_piece.offset(temp_new_location);
+                        console.log(temp_piece.offset());
+
+                        // TODO: Somehow simulate dropping a piece
+                        // TODO: Break things out into functions so I have a programmatic api?
+
+                    }
+                }
 
 
 
