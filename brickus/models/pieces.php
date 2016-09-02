@@ -38,7 +38,6 @@ class Pieces {
         Returns the piece record for the passed piece id.
     **/
     public function query_piece($piece_id) {
-        // Prepare the sql statement
         $stmt = $this->dbh->prepare("SELECT * FROM $this->table_name WHERE id = ?");
         $stmt->execute(array($piece_id));
         $stmt->setFetchMode(PDO::FETCH_INTO, new Piece);
@@ -55,8 +54,7 @@ class Pieces {
         // TODO: Keep track of turn number
     **/
     public function create_piece($game_id, $rows, $cols, $bitmap, $gameboard_x, $gameboard_y, $player_number, $value, $html_piece_id) {
-
-        // TODO: Check to make sure the piece had not been placed for the player for that game
+        // Check to make sure the piece had not already been placed for the player for that game
         if($this->has_piece_been_played($game_id, $player_number, $html_piece_id)){
             error_log("ERROR: Piece has already been used!!!! Something is fishy here...");
             return false;
@@ -93,6 +91,16 @@ class Pieces {
     }
 
 
+    // Returns an array of piece records for the current game
+    public function get_all_pieces_for_a_game($game_id){
+        $stmt = $this->dbh->prepare("SELECT * FROM $this->table_name WHERE game_id = ?");
+        $stmt->execute(array($game_id));
+        $stmt->setFetchMode(PDO::FETCH_INTO, new Piece);
+        $returned_pieces = $stmt->fetchAll();
+        return $returned_pieces;
+    }
+
+
 
     // TODO: Implement these functions:
 
@@ -101,9 +109,6 @@ class Pieces {
     // delete piece
 
     // remove last piece (for undo)
-
-
-
 
 
 

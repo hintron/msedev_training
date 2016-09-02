@@ -1,6 +1,7 @@
 <?php
     include "../models/games.php";
     include "../models/users.php";
+    include "../models/pieces.php";
     session_name("brickus_session_id");
     session_start();
 
@@ -23,6 +24,7 @@
     $username = $_SESSION["username"];
     $games_model = new Games;
     $users_model = new Users;
+    $pieces_model = new Pieces;
 
     // Search for the first game possible
     $current_game = $games_model->get_current_game();
@@ -49,7 +51,7 @@
         exit();
     }
 
-    // TODO: Create a server-side handler that returns game data and info in json form to an ajax call
+    // Create a server-side handler that returns game data and info in json form to an ajax call
     // Figure out if it's the pinging user's turn, and let them know if so
 
     $json_response["data"] = array(
@@ -77,6 +79,11 @@
         $json_response["data"]["player4_username"] = $player4->username;
     }
 
+
+    // Return all the pieces placed during the game, so the client can sync and rerender the gameboard
+
+    $all_pieces = $pieces_model->get_all_pieces_for_a_game($current_game->id);
+    $json_response["data"]["all_pieces"] = $all_pieces;
 
 
     $json_response["msg"] = "Ping successful!";

@@ -259,6 +259,7 @@ class Games {
             $new_player_turn++;
         }
 
+        // TODO: keep track of the current turn number and increment it each turn, so I can know what turn the piece was placed
         $stmt = $this->dbh->prepare("UPDATE $this->table_name SET player_turn=$new_player_turn WHERE id=?");
 
         // Prepare the sql statement
@@ -283,11 +284,6 @@ class Games {
     // public function add_piece_to_score($game_id, $player_number, $score) {
 
     // }
-
-
-
-
-
 
 
 

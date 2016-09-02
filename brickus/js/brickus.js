@@ -175,7 +175,12 @@ function start_pinging(){
 
 
 
-                // TODO: Receive a json array of pieces, loop through, and render the board each time
+                var all_pieces = json.data.all_pieces;
+                console.log(all_pieces);
+
+                // TODO: loop through and render each piece to the game board
+
+
 
 
             },
@@ -184,7 +189,7 @@ function start_pinging(){
             complete: function() {
                 if(pinging_active){
                     // Schedule the next request when the current one's complete
-                    setTimeout(ping_worker, 1000);
+                    setTimeout(ping_worker, 5000);
                 }
             }
         });
@@ -207,15 +212,10 @@ function finish_turn_handler() {
         return;
     }
 
-
     // console.log(last_snapped_piece);
 
-    // TODO: Send data on the piece that was placed
-    //  -where it was on the grid (grid location)
-    //  -bitmap
-    //  -cols
-    //  -rows
-    // NOTE: Don't need to send the player number, since that will be contained in the session vars and is difficult to fake
+    // Send data on the piece that was placed
+    // NOTE: Don't need to send player info, since that will be contained in the session vars
     var data = {};
     if(last_snapped_piece){
         data.piece = JSON.stringify({
@@ -286,7 +286,7 @@ function mousedown_handler(mouse_event) {
         grabbed_piece = mouse_event.currentTarget;
     }
 
-    // TODO: Have a check to make sure that players can only select their own pieces
+    // Have a check to make sure that players can only select their own pieces
     if(player_turn && player_turn != grabbed_piece.dataset.player){
         console.log("Cannot select a piece that is not yours!");
         drop_piece();
