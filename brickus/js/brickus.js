@@ -200,22 +200,30 @@ function stop_pinging(){
 
 // Change the turn
 function finish_turn_handler() {
+    console.log(last_snapped_piece);
+
+    // TODO: Send data on the piece that was placed
+    //  -where it was on the grid (grid location)
+    //  -bitmap
+    //  -cols
+    //  -rows
+    // NOTE: Don't need to send the player number, since that will be contained in the session vars and is difficult to fake
+    var data = {};
+    if(last_snapped_piece){
+        data.piece = JSON.stringify({
+            rows:last_snapped_piece.dataset.rows,
+            cols:last_snapped_piece.dataset.cols,
+            id:last_snapped_piece.dataset.id,
+            bitmap:last_snapped_piece.dataset.bitmap,
+        })
+    }
+
     // Send a "turn finished" ajax call to the server
     var jqxhr = $.ajax({
         url: "ajax_handlers/finish_turn.php",
         dataType: "json",
         method: "POST",
-        // NOTE: User data will already be sent in session data
-        // TODO: Send data on the piece that was placed
-        //  -where it was on the grid (grid location)
-        //  -bitmap
-        //  -cols
-        //  -rows
-        // The value, player will be already known
-        data: {
-            // TODO: Send in the actual piece data
-            piece: JSON.stringify({a:"asdf", b:"asdf", c:4, test:"My bestest piece ever"})
-        },
+        data: data,
     });
 
     // Use promises!

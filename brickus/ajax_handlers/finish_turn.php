@@ -57,11 +57,55 @@
     // Advance the turn
     $new_player_turn = $games_model->next_turn($current_game->id, $current_user->id);
 
-    // TODO: Have the user send in the piece data
-    $piece = json_decode($_POST["piece"]);
 
-    // error_log(print_r($_POST,1));
-    // error_log(print_r($piece,1));
+    if(!isset($_POST["piece"])){
+        $json_response["msg"] = "No piece was recorded for that turn";
+        $json_response["success"] = true;
+        echo json_encode($json_response);
+        exit();
+    }
+
+    // Make json decode turn it into an array
+    // See http://stackoverflow.com/a/6815562
+    $piece = json_decode($_POST["piece"], 1);
+    error_log(print_r($piece,1));
+
+
+    if(!isset($piece["bitmap"]) || !isset($piece["cols"]) || !isset($piece["rows"]) || !isset($piece["id"])){
+        error_log("ERROR: The passed piece did not have correct data!!!");
+        $json_response["msg"] = "The passed piece did not have the correct information";
+        echo json_encode($json_response);
+        exit();
+    }
+
+    $piece_bitmap = $piece["bitmap"];
+    $piece_rows = $piece["rows"];
+    $piece_cols = $piece["cols"];
+    $piece_id = $piece["id"];
+
+
+    // Count the value of the piece from the bitmap
+    $piece_value = substr_count($piece_bitmap, "1");
+    // error_log("The piece value was " . $piece_value);
+
+    // Ignore it if the value is impossible
+    if($piece_value > $games_model::MAX_PIECE_VALUE){
+        error_log("ERROR: The user passed a piece that had an impossible value!");
+        $json_response["msg"] = "The user passed a piece that had an impossible value!";
+        echo json_encode($json_response);
+        exit();
+    }
+
+
+    // Check to make sure that the piece hasn't been used before (keep track of all the used ids)
+    // TODO: This IS a vulnerability though - I'm trusting the user to not know how to send in a proper piece.... The server will need a whitelist of pieces to avoid this vulnerability
+
+
+
+    // create a new piece if it is valid
+
+
+
 
 
     $json_response["data"] = array(
@@ -71,13 +115,10 @@
         // "username" => $username,
     );
 
-    // Check to make sure that the piece hasn't been used before (same piece == same rows, same columns, and same bitmask for the same player - create a mysql query for this)
-    // Make sure the piece doesn't exceed a certain value (5 in this case). If it does, then must be a hack
-    // TODO: This IS a vulnerability though - I'm trusting the user to not know how to send in a proper piece.... The server will need a whitelist of pieces to avoid this vulnerability
-
-    // If so, create a new piece
 
 
+
+    // TODO: Send back the scores of each player, so the client side can check and update
 
     $json_response["msg"] = "Turn was successfully recorded!";
     $json_response["success"] = true;

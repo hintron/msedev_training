@@ -30,6 +30,9 @@ class Games {
     const PLAYER_3 = 3;
     const PLAYER_4 = 4;
 
+    // Ignore any piece with a value larger than this
+    const MAX_PIECE_VALUE = 5;
+
 
    function __construct() {
         // Connect to the db
