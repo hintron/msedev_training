@@ -88,6 +88,8 @@
     $piece_cols = $piece["cols"];
     $piece_bitmap = $piece["bitmap"];
     $piece_id = $piece["id"];
+    $piece_gameboard_x = $piece["gameboard_x"];
+    $piece_gameboard_y = $piece["gameboard_y"];
 
 
     // Count the value of the piece from the bitmap
@@ -106,7 +108,7 @@
     // TODO: This IS a vulnerability though - I'm trusting the user to not know how to send in a proper piece.... The server will need a whitelist of pieces to avoid this vulnerability
 
     // create a new piece if it is valid
-    $piece_created = $pieces_model->create_piece($current_game->id, $piece_rows, $piece_cols, $piece_bitmap, 0, 0, $player_number, $piece_value, $piece_id);
+    $piece_created = $pieces_model->create_piece($current_game->id, $piece_rows, $piece_cols, $piece_bitmap, $piece_gameboard_x, $piece_gameboard_y, $player_number, $piece_value, $piece_id);
 
 
     if($piece_created){

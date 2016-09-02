@@ -88,6 +88,7 @@ var current_user_player_number = null;
 // Only let the user place one piece per turn
 // Keep track of the piece that was placed this turn
 // If this var is null, it means that no piece is placed yet
+// It will contain a gameboard x and y, the coordinates of the piece on the gameboard
 var last_snapped_piece = null;
 
 // Create a gameboard that will store the pieces or just blocks
@@ -207,7 +208,7 @@ function finish_turn_handler() {
     }
 
 
-    console.log(last_snapped_piece);
+    // console.log(last_snapped_piece);
 
     // TODO: Send data on the piece that was placed
     //  -where it was on the grid (grid location)
@@ -222,6 +223,8 @@ function finish_turn_handler() {
             cols:last_snapped_piece.dataset.cols,
             id:last_snapped_piece.dataset.id,
             bitmap:last_snapped_piece.dataset.bitmap,
+            gameboard_x:last_snapped_piece.gameboard_x,
+            gameboard_y:last_snapped_piece.gameboard_y,
         })
     }
 
@@ -246,6 +249,8 @@ function finish_turn_handler() {
         $("#player_turn").html(PLAYER_COLORS[player_turn]);
 
         // Clear the last snapped piece
+        last_snapped_piece.gameboard_x = null;
+        last_snapped_piece.gameboard_y = null;
         last_snapped_piece = null;
         $("#finish_turn_btn").removeClass("bold");
 
@@ -304,6 +309,8 @@ function mousedown_handler(mouse_event) {
         grabbed_piece.snapped_to_gameboard = false;
 
         // Unset the placed piece for this turn
+        last_snapped_piece.gameboard_x = null;
+        last_snapped_piece.gameboard_y = null;
         last_snapped_piece = null;
         $("#finish_turn_btn").removeClass("bold");
 
@@ -485,6 +492,8 @@ function mouseup_handler(mouse_event) {
     grabbed_piece.snapped_to_gameboard = true;
     // Set the grabbed piece as the last piece snapped to the grid
     last_snapped_piece = grabbed_piece;
+    last_snapped_piece.gameboard_x = gameboard_cell_col;
+    last_snapped_piece.gameboard_y = gameboard_cell_row;
     $("#finish_turn_btn").addClass("bold");
 
     // Set the gameboard to register the pieces for the player
