@@ -179,7 +179,7 @@ function start_pinging(){
                 var all_pieces = json.data.all_pieces;
                 // console.log(all_pieces);
 
-                // Reset the gameboard
+                // TODO: Reset the gameboard
                 // reset_gameboard();
 
                 // loop through and render each piece to the game board
@@ -193,17 +193,17 @@ function start_pinging(){
                         temp_piece_el = $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "']");
                         // Find the gameboard location and move the piece to the correct spot on the gameboard
                         temp_new_location = temp_gameboard.offset();
-                        // console.log(temp_new_location);
-                        // console.log(temp_piece);
-                        // console.log(temp_piece.gameboard_x);
-                        // console.log(temp_piece.gameboard_y);
                         temp_new_location.left = temp_new_location.left + (temp_piece.gameboard_x * (GAMEBOARD_CELL_WIDTH+GAMEBOARD_CELL_BORDER_WIDTH)) + GAMEBOARD_CELL_BORDER_WIDTH;
                         temp_new_location.top = temp_new_location.top + (temp_piece.gameboard_y * (GAMEBOARD_CELL_WIDTH+GAMEBOARD_CELL_BORDER_WIDTH)) + GAMEBOARD_CELL_BORDER_WIDTH;
                         temp_piece_el.offset(temp_new_location);
 
                         // TODO: Register piece to the gameboard
-                        // TODO: Break things out into functions so I have a programmatic api?
+                        // register_gameboard_piece();
 
+                        // TODO: Increase player score (put this in with register piece?)
+
+                        // Set the inner piece element as snapped to gameboard, so user can't move it (as long as it's not the last snapped piece)
+                        temp_piece_el[0].snapped_to_gameboard = true;
                     }
                 }
 
@@ -239,10 +239,65 @@ function reset_gameboard() {
 }
 
 
-// TODO:
-function register_piece_to_gameboard(piece) {
-
+/**
+    Registers the piece to the gameboard for the passed player
+**/
+function register_gameboard_piece(gameboard_x, gameboard_y, piece_bitmap, piece_rows, piece_cols, player_number) {
+    // and iterate through the bitmap to set the gameboard
+    for (i = 0; i < piece_rows; i++) {
+        for (j = 0; j < piece_cols; j++) {
+            // Grab the char at the string
+            index = (i*piece_cols)+j;
+            bit = +piece_bitmap.charAt(index);
+            if(bit){
+                gameboard[i+gameboard_y][j+gameboard_x] = player_number;
+            };
+        }
+    }
 }
+
+
+
+function clear_gameboard_piece(gameboard_x, gameboard_y, piece_bitmap, piece_rows, piece_cols) {
+    var i,j,bit,index;
+    // Clear the gameboard of the points of the selected piece
+    for (i = 0; i < piece_rows; i++) {
+        for (j = 0; j < piece_cols; j++) {
+            // Grab the char at the string
+            index = (i*piece_cols)+j;
+            bit = +piece_bitmap.charAt(index);
+            if(bit){
+                // Clear the piece from the global gameboard array
+                gameboard[i+gameboard_y][j+gameboard_x] = 0;
+            };
+        }
+    }
+}
+
+
+/**
+    Checks to see if the passed piece can fit on the gameboard at the passed location
+
+    return: True if the piece can be placed on the gameboard at the designated coordinates
+**/
+function does_gameboard_piece_fit(gameboard_x, gameboard_y, piece_bitmap, piece_rows, piece_cols) {
+    var i,j,bit,index;
+    // Check to make sure the piece is not going over other pieces
+    for (i = 0; i < piece_rows; i++) {
+        for (j = 0; j < piece_cols; j++) {
+            // Grab the char at the string
+            index = (i*piece_cols)+j;
+            bit = +piece_bitmap.charAt(index);
+            if(bit && gameboard[i+gameboard_y][j+gameboard_x]){
+                return false;
+            };
+        }
+    }
+
+    return true;
+}
+
+
 
 
 // Change the turn
@@ -364,22 +419,14 @@ function mousedown_handler(mouse_event) {
         var cols = +grabbed_piece.dataset.cols;
         var rows = +grabbed_piece.dataset.rows;
 
-        var i,j,bit,index;
-        // Clear the gameboard of the points of the selected piece
-        for (i = 0; i < rows; i++) {
-            for (j = 0; j < cols; j++) {
-                // Grab the char at the string
-                index = (i*cols)+j;
-                bit = +bitmap.charAt(index);
-                if(bit){
-                    // Clear the piece
-                    gameboard[i+gameboard_cell_row][j+gameboard_cell_col] = 0;
-                };
-            }
-        }
+        clear_gameboard_piece(gameboard_cell_col, gameboard_cell_row, bitmap, rows, cols);
 
         // Update the scoreboard
         calculate_points();
+    }
+    else {
+        console.log("Grabbed piece was not snapped to gameboard");
+        console.log(grabbed_piece.snapped_to_gameboard);
     }
 
     // Save the grab position relative to the piece
@@ -508,18 +555,9 @@ function mouseup_handler(mouse_event) {
         return;
     }
 
-    var i,j,bit,index;
-    // Check to make sure the piece is not going over other pieces
-    for (i = 0; i < rows; i++) {
-        for (j = 0; j < cols; j++) {
-            // Grab the char at the string
-            index = (i*cols)+j;
-            bit = +bitmap.charAt(index);
-            if(bit && gameboard[i+gameboard_cell_row][j+gameboard_cell_col]){
-                drop_piece();
-                return;
-            };
-        }
+    if(!does_gameboard_piece_fit(gameboard_cell_col, gameboard_cell_row, bitmap, rows, cols)){
+        drop_piece();
+        return;
     }
 
     var gameboard_cell_rect = gameboard_cell.getBoundingClientRect();
@@ -537,19 +575,8 @@ function mouseup_handler(mouse_event) {
     last_snapped_piece.gameboard_y = gameboard_cell_row;
     $("#finish_turn_btn").addClass("bold");
 
-    // Set the gameboard to register the pieces for the player
-    // Start at the location of the upper left corner of the piece,
-    // and iterate through the bitmap to set the gameboard
-    for (i = 0; i < rows; i++) {
-        for (j = 0; j < cols; j++) {
-            // Grab the char at the string
-            index = (i*cols)+j;
-            bit = +bitmap.charAt(index);
-            if(bit){
-                gameboard[i+gameboard_cell_row][j+gameboard_cell_col] = player;
-            };
-        }
-    }
+    register_gameboard_piece(gameboard_cell_col, gameboard_cell_row, bitmap, rows, cols, player);
+
     calculate_points();
     drop_piece();
 }
