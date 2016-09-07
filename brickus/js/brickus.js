@@ -179,8 +179,8 @@ function start_pinging(){
                 var all_pieces = json.data.all_pieces;
                 // console.log(all_pieces);
 
-                // TODO: Reset the gameboard
-                // reset_gameboard();
+                // Reset the gameboard
+                reset_gameboard();
 
                 // loop through and render each piece to the game board
                 if(all_pieces.length){
@@ -197,18 +197,16 @@ function start_pinging(){
                         temp_new_location.top = temp_new_location.top + (temp_piece.gameboard_y * (GAMEBOARD_CELL_WIDTH+GAMEBOARD_CELL_BORDER_WIDTH)) + GAMEBOARD_CELL_BORDER_WIDTH;
                         temp_piece_el.offset(temp_new_location);
 
-                        // TODO: Register piece to the gameboard
-                        // register_gameboard_piece();
-
-                        // TODO: Increase player score (put this in with register piece?)
+                        // Register piece to the gameboard
+                        register_gameboard_piece(+temp_piece.gameboard_x, +temp_piece.gameboard_y, temp_piece.bitmap, temp_piece.rows, temp_piece.cols, +temp_piece.player_number);
 
                         // Set the inner piece element as snapped to gameboard, so user can't move it (as long as it's not the last snapped piece)
                         temp_piece_el[0].snapped_to_gameboard = true;
                     }
                 }
 
-
-
+                // Update the scoreboard
+                calculate_points();
             },
 
             // Note: Complete executes after success does
@@ -425,8 +423,7 @@ function mousedown_handler(mouse_event) {
         calculate_points();
     }
     else {
-        console.log("Grabbed piece was not snapped to gameboard");
-        console.log(grabbed_piece.snapped_to_gameboard);
+        // console.log("Grabbed piece was not snapped to gameboard");
     }
 
     // Save the grab position relative to the piece
