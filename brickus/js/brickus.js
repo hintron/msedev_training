@@ -161,6 +161,7 @@ function start_pinging(){
                 // Set whose turn it is if yet unknown or if it is a new player's turn
                 if(!player_turn || player_turn != +json.data.player_turn){
                     console.log("Detected a change in player turn!");
+                    turn_changed_sound();
                     player_turn = +json.data.player_turn;
                     // update the current player displayed
                     $("#player_turn").html(PLAYER_COLORS[player_turn]);
@@ -216,8 +217,10 @@ function start_pinging(){
     })();
 }
 
+
 // Turns off pinging
 function stop_pinging(){
+    your_turn_sound();
     pinging_active = false;
 }
 
@@ -732,9 +735,28 @@ function calculate_points() {
 }
 
 
-//
-//// Helper functions:
-//
+
+// Play a sound!
+// Roylty-free sounds taken from http://soundbible.com/royalty-free-sounds-1.html
+// See https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement
+// and https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+function turn_changed_sound() {
+    sound = new Audio("sound/next_turn.mp3");
+    sound.play();
+
+}
+
+function your_turn_sound() {
+    sound = new Audio("sound/your_turn.mp3");
+    sound.play();
+}
+
+
+
+
+
+
+
 
 // Rotate the currently selected piece
 function rotate_piece() {
