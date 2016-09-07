@@ -117,7 +117,6 @@ function start_pinging(){
             url: 'ajax_handlers/ping.php',
             dataType: "json",
             success: function(json) {
-                // console.log(json);
 
                 // Figure out which player number (color) the current user is and set it ONE time
                 if(!current_user_player_number){
@@ -140,10 +139,7 @@ function start_pinging(){
                     }
                 }
 
-
-
                 // Set all the playernames as the users
-                // TODO: Only set this once? What if a player leaves the game?
                 if(json.data.player1_username){
                     $("#player1_name").html(json.data.player1_username + "'s Score:");
                 }
@@ -163,7 +159,7 @@ function start_pinging(){
 
 
                 // Set whose turn it is if yet unknown or if it is a new player's turn
-                if(!player_turn && player_turn != +json.data.player_turn){
+                if(!player_turn || player_turn != +json.data.player_turn){
                     console.log("Detected a change in player turn!");
                     player_turn = +json.data.player_turn;
                     // update the current player displayed
@@ -294,7 +290,6 @@ function does_gameboard_piece_fit(gameboard_x, gameboard_y, piece_bitmap, piece_
 
     return true;
 }
-
 
 
 
