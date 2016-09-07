@@ -176,26 +176,33 @@ function start_pinging(){
 
                 var all_pieces = json.data.all_pieces;
                 console.log(all_pieces);
+
+                // Reset the gameboard
+                // reset_gameboard();
+
                 // loop through and render each piece to the game board
                 if(all_pieces.length){
                     var temp_piece;
+                    var temp_piece_el;
                     var temp_gameboard = $("#gameboard");
                     var temp_new_location;
                     for (var i = 0; i < all_pieces.length; i++) {
-                        temp_piece = $(".piece[data-id='" + all_pieces[i].html_piece_id + "'][data-player='" + all_pieces[i].player_number + "']");
-                        // console.log(temp_piece);
-
-                        // TODO: Find the gameboard location
-
-                        // TODO: Move the piece to the correct spot on the gameboard
+                        temp_piece = all_pieces[i];
+                        temp_piece_el = $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "']");
+                        // Find the gameboard location and move the piece to the correct spot on the gameboard
                         temp_new_location = temp_gameboard.offset();
-                        // temp_new_location.left = temp_new_location.left + (temp_piece.gameboard_x*GAMEBOARD_CELL_WIDTH);
-                        // temp_new_location.top = temp_new_location.top + (temp_piece.gameboard_y*GAMEBOARD_CELL_WIDTH);
-                        temp_piece.offset(temp_new_location);
+                        console.log(temp_new_location);
+                        console.log(temp_piece);
+                        console.log((temp_piece.gameboard_x*GAMEBOARD_CELL_WIDTH));
+                        console.log((temp_piece.gameboard_y*GAMEBOARD_CELL_WIDTH));
+                        temp_new_location.left = temp_new_location.left + (temp_piece.gameboard_x*GAMEBOARD_CELL_WIDTH);
+                        temp_new_location.top = temp_new_location.top + (temp_piece.gameboard_y*GAMEBOARD_CELL_WIDTH);
+                        temp_piece_el.offset(temp_new_location);
                         // console.log(temp_piece.offset());
 
-                        // TODO: Somehow simulate dropping a piece
                         // TODO: Break things out into functions so I have a programmatic api?
+
+                        // TODO: Register piece to the gameboard
 
                     }
                 }
@@ -221,6 +228,21 @@ function stop_pinging(){
 }
 
 
+
+
+function reset_gameboard() {
+    // For how to clear arrays, see http://stackoverflow.com/a/1234337
+    // Setting length to 0 automatically deletes all indexed values that are >= 0
+    for (var i = 0; i < GAMEBOARD_WIDTH; i++) {
+        gameboard[i].length = 0;
+    }
+}
+
+
+// TODO:
+function register_piece_to_gameboard(piece) {
+
+}
 
 
 // Change the turn
