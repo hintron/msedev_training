@@ -179,7 +179,7 @@ function start_pinging(){
                 reset_gameboard();
 
                 // loop through and render each piece to the game board
-                if(all_pieces.length){
+                if(all_pieces){
                     var temp_piece;
                     var temp_piece_el;
                     var temp_gameboard = $("#gameboard");
@@ -314,7 +314,13 @@ function finish_turn_handler() {
             bitmap:last_snapped_piece.dataset.bitmap,
             gameboard_x:last_snapped_piece.gameboard_x,
             gameboard_y:last_snapped_piece.gameboard_y,
-        })
+        });
+
+        // Clear the last snapped piece
+        last_snapped_piece.gameboard_x = null;
+        last_snapped_piece.gameboard_y = null;
+        last_snapped_piece = null;
+        $("#finish_turn_btn").removeClass("bold");
     }
 
     // Send a "turn finished" ajax call to the server
@@ -327,22 +333,6 @@ function finish_turn_handler() {
 
     // Use promises!
     jqxhr.done(function(json) {
-        console.log(json);
-
-        // Set the new player turn
-        player_turn = json.player_turn;
-
-        console.log("It is now " + PLAYER_COLORS[player_turn] + "'s turn!");
-
-        // Set the label as the current player
-        $("#player_turn").html(PLAYER_COLORS[player_turn]);
-
-        // Clear the last snapped piece
-        last_snapped_piece.gameboard_x = null;
-        last_snapped_piece.gameboard_y = null;
-        last_snapped_piece = null;
-        $("#finish_turn_btn").removeClass("bold");
-
         // Turn on pinging again
         start_pinging();
     });
