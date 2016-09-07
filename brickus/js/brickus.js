@@ -183,7 +183,7 @@ function start_pinging(){
                     var temp_new_location;
                     for (var i = 0; i < all_pieces.length; i++) {
                         temp_piece = $(".piece[data-id='" + all_pieces[i].html_piece_id + "'][data-player='" + all_pieces[i].player_number + "']");
-                        console.log(temp_piece);
+                        // console.log(temp_piece);
 
                         // TODO: Find the gameboard location
 
@@ -192,7 +192,7 @@ function start_pinging(){
                         // temp_new_location.left = temp_new_location.left + (temp_piece.gameboard_x*GAMEBOARD_CELL_WIDTH);
                         // temp_new_location.top = temp_new_location.top + (temp_piece.gameboard_y*GAMEBOARD_CELL_WIDTH);
                         temp_piece.offset(temp_new_location);
-                        console.log(temp_piece.offset());
+                        // console.log(temp_piece.offset());
 
                         // TODO: Somehow simulate dropping a piece
                         // TODO: Break things out into functions so I have a programmatic api?

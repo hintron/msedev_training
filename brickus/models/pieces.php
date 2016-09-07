@@ -95,7 +95,7 @@ class Pieces {
     public function get_all_pieces_for_a_game($game_id){
         $stmt = $this->dbh->prepare("SELECT * FROM $this->table_name WHERE game_id = ?");
         $stmt->execute(array($game_id));
-        $stmt->setFetchMode(PDO::FETCH_INTO, new Piece);
+        // Note: Don't use FETCH_INTO for multiple rows - they will all be the same!
         $returned_pieces = $stmt->fetchAll();
         return $returned_pieces;
     }
