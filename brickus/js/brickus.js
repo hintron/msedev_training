@@ -49,6 +49,8 @@ const MAX_HEIGHT = 700;
 const GAMEBOARD_WIDTH = 12;
 const GAMEBOARD_CELL_WIDTH = 30;
 const GAMEBOARD_CELL_HALF_WIDTH = GAMEBOARD_CELL_WIDTH/2;
+const GAMEBOARD_CELL_BORDER_WIDTH = 1;
+const GAMEBOARD_BORDER_OFFSET = 2 * GAMEBOARD_CELL_BORDER_WIDTH;
 // The offset is to find the neighbors of the currently selected gameboard cell
 const GAMEBOARD_CELL_OFFSET = GAMEBOARD_CELL_WIDTH + GAMEBOARD_CELL_HALF_WIDTH;
 
@@ -175,7 +177,7 @@ function start_pinging(){
 
 
                 var all_pieces = json.data.all_pieces;
-                console.log(all_pieces);
+                // console.log(all_pieces);
 
                 // Reset the gameboard
                 // reset_gameboard();
@@ -191,18 +193,16 @@ function start_pinging(){
                         temp_piece_el = $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "']");
                         // Find the gameboard location and move the piece to the correct spot on the gameboard
                         temp_new_location = temp_gameboard.offset();
-                        console.log(temp_new_location);
-                        console.log(temp_piece);
-                        console.log((temp_piece.gameboard_x*GAMEBOARD_CELL_WIDTH));
-                        console.log((temp_piece.gameboard_y*GAMEBOARD_CELL_WIDTH));
-                        temp_new_location.left = temp_new_location.left + (temp_piece.gameboard_x*GAMEBOARD_CELL_WIDTH);
-                        temp_new_location.top = temp_new_location.top + (temp_piece.gameboard_y*GAMEBOARD_CELL_WIDTH);
+                        // console.log(temp_new_location);
+                        // console.log(temp_piece);
+                        // console.log(temp_piece.gameboard_x);
+                        // console.log(temp_piece.gameboard_y);
+                        temp_new_location.left = temp_new_location.left + (temp_piece.gameboard_x * (GAMEBOARD_CELL_WIDTH+GAMEBOARD_CELL_BORDER_WIDTH)) + GAMEBOARD_CELL_BORDER_WIDTH;
+                        temp_new_location.top = temp_new_location.top + (temp_piece.gameboard_y * (GAMEBOARD_CELL_WIDTH+GAMEBOARD_CELL_BORDER_WIDTH)) + GAMEBOARD_CELL_BORDER_WIDTH;
                         temp_piece_el.offset(temp_new_location);
-                        // console.log(temp_piece.offset());
-
-                        // TODO: Break things out into functions so I have a programmatic api?
 
                         // TODO: Register piece to the gameboard
+                        // TODO: Break things out into functions so I have a programmatic api?
 
                     }
                 }
