@@ -100,9 +100,29 @@ a.button {
     padding: 5px 0;
 }
 
+/* Dynamically add and subtract classes to change the color after turns change */
+#header_container.player1 {
+    background-color: #ffff00;
+}
 
-#current_player_turn {
-    /* TODO: Make cool css for this; */
+#header_container.player2 {
+    background-color: #3388ee;
+}
+
+#header_container.player3 {
+    background-color: #ff6666;
+}
+
+#header_container.player4 {
+    background-color: #33ff33;
+}
+
+
+
+
+#player_turn {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
 }
 
 .hidden {

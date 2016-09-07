@@ -161,10 +161,16 @@ function start_pinging(){
                 // Set whose turn it is if yet unknown or if it is a new player's turn
                 if(!player_turn || player_turn != +json.data.player_turn){
                     console.log("Detected a change in player turn!");
-                    turn_changed_sound();
+                    // Don't play the sound on page refresh
+                    if(player_turn){
+                        turn_changed_sound();
+                    }
+
                     player_turn = +json.data.player_turn;
                     // update the current player displayed
                     $("#player_turn").html(PLAYER_COLORS[player_turn]);
+                    // Remove all classes, then add the class for the current player's turn
+                    $("#header_container").removeClass().addClass("player" + player_turn);
                     // If it's the user's turn, turn off pinging until he/she finishes the turn
                     if(player_turn == current_user_player_number){
                         console.log("It's your turn! Turn off pinging while you figure out your next move...");
