@@ -219,6 +219,10 @@ class Games {
 
         // TODO: Eventually, delete all piece records for a finished game, since they are no longer needed
 
+        // TODO: Add up score totals now, and save it for future reference?
+
+        // TODO: Save how big the gameboard was (total points possible)
+
 
         // Prepare the sql statement
         $stmt->execute(array($game_id));
@@ -274,9 +278,22 @@ class Games {
 
 
     // TODO: Undo last turn function
-    // -Remove piece
-    // -Subtract score
-    // -Turn back the turn
+    public function undo_last_turn() {
+
+        // -Turn back the turn
+
+        // Query the last-placed piece
+        // If it exists,
+        // -Remove piece
+
+        // -Subtract score
+
+
+    }
+
+
+
+
 
 
 

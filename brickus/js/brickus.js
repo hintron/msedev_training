@@ -12,14 +12,6 @@ $(function(){
         }
     });
 
-    // Set an event listener for the r button, to rotate a piece
-    $(window).on("keyup", function(event) {
-        // See if keyup is ENTER
-        if (event.keyCode == R_KEY) {
-            rotate_piece();
-        }
-    });
-
     // See http://stackoverflow.com/a/6802970 for moving html elements
     var pieces = $(".piece");
     for (var i = pieces.length - 1; i >= 0; i--) {
@@ -765,7 +757,54 @@ function your_turn_sound() {
 
 
 // Rotate the currently selected piece
-function rotate_piece() {
-    console.log("Rotate piece");
+function rotate_piece(player_number, piece_number) {
+    if(grabbed_piece){
+        console.log("Can't rotate a piece that is grabbed!");
+    }
+
+    // TODO: Make sure that the next piece to rotate isn't already placed on the gameboard
+    // If it is, then this is an illegal move, and actually should never happen
+
+    // Find the first piece that is underneath the cursor for the current user
+
+    // TODO: Rotate pieces
+    var original = $("[data-id='7'][data-player='2']").not(".hidden");
+
+    var rotate_count = original.data("rotate-count");
+    console.log("rotate_count: " + rotate_count);
+    // Only rotate pieces that are designated as able to be rotated
+    if(!rotate_count){
+        console.log("can't rotate the piece!");
+        return;
+    }
+
+
+    // Move the piece to where the original piece was
+    var original_coordinates = original.offset();
+
+    // Cycle through the rotation ids, unhide the
+    var original_rotate_id = original.data("rotate-id");
+    console.log("original_rotate_id: " + original_rotate_id);
+    var next_rotate_id = original_rotate_id + 1;
+    // Loop back around if we rotate past the last rotate variant
+    console.log("next_rotate_id: " + next_rotatre_id);
+    if(next_rotate_id > rotate_count){
+        next_rotate_id = 1;
+    }
+
+
+    // Get the next piece to rotate to
+    var rotated = $("[data-id='7'][data-player='2'][data-rotate-id='" + next_rotate_id + "']");
+    console.log(rotated);
+
+    // Move the rotated piece to where the original was
+    rotated.offset(original_coordinates).removeClass("hidden");
+    // Hide the original
+    original.addClass("hidden");
+
+
+
+
+
 }
 

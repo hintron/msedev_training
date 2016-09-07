@@ -12,6 +12,7 @@ class Piece {
     public $player_number;
     public $value;
     public $html_piece_id;
+    public $html_piece_rotate_id;
 }
 
 class Pieces {
@@ -53,7 +54,7 @@ class Pieces {
         Returns true if creation was successful, else returns false.
         // TODO: Keep track of turn number
     **/
-    public function create_piece($game_id, $rows, $cols, $bitmap, $gameboard_x, $gameboard_y, $player_number, $value, $html_piece_id) {
+    public function create_piece($game_id, $rows, $cols, $bitmap, $gameboard_x, $gameboard_y, $player_number, $value, $html_piece_id, $html_piece_rotate_id) {
         // Check to make sure the piece had not already been placed for the player for that game
         if($this->has_piece_been_played($game_id, $player_number, $html_piece_id)){
             error_log("ERROR: Piece has already been used!!!! Something is fishy here...");
@@ -61,8 +62,8 @@ class Pieces {
         };
 
         // Prepare the sql statement
-        $stmt = $this->dbh->prepare("INSERT INTO $this->table_name (game_id, rows, cols, bitmap, gameboard_x, gameboard_y, player_number, value, html_piece_id) VALUES (:game_id, :rows, :cols, :bitmap, :gameboard_x, :gameboard_y, :player_number, :value, :html_piece_id)");
-        $stmt->execute(array(":game_id" => $game_id, ":rows" => $rows, ":cols" => $cols, ":bitmap" => $bitmap, ":gameboard_x" => $gameboard_x, ":gameboard_y" => $gameboard_y, ":player_number" => $player_number, ":value" => $value, ":html_piece_id" => $html_piece_id));
+        $stmt = $this->dbh->prepare("INSERT INTO $this->table_name (game_id, rows, cols, bitmap, gameboard_x, gameboard_y, player_number, value, html_piece_id) VALUES (:game_id, :rows, :cols, :bitmap, :gameboard_x, :gameboard_y, :player_number, :value, :html_piece_id, :html_piece_rotate_id)");
+        $stmt->execute(array(":game_id" => $game_id, ":rows" => $rows, ":cols" => $cols, ":bitmap" => $bitmap, ":gameboard_x" => $gameboard_x, ":gameboard_y" => $gameboard_y, ":player_number" => $player_number, ":value" => $value, ":html_piece_id" => $html_piece_id, ":html_piece_rotate_id" => $html_piece_rotate_id));
         if($stmt->rowCount()){
             return true;
         }
