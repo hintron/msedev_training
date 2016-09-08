@@ -16,7 +16,7 @@ $(function(){
                 rotate_piece(underlying_piece);
             }
             else {
-                console.log("Could not find a piece to rotate under the mouse!");
+                // console.log("Could not find a piece to rotate under the mouse!");
             }
         }
     });
@@ -796,53 +796,42 @@ function your_turn_sound() {
 
 **/
 function rotate_piece(piece) {
+    // Do not allow rotation during piece movement
     if(grabbed_piece){
         console.log("Can't rotate a piece when another piece is grabbed!");
         return;
     }
 
+    // Make sure that the next piece to rotate isn't already placed on the gameboard
+    // If it is, then this is an illegal move, and actually should never happen
     if(piece[0].snapped_to_gameboard){
         console.log("Can't rotate a piece that is on the gameboard!");
         return;
     }
-
-    // Make sure the rotated piece is the current player's
-
-
 
     var original = piece;
     var rotate_count = original.data("rotate-count");
     var original_piece_id = piece.data("id");
     var original_piece_player = piece.data("player");
 
-
+    // Make sure the rotated piece is the current player's
     if(original_piece_player != current_user_player_number){
-        console.log("Can't rotate a piece that is not yours!");
+        // console.log("Can't rotate a piece that is not yours!");
         return;
     }
 
-
-    // TODO: Make sure that the next piece to rotate isn't already placed on the gameboard
-    // If it is, then this is an illegal move, and actually should never happen
-
-
-    console.log("rotate-count: " + rotate_count);
     // Only rotate pieces that are designated as able to be rotated
     if(!rotate_count){
-        console.log("can't rotate the piece!");
+        // console.log("The piece has not rotation variants");
         return;
     }
-
 
     // Move the piece to where the original piece was
     var original_coordinates = original.offset();
-
-    // Cycle through the rotation ids, unhide the
     var original_rotate_id = original.data("rotate-id");
-    console.log("original_rotate_id: " + original_rotate_id);
     var next_rotate_id = original_rotate_id + 1;
+
     // Loop back around if we rotate past the last rotate variant
-    console.log("next_rotate_id: " + next_rotate_id);
     if(next_rotate_id > rotate_count){
         next_rotate_id = 1;
     }
@@ -850,7 +839,6 @@ function rotate_piece(piece) {
 
     // Get the next piece to rotate to
     var rotated = $("[data-id='" + original_piece_id + "'][data-player='" + original_piece_player + "'][data-rotate-id='" + next_rotate_id + "']");
-    console.log(rotated);
 
     // Move the rotated piece to where the original was
     rotated.offset(original_coordinates).removeClass("hidden");
