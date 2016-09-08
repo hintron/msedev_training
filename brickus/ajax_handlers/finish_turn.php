@@ -108,7 +108,7 @@
     // TODO: This IS a vulnerability though - I'm trusting the user to not know how to send in a proper piece.... The server will need a whitelist of pieces to avoid this vulnerability
 
     $piece_rotate_id;
-    if(isset($piece["rotate_id"]){
+    if(isset($piece["rotate_id"])){
         $piece_rotate_id = $piece["rotate_id"];
     }
     else {

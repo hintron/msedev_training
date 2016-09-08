@@ -200,14 +200,20 @@ function start_pinging(){
                     var temp_new_location;
                     for (var i = 0; i < all_pieces.length; i++) {
                         temp_piece = all_pieces[i];
-                        temp_piece_el = $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "']");
+                        // TODO: Get the right rotated variant of the piece!
+                        temp_piece_el = $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "'][data-rotate-id='" + temp_piece.html_piece_rotate_id + "']");
+                        // If this is a hidden piece, unhide it and hide the other one
+                        if(temp_piece_el.hasClass("hidden")){
+                            // Find the unhidden one and hide it
+                            $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "']").not(".hidden").addClass("hidden");
+                            // Unhide the rotated piece variant that was actually used
+                            temp_piece_el.removeClass("hidden");
+                        }
 
-                        console.log(temp_piece_el);
                         if(temp_piece_el.length == 0){
                             alert("The game is messed up. Can't find the piece with the passed id");
                             continue;
                         }
-
 
                         // Find the gameboard location and move the piece to the correct spot on the gameboard
                         temp_new_location = temp_gameboard.offset();
@@ -325,7 +331,7 @@ function finish_turn_handler() {
         return;
     }
 
-    // console.log(last_snapped_piece);
+    console.log(last_snapped_piece);
 
     // Send data on the piece that was placed
     // NOTE: Don't need to send player info, since that will be contained in the session vars
@@ -335,6 +341,7 @@ function finish_turn_handler() {
             rows:last_snapped_piece.dataset.rows,
             cols:last_snapped_piece.dataset.cols,
             id:last_snapped_piece.dataset.id,
+            rotate_id:last_snapped_piece.dataset.rotateId,
             bitmap:last_snapped_piece.dataset.bitmap,
             gameboard_x:last_snapped_piece.gameboard_x,
             gameboard_y:last_snapped_piece.gameboard_y,
@@ -850,5 +857,7 @@ function rotate_piece(piece) {
     // Hide the original
     original.addClass("hidden");
 
+
+    // TODO: Reset the z on the rotated piece
 }
 

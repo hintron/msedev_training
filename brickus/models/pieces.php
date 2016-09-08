@@ -62,7 +62,9 @@ class Pieces {
         };
 
         // Prepare the sql statement
-        $stmt = $this->dbh->prepare("INSERT INTO $this->table_name (game_id, rows, cols, bitmap, gameboard_x, gameboard_y, player_number, value, html_piece_id) VALUES (:game_id, :rows, :cols, :bitmap, :gameboard_x, :gameboard_y, :player_number, :value, :html_piece_id, :html_piece_rotate_id)");
+        $stmt = $this->dbh->prepare("INSERT INTO $this->table_name (game_id, rows, cols, bitmap, gameboard_x, gameboard_y, player_number, value, html_piece_id, html_piece_rotate_id) VALUES (:game_id, :rows, :cols, :bitmap, :gameboard_x, :gameboard_y, :player_number, :value, :html_piece_id, :html_piece_rotate_id)");
+
+
         $stmt->execute(array(":game_id" => $game_id, ":rows" => $rows, ":cols" => $cols, ":bitmap" => $bitmap, ":gameboard_x" => $gameboard_x, ":gameboard_y" => $gameboard_y, ":player_number" => $player_number, ":value" => $value, ":html_piece_id" => $html_piece_id, ":html_piece_rotate_id" => $html_piece_rotate_id));
         if($stmt->rowCount()){
             return true;
@@ -97,6 +99,7 @@ class Pieces {
         $stmt = $this->dbh->prepare("SELECT * FROM $this->table_name WHERE game_id = ?");
         $stmt->execute(array($game_id));
         // FETCH_INTO will place the data into an instance of the passed class
+        $returned_pieces = [];
         for ($i = 0; $i < $stmt->rowCount(); $i++) {
             $row = new Piece;
             $stmt->setFetchMode(PDO::FETCH_INTO, $row);
