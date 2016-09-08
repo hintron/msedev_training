@@ -8,7 +8,16 @@ $(function(){
     // Set an event listener for the r button, to rotate a piece
     $(window).on("keyup", function(event) {
         if (event.keyCode == R_KEY) {
-            rotate_piece();
+            // Find the piece underneath the current mousepointer
+            var underlying_el = document.elementFromPoint(current_mouse_pos_x, current_mouse_pos_y);
+            var underlying_piece = $(underlying_el).parents(".piece");
+
+            if(underlying_piece.length){
+                rotate_piece(underlying_piece);
+            }
+            else {
+                console.log("Could not find a piece to rotate under the mouse!");
+            }
         }
     });
 
@@ -51,6 +60,12 @@ var grabbed_piece = null;
 // These are the coordinates of the grab location relative to the upper-left corner of the grabbed piece
 var grab_relative_x = null;
 var grab_relative_y = null;
+
+
+var current_mouse_pos_x = null;
+var current_mouse_pos_y = null;
+
+
 
 // If true, pinging will be allowed to run. If false, it will stop running.
 var pinging_active = false;
@@ -186,6 +201,14 @@ function start_pinging(){
                     for (var i = 0; i < all_pieces.length; i++) {
                         temp_piece = all_pieces[i];
                         temp_piece_el = $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "']");
+
+                        console.log(temp_piece_el);
+                        if(temp_piece_el.length == 0){
+                            alert("The game is messed up. Can't find the piece with the passed id");
+                            continue;
+                        }
+
+
                         // Find the gameboard location and move the piece to the correct spot on the gameboard
                         temp_new_location = temp_gameboard.offset();
                         temp_new_location.left = temp_new_location.left + (temp_piece.gameboard_x * (GAMEBOARD_CELL_WIDTH+GAMEBOARD_CELL_BORDER_WIDTH)) + GAMEBOARD_CELL_BORDER_WIDTH;
@@ -444,6 +467,10 @@ function mousemove_handler(mouse_event) {
         grabbed_piece.style.left = (mouse_x - grab_relative_x) + "px";
         grabbed_piece.style.top = (mouse_y - grab_relative_y) + "px";
     }
+
+    // Save the current location of the mouse for rotation
+    current_mouse_pos_x = mouse_event.pageX;
+    current_mouse_pos_y = mouse_event.pageY;
 }
 
 function mouseup_handler(mouse_event) {
@@ -755,23 +782,44 @@ function your_turn_sound() {
 
 
 
+/**
+    Rotate the currently selected piece
 
-// Rotate the currently selected piece
-function rotate_piece(player_number, piece_number) {
+    @param piece: IN. The jquery-wrapped piece to rotate
+
+**/
+function rotate_piece(piece) {
     if(grabbed_piece){
-        console.log("Can't rotate a piece that is grabbed!");
+        console.log("Can't rotate a piece when another piece is grabbed!");
+        return;
     }
+
+    if(piece[0].snapped_to_gameboard){
+        console.log("Can't rotate a piece that is on the gameboard!");
+        return;
+    }
+
+    // Make sure the rotated piece is the current player's
+
+
+
+    var original = piece;
+    var rotate_count = original.data("rotate-count");
+    var original_piece_id = piece.data("id");
+    var original_piece_player = piece.data("player");
+
+
+    if(original_piece_player != current_user_player_number){
+        console.log("Can't rotate a piece that is not yours!");
+        return;
+    }
+
 
     // TODO: Make sure that the next piece to rotate isn't already placed on the gameboard
     // If it is, then this is an illegal move, and actually should never happen
 
-    // Find the first piece that is underneath the cursor for the current user
 
-    // TODO: Rotate pieces
-    var original = $("[data-id='7'][data-player='2']").not(".hidden");
-
-    var rotate_count = original.data("rotate-count");
-    console.log("rotate_count: " + rotate_count);
+    console.log("rotate-count: " + rotate_count);
     // Only rotate pieces that are designated as able to be rotated
     if(!rotate_count){
         console.log("can't rotate the piece!");
@@ -787,24 +835,20 @@ function rotate_piece(player_number, piece_number) {
     console.log("original_rotate_id: " + original_rotate_id);
     var next_rotate_id = original_rotate_id + 1;
     // Loop back around if we rotate past the last rotate variant
-    console.log("next_rotate_id: " + next_rotatre_id);
+    console.log("next_rotate_id: " + next_rotate_id);
     if(next_rotate_id > rotate_count){
         next_rotate_id = 1;
     }
 
 
     // Get the next piece to rotate to
-    var rotated = $("[data-id='7'][data-player='2'][data-rotate-id='" + next_rotate_id + "']");
+    var rotated = $("[data-id='" + original_piece_id + "'][data-player='" + original_piece_player + "'][data-rotate-id='" + next_rotate_id + "']");
     console.log(rotated);
 
     // Move the rotated piece to where the original was
     rotated.offset(original_coordinates).removeClass("hidden");
     // Hide the original
     original.addClass("hidden");
-
-
-
-
 
 }
 
