@@ -54,7 +54,7 @@ class Pieces {
         Returns true if creation was successful, else returns false.
         // TODO: Keep track of turn number
     **/
-    public function create_piece($game_id, $rows, $cols, $bitmap, $gameboard_x, $gameboard_y, $player_number, $value, $html_piece_id, $html_piece_rotate_id) {
+    public function create_piece($game_id, $rows, $cols, $bitmap, $gameboard_x, $gameboard_y, $player_number, $value, $html_piece_id, $html_piece_rotate_id = null) {
         // Check to make sure the piece had not already been placed for the player for that game
         if($this->has_piece_been_played($game_id, $player_number, $html_piece_id)){
             error_log("ERROR: Piece has already been used!!!! Something is fishy here...");

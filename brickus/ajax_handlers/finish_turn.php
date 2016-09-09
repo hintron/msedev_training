@@ -107,14 +107,13 @@
     // Check to make sure that the piece hasn't been used before (keep track of all the used ids)
     // TODO: This IS a vulnerability though - I'm trusting the user to not know how to send in a proper piece.... The server will need a whitelist of pieces to avoid this vulnerability
 
-    $piece_rotate_id;
+    $piece_rotate_id = null;
     if(isset($piece["rotate_id"])){
         $piece_rotate_id = $piece["rotate_id"];
     }
     else {
         error_log("rotate id is null! Assuming no rotation...");
     }
-
 
     // create a new piece if it is valid
     $piece_created = $pieces_model->create_piece($current_game->id, $piece_rows, $piece_cols, $piece_bitmap, $piece_gameboard_x, $piece_gameboard_y, $player_number, $piece_value, $piece_id, $piece_rotate_id);

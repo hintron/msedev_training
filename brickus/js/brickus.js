@@ -200,8 +200,15 @@ function start_pinging(){
                     var temp_new_location;
                     for (var i = 0; i < all_pieces.length; i++) {
                         temp_piece = all_pieces[i];
-                        // TODO: Get the right rotated variant of the piece!
-                        temp_piece_el = $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "'][data-rotate-id='" + temp_piece.html_piece_rotate_id + "']");
+
+                        // Figure out if the piece is a rotated piece or not
+                        if(temp_piece.html_piece_rotate_id){
+                            // Get the right rotated variant of the piece!
+                            temp_piece_el = $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "'][data-rotate-id='" + temp_piece.html_piece_rotate_id + "']");
+                        }
+                        else {
+                            temp_piece_el = $(".piece[data-id='" + temp_piece.html_piece_id + "'][data-player='" + temp_piece.player_number + "']");
+                        }
                         // If this is a hidden piece, unhide it and hide the other one
                         if(temp_piece_el.hasClass("hidden")){
                             // Find the unhidden one and hide it
@@ -211,6 +218,8 @@ function start_pinging(){
                         }
 
                         if(temp_piece_el.length == 0){
+                            console.log(all_pieces);
+                            console.log(temp_piece);
                             alert("The game is messed up. Can't find the piece with the passed id");
                             continue;
                         }
