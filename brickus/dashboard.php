@@ -25,11 +25,8 @@
 
         if($is_new_user){
             $repeat_password = $_POST["repeat_password"];
-            $first_name = $_POST["first_name"];
-            $last_name = $_POST["last_name"];
-            $birthday = $_POST["birthday"];
 
-            if($users_model->create_user($username, $password, $repeat_password, $first_name, $last_name, $birthday)){
+            if($users_model->create_user($username, $password, $repeat_password)){
                 echo "Registered user \"" . $username . "\"!!<br/>";
             }
             else {

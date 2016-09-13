@@ -92,7 +92,7 @@ class Users {
 
 
 
-    public function create_user($username, $password, $repeat_password, $first_name, $last_name, $birthday) {
+    public function create_user($username, $password, $repeat_password, $first_name=null, $last_name=null, $birthday=null) {
         $returned_user = $this->query_user($username);
 
        // Make sure that the username isn't already taken
